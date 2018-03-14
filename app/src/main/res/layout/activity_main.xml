@@ -8,56 +8,81 @@
         android:orientation="vertical"
         tools:context="com.ethshea.unitcalculator.MainActivity">
 
-    <TextView android:id="@+id/result_display"
+    <EditText android:id="@+id/result_display"
         style="@style/AppTheme.Display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="2.66"
+        android:inputType="none"
+        android:lines="1"
         />
 
     <TextView android:id="@+id/result_units"
-        style="@style/AppTheme.Display.Units"
+        style="@style/AppTheme.Display.Preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="MHz"
         />
 
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/unit_selector">
+            <Button android:text="T" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="G" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="M" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="k" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="1" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="m" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="μ" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="n" style="@style/AppTheme.CalculatorButton.Unit" />
+            <Button android:text="p" style="@style/AppTheme.CalculatorButton.Unit" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.ethshea.unitcalculator.CalculatorButton android:text="G" style="@style/AppTheme.CalculatorButton.Unit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="M" style="@style/AppTheme.CalculatorButton.Unit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="k" style="@style/AppTheme.CalculatorButton.Unit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="1" style="@style/AppTheme.CalculatorButton.Unit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="m" style="@style/AppTheme.CalculatorButton.Unit" />
+        android:layout_height="wrap_content"
+        android:columnCount="5">
+
+        <Button android:tag="sin(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="cos(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="log₁₀(|)" android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="x⁻¹" android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="x²" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="(" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag=")" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="e" android:text="i" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="DEL" android:text="DEL" style="@style/AppTheme.CalculatorButton.Advanced" />
     </GridLayout>
 
     <GridLayout android:id="@+id/button_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="5">
+        android:columnCount="4">
 
-        <com.ethshea.unitcalculator.CalculatorButton android:text="7" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="8" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="9" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="÷" style="@style/AppTheme.CalculatorButton.Operator" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="sin" style="@style/AppTheme.CalculatorButton.Operator" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="4" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="5" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="6" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="×" style="@style/AppTheme.CalculatorButton.Operator" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="cos" style="@style/AppTheme.CalculatorButton.Operator" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="1" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="2" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="3" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="-" style="@style/AppTheme.CalculatorButton.Operator" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Operator" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="0" style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="." style="@style/AppTheme.CalculatorButton.Digit" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="+" style="@style/AppTheme.CalculatorButton.Operator" />
-        <com.ethshea.unitcalculator.CalculatorButton android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
+        <Button android:tag="7" android:text="7" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="8" android:text="8" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="9" android:text="9" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="/" android:text="÷" style="@style/AppTheme.CalculatorButton.Operator" />
+        <Button android:tag="4" android:text="4" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="5" android:text="5" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="6" android:text="6" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="×" android:text="×" style="@style/AppTheme.CalculatorButton.Operator" />
+        <Button android:tag="1" android:text="1" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="2" android:text="2" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="3" android:text="3" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="-" android:text="-" style="@style/AppTheme.CalculatorButton.Operator" />
+        <Button android:tag="0" android:text="0" style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="." android:text="." style="@style/AppTheme.CalculatorButton.Digit" />
+        <Button android:tag="=" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
+        <Button android:tag="+" android:text="+" style="@style/AppTheme.CalculatorButton.Operator" />
     </GridLayout>
 
 </LinearLayout>
