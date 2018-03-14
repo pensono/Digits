@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:inputType="none"
+        android:inputType="text|textNoSuggestions"
         android:lines="1"
         />
 
@@ -33,15 +33,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/unit_selector">
-            <Button android:text="T" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="G" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="M" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="k" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="1" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="m" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="μ" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="n" style="@style/AppTheme.CalculatorButton.Unit" />
-            <Button android:text="p" style="@style/AppTheme.CalculatorButton.Unit" />
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -55,10 +46,10 @@
         <Button android:tag="log₁₀(|)" android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="x⁻¹" android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="x²" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="π" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="(" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag=")" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="e" android:text="i" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="DEL" android:text="DEL" style="@style/AppTheme.CalculatorButton.Advanced" />
     </GridLayout>
 

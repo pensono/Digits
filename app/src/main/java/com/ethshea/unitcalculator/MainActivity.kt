@@ -11,19 +11,25 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity() {
+    private var prefix = true
+        set(value) {
+            field = value
+            if (prefix) {
+                displayUnits(listOf("T", "G", "M", "k", "1", "m", "μ", "n", "p"))
+            } else {
+                displayUnits(listOf("Hz", "S", "m", "g"))
+            }
+        }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
-        result_display.showSoftInputOnFocus = false
+        prefix = true
 
-//        button_grid.viewTreeObserver.addOnGlobalLayoutListener {
-//            val reference = button_grid.getChildAt(0)
-//            for (i in 0 until unit_selector.childCount) {
-//                unit_selector.getChildAt(i).layoutParams = LinearLayout.LayoutParams(reference.width, reference.height)
-//            }
-//        }
+        result_display.showSoftInputOnFocus = false
     }
 
     fun calculatorButtonClick(button: View) {
@@ -41,6 +47,21 @@ class MainActivity : Activity() {
                 var offset = buttonCommand.indexOf('|')
                 result_display.setSelection(result_display.selectionStart + offset - insertText.length)
             }
+        }
+    }
+
+    fun calculatorUnitClick(button: View) {
+        calculatorButtonClick(button)
+        prefix = !prefix
+    }
+
+    fun displayUnits(units : List<String>) {
+        unit_selector.removeAllViews()
+        for (unit in units) {
+            var newButton = layoutInflater.inflate(R.layout.unit_button, null) as Button
+            newButton.tag = if (unit == "1") "" else unit
+            newButton.text = unit
+            unit_selector.addView(newButton)
         }
     }
 }
