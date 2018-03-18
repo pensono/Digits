@@ -21,7 +21,7 @@
         style="@style/AppTheme.Display.Preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MHz"
+        android:text="2.34 MHz"
         />
 
     <HorizontalScrollView
@@ -44,8 +44,8 @@
         <Button android:tag="sin(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="cos(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="log₁₀(|)" android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="x⁻¹" android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="x²" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="⁻¹" android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <Button android:tag="²" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="π" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
         <Button android:tag="(" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />

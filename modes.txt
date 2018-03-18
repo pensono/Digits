@@ -2,3 +2,4 @@ Electrical: Volts, Amps, Ohms, Farads
 Signal: Hz, cycles, wavelength, propagation constants, complex?
 Data: Bits, Bytes, per second
 Mechanical: Length, stress, strain
+Astronomical: Angle, AU, Light year, Parsec, Solar Mass

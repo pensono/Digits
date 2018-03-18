@@ -17,7 +17,7 @@ class MainActivity : Activity() {
             if (prefix) {
                 displayUnits(listOf("T", "G", "M", "k", "1", "m", "μ", "n", "p"))
             } else {
-                displayUnits(listOf("Hz", "S", "m", "g"))
+                displayUnits(listOf("Hz", "s", "m", "g", "V", "Ω", "H"))
             }
         }
 
@@ -33,7 +33,7 @@ class MainActivity : Activity() {
     }
 
     fun calculatorButtonClick(button: View) {
-        val buttonCommand = (button as Button).tag.toString().replace("x", "")
+        val buttonCommand = (button as Button).tag.toString()
         if (buttonCommand == "DEL") {
             if (result_display.selectionStart == result_display.selectionEnd && result_display.selectionStart != 0) {
                 result_display.text.replace(result_display.selectionStart-1, result_display.selectionStart, "")
