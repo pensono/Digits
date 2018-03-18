@@ -5,12 +5,7 @@ import org.junit.Test
 
 import org.junit.Assert.*
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleSIUnitTest {
+class SIUnitTest {
     @Test
     fun parseUnits() {
         assertEquals(SIUnit(0, 0, -1, 0),SIUnit.fromString("Hz"))
