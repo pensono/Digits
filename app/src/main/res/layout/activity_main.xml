@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.ethshea.unitcalculator.MainActivity">
+        tools:context="com.ethshea.digits.MainActivity">
 
     <EditText android:id="@+id/result_display"
         style="@style/AppTheme.Display"

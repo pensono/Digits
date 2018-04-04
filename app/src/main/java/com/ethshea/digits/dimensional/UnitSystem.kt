@@ -1,4 +1,4 @@
-package com.ethshea.unitcalculator.dimensional
+package com.ethshea.digits.dimensional
 
 /**
  * @author Ethan

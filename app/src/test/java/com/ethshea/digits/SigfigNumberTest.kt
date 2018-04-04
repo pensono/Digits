@@ -1,8 +1,6 @@
-package com.ethshea.unitcalculator
+package com.ethshea.digits
 
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * @author Ethan
