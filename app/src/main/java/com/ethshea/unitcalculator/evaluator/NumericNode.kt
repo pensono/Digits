@@ -1,5 +1,6 @@
 package com.ethshea.unitcalculator.evaluator
 
+import com.ethshea.unitcalculator.dimensional.SIUnit
 import java.math.BigInteger
 
 /**
