@@ -1,31 +1,18 @@
 package com.ethshea.digits.dimensional
 
+
 /**
  * @author Ethan
  */
 
 
 open class NaturalUnit(val dimensions: Map<String, Int>, val factor: Double) {
-
-    // TODO: refactor plus and minus with a map-merge operation
     operator fun plus(other: NaturalUnit) : NaturalUnit {
-        val newMap = mutableMapOf<String, Int>()
-        newMap.putAll(dimensions)
-        for (entry in other.dimensions) {
-            newMap[entry.key] = newMap.getOrDefault(entry.key, 0) + entry.value
-        }
-
-        return NaturalUnit(newMap, factor * other.factor)
+        return NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::plus), factor * other.factor)
     }
 
     operator fun minus(other: NaturalUnit) : NaturalUnit {
-        val newMap = mutableMapOf<String, Int>()
-        newMap.putAll(dimensions)
-        for (entry in other.dimensions) {
-            newMap[entry.key] = newMap.getOrDefault(entry.key, 0) - entry.value
-        }
-
-        return NaturalUnit(newMap, factor / other.factor)
+        return NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::minus), factor / other.factor)
     }
 
     operator fun unaryMinus() : NaturalUnit {
@@ -45,6 +32,20 @@ open class NaturalUnit(val dimensions: Map<String, Int>, val factor: Double) {
 
     override fun toString(): String {
         return dimensions.toString() + " " + factor.toString()
+    }
+
+    private fun combineMapsDefault(a: Map<String, Int>, b: Map<String, Int>, operation: (Int, Int) -> Int): Map<String, Int> {
+        val newMap = mutableMapOf<String, Int>()
+        newMap.putAll(a)
+        for (entry in b) {
+            val newValue = operation.invoke(newMap.getOrDefault(entry.key, 0), entry.value)
+            if (newValue == 0) { // Gross
+                newMap.remove(entry.key)
+            } else {
+                newMap[entry.key] = newValue
+            }
+        }
+        return newMap
     }
 }
 
