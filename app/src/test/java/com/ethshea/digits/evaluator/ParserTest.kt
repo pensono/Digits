@@ -12,11 +12,14 @@ import java.math.BigDecimal
  */
 class ParserTest {
     @Test
-    fun parseInput() {
-    }
-
-    @Test
-    fun parseInput1() {
+    fun evaluateInput() {
+        doTest(Quantity(BigDecimal("1")), "1", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("2")), "1+1", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("3")), "1+1+1", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("579")), "123+456", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("8")), "4*2", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("11")), "4*2+3", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("11")), "3+4*2", ::evaluateExpression)
     }
 
     @Test
@@ -26,10 +29,14 @@ class ParserTest {
         doTest(null, "123.45.67", ::parseNumeric)
         doTest(Quantity(BigDecimal("123")), "123 +", "+", ::parseNumeric)
         doTest(Quantity(BigDecimal("123")), "123.", "", ::parseNumeric)
+        doTest(Quantity(BigDecimal("-123")), "-123", ::parseNumeric)
 
 
         doTest(Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!), "123m", ::parseNumeric)
         doTest(Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!), "123 m", ::parseNumeric)
+        doTest(Quantity(BigDecimal("-123"), UnitSystem.byAbbreviation("m")!!), "-123m", ::parseNumeric)
+
+        //doTest(Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!), "123m/2", "/2", ::parseNumeric)
     }
 
     @Test
