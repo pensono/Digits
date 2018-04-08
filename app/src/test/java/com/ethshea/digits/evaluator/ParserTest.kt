@@ -20,6 +20,7 @@ class ParserTest {
         doTest(Quantity(BigDecimal("8")), "4*2", ::evaluateExpression)
         doTest(Quantity(BigDecimal("11")), "4*2+3", ::evaluateExpression)
         doTest(Quantity(BigDecimal("11")), "3+4*2", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("-11")), "-3-4*2", ::evaluateExpression)
     }
 
     @Test
@@ -36,7 +37,9 @@ class ParserTest {
         doTest(Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!), "123 m", ::parseNumeric)
         doTest(Quantity(BigDecimal("-123"), UnitSystem.byAbbreviation("m")!!), "-123m", ::parseNumeric)
 
-        //doTest(Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!), "123m/2", "/2", ::parseNumeric)
+        doTest(Quantity(BigDecimal("123")), "123/2", "/2", ::parseNumeric)
+        doTest(Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!), "123m/2", "/2", ::parseNumeric)
+        doTest(Quantity(BigDecimal("123")), "123-", "-", ::parseNumeric)
     }
 
     @Test

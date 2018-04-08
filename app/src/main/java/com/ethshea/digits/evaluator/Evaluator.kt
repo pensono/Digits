@@ -39,28 +39,32 @@ fun unary(operator: (Quantity) -> Quantity): (List<Quantity>) -> Quantity {
 fun <T> Stack<T>.pop(amount: Int) : List<T> {
     var result = ArrayList<T>()
     for (i in 0 until amount) {
-        result.add(this.pop())
+        result.add(0,this.pop())
     }
     return result
 }
 
 fun evaluateExpression(tokens: TokenIterator) : Quantity? {
     // Shunting-yard
-    var operatorStack = Stack<OperatorSpec>()
-    var quantityStack = Stack<Quantity>()
+    val operatorStack = Stack<OperatorSpec>()
+    val quantityStack = Stack<Quantity>()
+
+    var minusIsUnary = true // True at start and after operators
 
     while (tokens.hasNext() && !tokens.isNext(')')) {
-        if (isNextNumeric(tokens)) {
+        if (isNextNumeric(tokens) || (tokens.isNext('-') && minusIsUnary)) {
             quantityStack.push(parseNumeric(tokens))
+            minusIsUnary = false
         } else {
             val operator = tokens.takeNextLargest(operators)
             if (operator != null) {
                 while (!operatorStack.empty() && operatorStack.peek().prescidence >= operator.prescidence) {
                     val toApply = operatorStack.pop()
-                    var arguments = quantityStack.pop(toApply.arity)
+                    val arguments = quantityStack.pop(toApply.arity)
                     quantityStack.push(toApply.operation.invoke(arguments))
                 }
                 operatorStack.push(operator)
+                minusIsUnary = true
             } else {
                 return null
             }
@@ -69,7 +73,7 @@ fun evaluateExpression(tokens: TokenIterator) : Quantity? {
 
     while (operatorStack.isNotEmpty()) {
         val toApply = operatorStack.pop()
-        var arguments = quantityStack.pop(toApply.arity)
+        val arguments = quantityStack.pop(toApply.arity)
         quantityStack.push(toApply.operation.invoke(arguments))
     }
 
@@ -80,7 +84,7 @@ fun evaluateExpression(tokens: TokenIterator) : Quantity? {
 
 fun parseNumeric(tokens: TokenIterator) : Quantity? {
     var value = ""
-    while (tokens.hasNext() && isNextNumeric(tokens)) {
+    while (tokens.hasNext() && (isNextNumeric(tokens) || (value.isEmpty() && tokens.isNext('-')))) {
         value += tokens.next()
     }
 
@@ -94,7 +98,7 @@ fun parseNumeric(tokens: TokenIterator) : Quantity? {
 }
 
 private fun isNextNumeric(tokens: TokenIterator) =
-        (tokens.peek().isDigit() || tokens.isNext('.') || tokens.isNext('-'))
+        (tokens.peek().isDigit() || tokens.isNext('.'))
 
 fun parseUnit(tokens: TokenIterator) : NaturalUnit? {
     var invert = false
@@ -108,11 +112,11 @@ fun parseUnit(tokens: TokenIterator) : NaturalUnit? {
             unit += if (invert) -newUnit else newUnit
             tokens.consume(abbreviation)
             foundUnit = true
-        } else if (tokens.isNext("/")) {
+        } else if (tokens.isNext("/") && tokens.nextLargest(UnitSystem.abbreviations.map { a -> "/" + a }) != null) { // Lame fix for division at the end
             invert = true
             tokens.consume("/")
         } else {
-            return null
+            break
         }
     }
 
