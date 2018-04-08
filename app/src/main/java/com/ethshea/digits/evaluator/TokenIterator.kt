@@ -28,6 +28,13 @@ class TokenIterator(tokens: String) {
         return result
     }
 
+    fun consume(input: Char) {
+        if (!isNext(input)) {
+            throw RuntimeException("$input is not next in $tokens at $position")
+        }
+        next()
+    }
+
     fun consume(input: String) {
         if (!isNext(input)) {
             throw RuntimeException("$input is not next in $tokens at $position")

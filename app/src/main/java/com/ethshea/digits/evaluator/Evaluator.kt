@@ -52,7 +52,11 @@ fun evaluateExpression(tokens: TokenIterator) : Quantity? {
     var minusIsUnary = true // True at start and after operators
 
     while (tokens.hasNext() && !tokens.isNext(')')) {
-        if (isNextNumeric(tokens) || (tokens.isNext('-') && minusIsUnary)) {
+        if (tokens.isNext('(')) {
+            tokens.consume('(')
+            quantityStack.push(evaluateExpression(tokens))
+            tokens.consume(')')
+        } else if (isNextNumeric(tokens) || (tokens.isNext('-') && minusIsUnary)) {
             quantityStack.push(parseNumeric(tokens))
             minusIsUnary = false
         } else {

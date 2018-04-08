@@ -21,6 +21,16 @@ class ParserTest {
         doTest(Quantity(BigDecimal("11")), "4*2+3", ::evaluateExpression)
         doTest(Quantity(BigDecimal("11")), "3+4*2", ::evaluateExpression)
         doTest(Quantity(BigDecimal("-11")), "-3-4*2", ::evaluateExpression)
+
+        doTest(Quantity(BigDecimal("8")), "(4*2)", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("20")), "4*(2+3)", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("11")), "(4*2)+3", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("11")), "3+(4*2)", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("14")), "(3+4)*2", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("-5")), "-(3-4*2)", ::evaluateExpression)
+        doTest(Quantity(BigDecimal("-11")), "-3-(4)*2", ::evaluateExpression)
+
+        // TODO test malformed expressions
     }
 
     @Test
