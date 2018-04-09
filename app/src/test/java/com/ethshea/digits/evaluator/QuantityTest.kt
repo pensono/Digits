@@ -11,10 +11,16 @@ import java.math.BigDecimal
  * @author Ethan
  */
 class QuantityTest {
+    val meters = UnitSystem.byAbbreviation("m")!!
+    val kilometers = NaturalUnit(mapOf("length" to 1), BigDecimal("1e3"))
+
     @Test
     fun plus() {
-        assertEquals(Quantity(BigDecimal("123123"), UnitSystem.byAbbreviation("m")!!),
-                Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!) + Quantity(BigDecimal("123"), NaturalUnit(mapOf("length" to 1), BigDecimal("1e3"))))
+        assertEquals(Quantity(BigDecimal("456.123"), kilometers),
+                Quantity(BigDecimal("123"), meters) + Quantity(BigDecimal("456"), kilometers))
+
+        assertEquals(Quantity(BigDecimal("123.456"), kilometers),
+                Quantity(BigDecimal("123"), kilometers) + Quantity(BigDecimal("456"), meters))
     }
 
     @Test
