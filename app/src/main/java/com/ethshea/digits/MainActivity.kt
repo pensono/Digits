@@ -33,8 +33,6 @@ class MainActivity : Activity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val result = evaluateExpression(input.text.toString())
                 result_preview.text = result.value.toString()
-
-                // Do errors
                 input.errors = result.errors
             }
         })

@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="AppTheme.Display">
+    <style name="AppTheme.Display" parent="android:Widget.Material.EditText">
         <item name="android:gravity">end|bottom</item>
         <item name="android:textSize">60sp</item>
         <item name="android:background">@android:color/transparent</item>

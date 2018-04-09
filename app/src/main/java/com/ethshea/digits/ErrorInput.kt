@@ -7,13 +7,8 @@ import android.widget.TextView
 import android.text.Layout
 import android.widget.EditText
 import com.ethshea.digits.evaluator.ErrorMessage
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
@@ -44,7 +39,7 @@ class ErrorInput: EditText {
         val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.ErrorInput, defStyle, 0)
         underlineColor = typedArray.getColor(R.styleable.ErrorInput_underlineColor, -0x10000)
         underlineThickness = typedArray.getDimension(R.styleable.ErrorInput_underlineThickness, density * 2)
-        underlineOffset = typedArray.getDimension(R.styleable.ErrorInput_underlineThickness, underlineThickness)
+        underlineOffset = typedArray.getDimension(R.styleable.ErrorInput_underlineOffset, underlineThickness)
         typedArray.recycle()
 
         underlinePaint.style = Paint.Style.STROKE
@@ -59,21 +54,6 @@ class ErrorInput: EditText {
             val end = paint.measureText(text, 0, error.position + 1)
             canvas.drawLine(left + start, underlineY, left + end, underlineY, underlinePaint)
         }
-
-        System.out.println(errors)
-
-        // Multiline
-//        for (i in 0 until count) {
-//            val baseline = getLineBounds(i, rect)
-//            firstCharInLine = layout.getLineStart(i)
-//            lastCharInLine = layout.getLineEnd(i)
-//
-//            x_start = layout.getPrimaryHorizontal(firstCharInLine)
-//            x_diff = layout.getPrimaryHorizontal(firstCharInLine + 1) - x_start
-//            x_stop = layout.getPrimaryHorizontal(lastCharInLine - 1) + x_diff
-//
-//            canvas.drawLine(x_start, baseline + mStrokeWidth, x_stop, baseline + mStrokeWidth, mPaint)
-//        }
 
         super.onDraw(canvas)
     }
