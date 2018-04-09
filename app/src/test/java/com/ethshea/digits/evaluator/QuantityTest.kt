@@ -13,8 +13,8 @@ import java.math.BigDecimal
 class QuantityTest {
     @Test
     fun plus() {
-//        assertEquals(Quantity(BigDecimal("123123"), UnitSystem.byAbbreviation("m")!!),
-//                Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!) + Quantity(BigDecimal("123"), NaturalUnit(mapOf("length" to 1), 1e3)))
+        assertEquals(Quantity(BigDecimal("123123"), UnitSystem.byAbbreviation("m")!!),
+                Quantity(BigDecimal("123"), UnitSystem.byAbbreviation("m")!!) + Quantity(BigDecimal("123"), NaturalUnit(mapOf("length" to 1), BigDecimal("1e3"))))
     }
 
     @Test

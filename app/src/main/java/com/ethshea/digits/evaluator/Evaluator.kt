@@ -34,6 +34,7 @@ private data class OperatorSpec(val arity: Int, val prescience: Int, val operati
 private val operators = mapOf(
         "+" to OperatorSpec(2, 1, unitInference(Quantity::plus)),
         "-" to OperatorSpec(2, 1, unitInference(Quantity::minus)),
+        "*" to OperatorSpec(2, 3, binary(Quantity::times)),
         "×" to OperatorSpec(2, 3, binary(Quantity::times)),
         "/" to OperatorSpec(2,3, binary(Quantity::div))
 //        "sin" to OperatorSpec(1, 5, unary({q -> Quantity(q.value) }))
@@ -149,5 +150,5 @@ fun parseUnit(tokens: TokenIterator) : ParseResult<NaturalUnit> {
         }
     }
 
-    return if (foundUnit) success(unit) else failure(unit, ErrorMessage("Unit failure", tokens.position - 1))
+    return success(unit)
 }

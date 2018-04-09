@@ -3,10 +3,7 @@ package com.ethshea.digits
 import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.TextWatcher
-import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Button
 import com.ethshea.digits.evaluator.evaluateExpression

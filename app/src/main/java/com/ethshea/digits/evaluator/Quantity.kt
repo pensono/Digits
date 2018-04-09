@@ -16,7 +16,7 @@ data class Quantity(val value:BigDecimal, val unit: NaturalUnit = UnitSystem.voi
      */
     operator fun plus(other: Quantity) : Quantity {
         if (!unit.dimensionallyEqual(other.unit)) throw RuntimeException("Bad units") // Todo clean up this error handling
-        return Quantity(value.plus(other.value), unit)
+        return Quantity(value.plus(other.value.times(other.unit.factor / unit.factor)), unit)
     }
 
     /**
