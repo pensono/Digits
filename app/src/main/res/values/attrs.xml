@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="ErrorInput">
         <attr name="underlineThickness" format="dimension" />
+        <attr name="underlineOffset" format="dimension" />
         <attr name="underlineColor" format="color" />
     </declare-styleable>
 </resources>
