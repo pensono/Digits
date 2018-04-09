@@ -9,14 +9,14 @@ import java.util.*
  * @author Ethan
  */
 
-data class ErrorMessage(val message: String, val position: Int = 0)
+data class ErrorMessage(val message: String, val position: Int)
 
 data class ParseResult<T>(val value: T, val errors: Collection<ErrorMessage>)
 
-fun <T> failure(value: T, message: String) = ParseResult(value, listOf(ErrorMessage(message)))
-fun <O, N> failure(prev: ParseResult<O>, message: String, operation: (O) -> N) = ParseResult(operation.invoke(prev.value), prev.errors.plusElement(ErrorMessage(message)))
-fun <O1, O2, N> failure(first: ParseResult<O1>, second: ParseResult<O2>, message: String, operation: (O1, O2) -> N) =
-        ParseResult(operation.invoke(first.value, second.value), (first.errors + second.errors).plusElement(ErrorMessage(message)))
+fun <T> failure(value: T, message: ErrorMessage) = ParseResult(value, listOf(message))
+fun <O, N> failure(prev: ParseResult<O>, message: ErrorMessage, operation: (O) -> N) = ParseResult(operation.invoke(prev.value), prev.errors.plusElement(message))
+fun <O1, O2, N> failure(first: ParseResult<O1>, second: ParseResult<O2>, message: ErrorMessage, operation: (O1, O2) -> N) =
+        ParseResult(operation.invoke(first.value, second.value), (first.errors + second.errors).plusElement(message))
 fun <T> success(value: T) = ParseResult(value, listOf())
 fun <O, N> success(prev: ParseResult<O>, operation: (O) -> N) = ParseResult(operation.invoke(prev.value), prev.errors)
 fun <O1, O2, N> success(first: ParseResult<O1>, second: ParseResult<O2>, operation: (O1, O2) -> N) = ParseResult(operation.invoke(first.value, second.value), first.errors + second.errors)
@@ -45,7 +45,7 @@ fun unitInference(operator: (Quantity, Quantity) -> Quantity) : (List<ParseResul
          if (list[0].value.unit.dimensionallyEqual(list[1].value.unit)) {
              success(list[0], list[1], operator)
          } else {
-             failure(list[0], list[1], "Incompatible units", {a, b ->
+             failure(list[0], list[1], ErrorMessage("Incompatible units", 0), {a, b ->
                  operator.invoke(a, Quantity(b.value, a.unit))
              })
          }
@@ -122,7 +122,7 @@ fun parseNumeric(tokens: TokenIterator) : ParseResult<Quantity> {
     return try {
         success(unit, {u -> Quantity(BigDecimal(value), u)})
     } catch (e: NumberFormatException) {
-        failure(unit, value + " is not a valid number", {u -> Quantity(BigDecimal(1), u)})
+        failure(unit, ErrorMessage(value + " is not a valid number", tokens.position), {u -> Quantity(BigDecimal(1), u)})
     }
 }
 
@@ -149,5 +149,5 @@ fun parseUnit(tokens: TokenIterator) : ParseResult<NaturalUnit> {
         }
     }
 
-    return if (foundUnit) success(unit) else failure(unit, "Unit failure")
+    return if (foundUnit) success(unit) else failure(unit, ErrorMessage("Unit failure", tokens.position - 1))
 }

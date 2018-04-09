@@ -8,7 +8,7 @@
         android:orientation="vertical"
         tools:context="com.ethshea.digits.MainActivity">
 
-    <EditText android:id="@+id/input"
+    <com.ethshea.digits.ErrorInput android:id="@+id/input"
         style="@style/AppTheme.Display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -40,6 +40,6 @@ data class Quantity(val value:BigDecimal, val unit: NaturalUnit = UnitSystem.voi
 //    }
 
     override fun toString(): String { // Temporary. Should be replaced by actual logic which converts this to something human readable
-        return value.toString() + " " + (unit?.toString() ?: "")
+        return value.toString() + " " + unit.toString()
     }
 }

@@ -6,7 +6,8 @@ import java.util.*
  * @author Ethan
  */
 class TokenIterator(tokens: String) {
-    private var position: Int = 0
+    var position: Int = 0
+        private set
     private var tokens = tokens.replace("""\s*""".toRegex(), "")
     private var speculations = Stack<Int>()
 
