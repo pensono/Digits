@@ -8,7 +8,7 @@
         android:orientation="vertical"
         tools:context="com.ethshea.digits.MainActivity">
 
-    <EditText android:id="@+id/result_display"
+    <EditText android:id="@+id/input"
         style="@style/AppTheme.Display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,11 +17,10 @@
         android:lines="1"
         />
 
-    <TextView android:id="@+id/result_units"
+    <TextView android:id="@+id/result_preview"
         style="@style/AppTheme.Display.Preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="2.34 MHz"
         />
 
     <HorizontalScrollView

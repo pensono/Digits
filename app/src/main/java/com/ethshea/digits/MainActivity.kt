@@ -2,8 +2,11 @@ package com.ethshea.digits
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
+import com.ethshea.digits.evaluator.evaluateExpression
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity() {
@@ -23,25 +26,35 @@ class MainActivity : Activity() {
 
         setContentView(R.layout.activity_main)
 
+        input.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val result = evaluateExpression(input.text.toString())
+                if (result != null) result_preview.text = result.toString()
+            }
+        })
+
         prefix = true
 
-        result_display.showSoftInputOnFocus = false
+        input.showSoftInputOnFocus = false
     }
 
     fun calculatorButtonClick(button: View) {
         val buttonCommand = (button as Button).tag.toString()
         if (buttonCommand == "DEL") {
-            if (result_display.selectionStart == result_display.selectionEnd && result_display.selectionStart != 0) {
-                result_display.text.replace(result_display.selectionStart-1, result_display.selectionStart, "")
+            if (input.selectionStart == input.selectionEnd && input.selectionStart != 0) {
+                input.text.replace(input.selectionStart-1, input.selectionStart, "")
             } else {
-                result_display.text.replace(result_display.selectionStart, result_display.selectionEnd, "")
+                input.text.replace(input.selectionStart, input.selectionEnd, "")
             }
         } else {
             var insertText = buttonCommand.replace("|", "")
-            result_display.text.replace(result_display.selectionStart, result_display.selectionEnd, insertText)
+            input.text.replace(input.selectionStart, input.selectionEnd, insertText)
             if (buttonCommand.contains('|')) {
                 var offset = buttonCommand.indexOf('|')
-                result_display.setSelection(result_display.selectionStart + offset - insertText.length)
+                input.setSelection(input.selectionStart + offset - insertText.length)
             }
         }
     }

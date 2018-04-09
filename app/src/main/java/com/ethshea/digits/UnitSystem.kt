@@ -21,20 +21,16 @@ open class NaturalUnit(val dimensions: Map<String, Int>, val factor: Double) {
         return NaturalUnit(dimensions.mapValues { e -> -e.value }, 1 / factor)
     }
 
-    override fun equals(other: Any?): Boolean {
-        return when (other) {
+    override fun equals(other: Any?) =
+        when (other) {
             is NaturalUnit -> dimensions == other.dimensions && factor == other.factor
             else -> false
         }
-    }
 
-    override fun hashCode(): Int {
-        return dimensions.hashCode() xor factor.hashCode()
-    }
+    fun dimensionallyEqual(other: NaturalUnit) = dimensions == other.dimensions
 
-    override fun toString(): String {
-        return dimensions.toString() + " " + factor.toString()
-    }
+    override fun hashCode() = dimensions.hashCode() xor factor.hashCode()
+    override fun toString() = dimensions.toString() + " " + factor.toString()
 
     private fun combineMapsDefault(a: Map<String, Int>, b: Map<String, Int>, operation: (Int, Int) -> Int): Map<String, Int> {
         val newMap = mutableMapOf<String, Int>()
