@@ -2,7 +2,6 @@ package com.ethshea.digits
 
 import java.math.BigDecimal
 import java.math.MathContext
-import java.util.*
 
 
 /**
@@ -57,29 +56,38 @@ object UnitSystem { // Preferred Units?
     val time = mapOf("time" to 1)
     val frequency = mapOf("time" to -1)
     val mass = mapOf("mass" to 1)
-    val tt = mapOf<String, Int>() // Lame name
+    val tt = mapOf<String, Int>()
 
-    val void = NaturalUnit(mapOf(), BigDecimal(1)) // Called this to avoid confusion with "unit", the intended name
+    val void = NaturalUnit(mapOf(), BigDecimal.ONE) // Called this to avoid confusion with "unit", the intended name
 
     private val units = mapOf(
-            "m" to HumanUnit("meter", length, BigDecimal(1)),
+            "m" to HumanUnit("meter", length, BigDecimal.ONE),
             "ft" to HumanUnit("foot", length, BigDecimal("3.28084")),
             "mi" to HumanUnit("mile", length, BigDecimal("0.000621371")),
 
             "acre" to HumanUnit("acre", area, BigDecimal("4046.86")),
 
-            "s" to HumanUnit("second", time, BigDecimal(1)),
-            "min" to HumanUnit("minute", time, BigDecimal(1).divide(BigDecimal(60), MathContext.DECIMAL32)),
-            "hr" to HumanUnit("hour", time, BigDecimal(1).divide(BigDecimal(60 * 60), MathContext.DECIMAL32)),
+            "s" to HumanUnit("second", time, BigDecimal.ONE),
+            "min" to HumanUnit("minute", time, BigDecimal.ONE.divide(BigDecimal(60), MathContext.DECIMAL32)),
+            "hr" to HumanUnit("hour", time, BigDecimal.ONE.divide(BigDecimal(60 * 60), MathContext.DECIMAL32)),
 
-            "Hz" to HumanUnit("hertz", frequency, BigDecimal(1)),
-            "g" to HumanUnit("gram", mass, BigDecimal(1)),
+            "Hz" to HumanUnit("hertz", frequency, BigDecimal.ONE),
+            "g" to HumanUnit("gram", mass, BigDecimal.ONE),
 
             "k" to HumanUnit("kilo", tt, BigDecimal("1e3")),
-            "M" to HumanUnit("kilo", tt, BigDecimal("1e6"))
+            "M" to HumanUnit("mega", tt, BigDecimal("1e6"))
     )
 
     fun byAbbreviation(s: String) = units[s]
+
+    fun humanAbbreviation(unit: NaturalUnit) : String? {
+        for (unitEntry in units) {
+            if (unitEntry.value == unit) {
+                return unitEntry.key
+            }
+        }
+        return null
+    }
 
     val abbreviations = units.keys
 }
