@@ -35,13 +35,18 @@ class ParserTest {
         evalTest(Quantity(BigDecimal("579")), "123+456")
     }
 
-
     @Test
     fun multiplication() {
         evalTest(Quantity(BigDecimal("8")), "4*2")
         evalTest(Quantity(BigDecimal("-8")), "-4*2")
         evalTest(Quantity(BigDecimal("-8")), "4*-2")
     }
+
+    @Test
+    fun alternativeMultiplicationSign() {
+        evalTest(Quantity(BigDecimal("8")), "4×2")
+    }
+
 
     @Test
     fun topLevelParentheses() {

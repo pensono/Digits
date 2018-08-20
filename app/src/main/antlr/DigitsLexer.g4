@@ -2,8 +2,8 @@ lexer grammar DigitsLexer;
 
 WS: [ \t\r\n\u000C]+ -> skip;
 
-TIMES: '×' | '*';
-DIVIDE: '÷' | '/';
+TIMES: '\u00D7' | '*';
+DIVIDE: '\u00F7' | '/';
 
 PLUS: '+';
 MINUS: '-';

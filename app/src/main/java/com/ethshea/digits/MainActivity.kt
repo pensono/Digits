@@ -34,9 +34,9 @@ class MainActivity : Activity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val result = evaluateExpression(input.text.toString())
 
-                // val humanUnit = humanize(result.value)
+//                val humanUnit = humanize(result.value)
 
-                result_preview.text = result.value.toString() //.value.toString() + humanUnit.abbreviation
+                result_preview.text = result.value.value.toString() + result.value.unit.toString()
                 input.errors = result.errors
             }
         })
