@@ -81,24 +81,4 @@ class TokenIterator(tokens: String) {
         }
         return next
     }
-
-    /**
-     * Save the current position
-     */
-    fun speculate() {
-
-    }
-
-    /**
-     * Commit to the current speculation
-     */
-    fun commit(){
-
-    }
-
-    /**
-     * Back out of speculation
-     */
-    fun fial() {}
-
 }

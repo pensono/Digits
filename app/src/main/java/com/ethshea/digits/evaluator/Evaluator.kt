@@ -2,8 +2,13 @@ package com.ethshea.digits.evaluator
 
 import com.ethshea.digits.NaturalUnit
 import com.ethshea.digits.UnitSystem
+import com.ethshea.digits.parser.DigitsLexer
+import com.ethshea.digits.parser.DigitsParser
+import com.ethshea.digits.parser.DigitsParserBaseVisitor
+import org.antlr.v4.runtime.CharStreams
+import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.ConsoleErrorListener
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * @author Ethan
@@ -11,129 +16,65 @@ import java.util.*
 
 data class ErrorMessage(val message: String, val position: Int)
 
-data class ParseResult<T>(val value: T, val errors: Collection<ErrorMessage>)
+// TODO Why does this have to be generic?
+data class ParseResult<T>(val value: T, val errors: Collection<ErrorMessage> = listOf()) {
+    fun <R, A> invoke(argument: A, operation: (T, A) -> R) = ParseResult(operation(value, argument), errors)
+    fun <R> invoke(operation: (T) -> R) = ParseResult(operation(value), errors)
 
-fun <T> failure(value: T, message: ErrorMessage) = ParseResult(value, listOf(message))
-fun <O, N> failure(prev: ParseResult<O>, message: ErrorMessage, operation: (O) -> N) = ParseResult(operation.invoke(prev.value), prev.errors.plusElement(message))
-fun <O1, O2, N> failure(first: ParseResult<O1>, second: ParseResult<O2>, message: ErrorMessage, operation: (O1, O2) -> N) =
-        ParseResult(operation.invoke(first.value, second.value), (first.errors + second.errors).plusElement(message))
-fun <T> success(value: T) = ParseResult(value, listOf())
-fun <O, N> success(prev: ParseResult<O>, operation: (O) -> N) = ParseResult(operation.invoke(prev.value), prev.errors)
-fun <O1, O2, N> success(first: ParseResult<O1>, second: ParseResult<O2>, operation: (O1, O2) -> N) = ParseResult(operation.invoke(first.value, second.value), first.errors + second.errors)
-fun <O1, O2, N> bind(first: ParseResult<O1>, second: ParseResult<O2>, operation: (O1, O2) -> ParseResult<N>) : ParseResult<N> {
-    val result = operation.invoke(first.value, second.value)
-    return ParseResult(result.value, result.errors + first.errors + second.errors)
+    fun <R, A> combine(argument: ParseResult<A>, operation: (T, A) -> R) = ParseResult(operation(value, argument.value), errors + argument.errors)
 }
 
 fun evaluateExpression(input: String) : ParseResult<Quantity> {
-    return evaluateExpression(TokenIterator(input))
+    val lexer = DigitsLexer(CharStreams.fromString(input))
+    lexer.removeErrorListener(ConsoleErrorListener.INSTANCE) // Error messages enabled by default -_-
+    val tokens = CommonTokenStream(lexer)
+    val parser = DigitsParser(tokens)
+    parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
+
+    return parser.expression()?.accept(Evaluator) ?: ParseResult(Quantity.Zero)
 }
 
-private data class OperatorSpec(val arity: Int, val prescience: Int, val operation: (List<ParseResult<Quantity>>) -> ParseResult<Quantity>)
 
-private val operators = mapOf(
-        "+" to OperatorSpec(2, 1, unitInference(Quantity::plus)),
-        "-" to OperatorSpec(2, 1, unitInference(Quantity::minus)),
-        "*" to OperatorSpec(2, 3, binary(Quantity::times)),
-        "×" to OperatorSpec(2, 3, binary(Quantity::times)),
-        "/" to OperatorSpec(2,3, binary(Quantity::div))
-//        "sin" to OperatorSpec(1, 5, unary({q -> Quantity(q.value) }))
-)
+// A null ParseResult means use whatever the identity element for the operation is
+object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
+    override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
+        val value = BigDecimal(ctx.value().text)
+        val unitResult = parseUnit(TokenIterator(ctx.unit().text))
 
-// I don't like that this takes a list. Is there some way it can be combined with binary()?
-fun unitInference(operator: (Quantity, Quantity) -> Quantity) : (List<ParseResult<Quantity>>) -> ParseResult<Quantity> =
-     {list ->
-         if (list[0].value.unit.dimensionallyEqual(list[1].value.unit)) {
-             success(list[0], list[1], operator)
-         } else {
-             failure(list[0], list[1], ErrorMessage("Incompatible units", 0), {a, b ->
-                 operator.invoke(a, Quantity(b.value, a.unit))
-             })
-         }
-     }
-
-
-fun binary(operator: (Quantity, Quantity) -> Quantity): (List<ParseResult<Quantity>>) -> ParseResult<Quantity> =
-    {list -> success(list[0], list[1], {a, b -> operator.invoke(a, b)})}
-
-
-fun unary(operator: (Quantity) -> Quantity): (List<Quantity>) -> Quantity =
-    {list -> operator.invoke(list[0])}
-
-
-fun <T> Stack<T>.pop(amount: Int) : List<T> {
-    var result = ArrayList<T>()
-    for (i in 0 until amount) {
-        result.add(0,this.pop())
-    }
-    return result
-}
-
-fun evaluateExpression(tokens: TokenIterator) : ParseResult<Quantity> {
-    // Shunting-yard
-    val operatorStack = Stack<OperatorSpec>()
-    val quantityStack = Stack<ParseResult<Quantity>>()
-
-    var minusIsUnary = true // True at start and after operators
-
-    while (tokens.hasNext() && !tokens.isNext(')')) {
-        if (tokens.isNext('(')) {
-            tokens.consume('(')
-            quantityStack.push(evaluateExpression(tokens))
-            tokens.consume(')')
-        } else if (isNextNumeric(tokens) || (tokens.isNext('-') && minusIsUnary)) {
-            quantityStack.push(parseNumeric(tokens))
-            minusIsUnary = false
-        } else {
-            val operator = tokens.takeNextLargest(operators)
-            if (operator != null) {
-                while (!operatorStack.empty() && operatorStack.peek().prescience >= operator.prescience) {
-                    val toApply = operatorStack.pop()
-                    val arguments = quantityStack.pop(toApply.arity)
-                    quantityStack.push(toApply.operation.invoke(arguments))
-                }
-                operatorStack.push(operator)
-                minusIsUnary = true
-            } else {
-                break // TODO handle fail case better
-            }
-        }
+        return unitResult.invoke { unit -> Quantity(value, unit)}
     }
 
-    while (operatorStack.isNotEmpty()) {
-        val toApply = operatorStack.pop()
-        if (quantityStack.size < toApply.arity) return quantityStack.pop() // Lame. We parsed most of the expression. Should return an error
-        val arguments = quantityStack.pop(toApply.arity)
-        quantityStack.push(toApply.operation.invoke(arguments))
+    override fun visitParenthesizedExpression(ctx: DigitsParser.ParenthesizedExpressionContext): ParseResult<Quantity>? {
+        return ctx.expression().accept(this)
     }
 
-    // Quantity stack must have 1 thing left
+    override fun visitSumExpression(ctx: DigitsParser.SumExpressionContext): ParseResult<Quantity> {
+        val lhsResult = ctx.lhs.accept(this) ?: ParseResult(Quantity.Zero)
+        val rhsResult = ctx.rhs.accept(this) ?: ParseResult(Quantity.Zero)
+        val operation = if (ctx.operation.type == DigitsLexer.PLUS) Quantity::plus else Quantity::minus
 
-    return quantityStack.pop()
-}
-
-fun parseNumeric(tokens: TokenIterator) : ParseResult<Quantity> {
-    var value = ""
-    while (tokens.hasNext() && (isNextNumeric(tokens) || (value.isEmpty() && tokens.isNext('-')))) {
-        value += tokens.next()
+        return lhsResult.combine(rhsResult, operation)
     }
 
-    val unit = parseUnit(tokens)
+    override fun visitProductExpression(ctx: DigitsParser.ProductExpressionContext): ParseResult<Quantity> {
+        val lhsResult = ctx.lhs.accept(this) ?: ParseResult(Quantity.One)
+        val rhsResult = ctx.rhs.accept(this) ?: ParseResult(Quantity.One)
+        val operation = if (ctx.operation.type == DigitsLexer.TIMES) Quantity::times else Quantity::div
 
-    return try {
-        success(unit, {u -> Quantity(BigDecimal(value), u)})
-    } catch (e: NumberFormatException) {
-        failure(unit, ErrorMessage(value + " is not a valid number", tokens.position), {u -> Quantity(BigDecimal(1), u)})
+        return lhsResult.combine(rhsResult, operation)
+    }
+
+    override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity>? {
+        val argument = ctx.expression().accept(this)
+
+        return argument?.invoke(Quantity::unaryMinus)
     }
 }
-
-private fun isNextNumeric(tokens: TokenIterator) =
-        (tokens.peek().isDigit() || tokens.isNext('.'))
 
 fun parseUnit(tokens: TokenIterator) : ParseResult<NaturalUnit> {
     var invert = false
     var unit = UnitSystem.void
-    var foundUnit = false
+    val errors = mutableListOf<ErrorMessage>()
 
     while (tokens.hasNext()) {
         val abbreviation = tokens.nextLargest(UnitSystem.abbreviations)
@@ -141,14 +82,14 @@ fun parseUnit(tokens: TokenIterator) : ParseResult<NaturalUnit> {
             val newUnit = UnitSystem.byAbbreviation(abbreviation)!!
             unit += if (invert) -newUnit else newUnit
             tokens.consume(abbreviation)
-            foundUnit = true
         } else if (tokens.isNext("/") && tokens.nextLargest(UnitSystem.abbreviations.map { a -> "/" + a }) != null) { // Lame fix for division at the end
             invert = true
             tokens.consume("/")
         } else {
-            break
+            tokens.next()
+            errors.add(ErrorMessage("Unknown unit:", 0)) // TODO fix position
         }
     }
 
-    return success(unit)
+    return ParseResult(unit, errors)
 }

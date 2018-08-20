@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import com.ethshea.digits.evaluator.evaluateExpression
+import humanize
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity() {
@@ -33,9 +34,9 @@ class MainActivity : Activity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val result = evaluateExpression(input.text.toString())
 
-                val unitString = UnitSystem.humanAbbreviation(result.value.unit) ?: result.value.unit.toString()
+                // val humanUnit = humanize(result.value)
 
-                result_preview.text = result.value.value.toString() + unitString
+                result_preview.text = result.value.toString() //.value.toString() + humanUnit.abbreviation
                 input.errors = result.errors
             }
         })

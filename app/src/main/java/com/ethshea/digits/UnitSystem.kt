@@ -30,6 +30,21 @@ open class NaturalUnit(val dimensions: Map<String, Int> = mapOf(), val factor: B
 
     fun dimensionallyEqual(other: NaturalUnit) = dimensions == other.dimensions
 
+    /**
+     * Returns true if all dimensions of this unit are greater than or equal to the other
+     */
+    fun fits(other: NaturalUnit) : Boolean {
+        if (!dimensions.keys.containsAll(other.dimensions.keys)) {
+            return false
+        }
+
+        return dimensions.all { dimension ->
+            other.dimensions.containsKey(dimension.key)
+            && (Integer.signum(dimension.value) == Integer.signum(other.dimensions[dimension.key]!!))
+            && (Math.abs(dimension.value) >= Math.abs(other.dimensions[dimension.key]!!))
+        }
+    }
+
     override fun hashCode() = dimensions.hashCode() xor factor.hashCode()
     override fun toString() = dimensions.toString() + " " + factor.toString()
 
@@ -48,7 +63,7 @@ open class NaturalUnit(val dimensions: Map<String, Int> = mapOf(), val factor: B
     }
 }
 
-class HumanUnit(val name: String, dimensions: Map<String, Int>, factor: BigDecimal) : NaturalUnit(dimensions, factor)
+class HumanUnit(val abbreviation: String, val name: String, dimensions: Map<String, Int>, factor: BigDecimal = BigDecimal.ONE) : NaturalUnit(dimensions, factor)
 
 object UnitSystem { // Preferred Units?
     val length = mapOf("length" to 1)
@@ -56,38 +71,38 @@ object UnitSystem { // Preferred Units?
     val time = mapOf("time" to 1)
     val frequency = mapOf("time" to -1)
     val mass = mapOf("mass" to 1)
+    val current = mapOf("current" to 1)
+    val emf = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -1)
+    val impedance = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -2)
     val tt = mapOf<String, Int>()
 
     val void = NaturalUnit(mapOf(), BigDecimal.ONE) // Called this to avoid confusion with "unit", the intended name
 
-    private val units = mapOf(
-            "m" to HumanUnit("meter", length, BigDecimal.ONE),
-            "ft" to HumanUnit("foot", length, BigDecimal("3.28084")),
-            "mi" to HumanUnit("mile", length, BigDecimal("0.000621371")),
+    val units = listOf(
+            HumanUnit("m", "meter", length),
+            HumanUnit("ft", "foot", length, BigDecimal("3.28084")),
+            HumanUnit("mi", "mile", length, BigDecimal("0.000621371")),
 
-            "acre" to HumanUnit("acre", area, BigDecimal("4046.86")),
+            HumanUnit("acre", "acre", area, BigDecimal("4046.86")),
 
-            "s" to HumanUnit("second", time, BigDecimal.ONE),
-            "min" to HumanUnit("minute", time, BigDecimal.ONE.divide(BigDecimal(60), MathContext.DECIMAL32)),
-            "hr" to HumanUnit("hour", time, BigDecimal.ONE.divide(BigDecimal(60 * 60), MathContext.DECIMAL32)),
+            HumanUnit("s", "second", time),
+            HumanUnit("min", "minute", time, BigDecimal.ONE.divide(BigDecimal(60), MathContext.DECIMAL32)),
+            HumanUnit("hr", "hour", time, BigDecimal.ONE.divide(BigDecimal(60 * 60), MathContext.DECIMAL32)),
 
-            "Hz" to HumanUnit("hertz", frequency, BigDecimal.ONE),
-            "g" to HumanUnit("gram", mass, BigDecimal.ONE),
+            HumanUnit("Hz", "hertz", frequency),
+            HumanUnit("g", "gram", mass),
 
-            "k" to HumanUnit("kilo", tt, BigDecimal("1e3")),
-            "M" to HumanUnit("mega", tt, BigDecimal("1e6"))
+            HumanUnit("V", "volts", emf),
+            HumanUnit("A", "amps", current),
+            HumanUnit("Ω", "ohms", impedance),
+
+            HumanUnit("k", "kilo", tt, BigDecimal("1e3")),
+            HumanUnit("M", "mega", tt, BigDecimal("1e6"))
     )
+    
+    private val unitAbbreviations = units.associateBy(HumanUnit::abbreviation)
 
-    fun byAbbreviation(s: String) = units[s]
+    fun byAbbreviation(s: String) = unitAbbreviations[s]
 
-    fun humanAbbreviation(unit: NaturalUnit) : String? {
-        for (unitEntry in units) {
-            if (unitEntry.value == unit) {
-                return unitEntry.key
-            }
-        }
-        return null
-    }
-
-    val abbreviations = units.keys
+    val abbreviations = unitAbbreviations.keys
 }

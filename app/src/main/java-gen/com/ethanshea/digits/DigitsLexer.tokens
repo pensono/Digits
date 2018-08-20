@@ -1,0 +1,7 @@
+TIMES=1
+PLUS=2
+DOT=3
+Digit=4
+Letter=5
+'+'=2
+'.'=3

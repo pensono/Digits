@@ -16,15 +16,17 @@ class QuantityTest {
 
     @Test
     fun plus() {
-        assertEquals(Quantity(BigDecimal("456.123"), kilometers),
-                Quantity(BigDecimal("123"), meters) + Quantity(BigDecimal("456"), kilometers))
-
-        assertEquals(Quantity(BigDecimal("123.456"), kilometers),
-                Quantity(BigDecimal("123"), kilometers) + Quantity(BigDecimal("456"), meters))
+        assertEquals(q("456.123", kilometers), q("123", meters) + q("456", kilometers))
+        assertEquals(q("123.456", kilometers),q("123", kilometers) + q("456", meters))
     }
 
     @Test
     fun minus() {
+        assertEquals(q("-1", meters), q("4", meters) - q("5", meters))
+        assertEquals(q("1", meters), q("5", meters) - q("4", meters))
+
+        assertEquals(q("999", meters), q("1", kilometers) - q("1", meters))
+        assertEquals(q("-999", meters), q("1", meters) - q("1", kilometers))
     }
 
     @Test
@@ -34,4 +36,6 @@ class QuantityTest {
     @Test
     fun div() {
     }
+
+    fun q(value: String, unit: NaturalUnit) = Quantity(BigDecimal(value), unit)
 }
