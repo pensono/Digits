@@ -2,6 +2,7 @@ package com.ethshea.digits
 
 import java.math.BigDecimal
 import java.math.MathContext
+import kotlin.math.absoluteValue
 
 
 /**
@@ -9,39 +10,37 @@ import java.math.MathContext
  */
 
 
-open class NaturalUnit(val dimensions: Map<String, Int> = mapOf(), val factor: BigDecimal = BigDecimal.ONE) {
-    operator fun plus(other: NaturalUnit) : NaturalUnit {
-        return NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::plus), factor * other.factor)
-    }
+open class NaturalUnit(open val dimensions: Map<String, Int> = mapOf(), open val factor: BigDecimal = BigDecimal.ONE) {
+    operator fun plus(other: NaturalUnit) =
+            NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::plus), factor * other.factor)
 
-    operator fun minus(other: NaturalUnit) : NaturalUnit {
-        return NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::minus), factor / other.factor)
-    }
+    operator fun minus(other: NaturalUnit) =
+        NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::minus), factor.divide(other.factor))
 
-    operator fun unaryMinus() : NaturalUnit {
-        return NaturalUnit(dimensions.mapValues { e -> -e.value }, BigDecimal.ONE.divide(factor))
-    }
+    operator fun times(n: Int) : NaturalUnit =
+        NaturalUnit(dimensions.mapValues { entry -> entry.value * n }, factor.pow(n))
+
+    operator fun unaryMinus() =
+        NaturalUnit(dimensions.mapValues { e -> -e.value }, BigDecimal.ONE.divide(factor))
 
     override fun equals(other: Any?) =
-        when (other) {
-            is NaturalUnit -> dimensions == other.dimensions && factor == other.factor
-            else -> false
-        }
+        other is NaturalUnit && representationEqual(other)
 
+    fun representationEqual(other: NaturalUnit) = dimensionallyEqual(other) && factor == other.factor
     fun dimensionallyEqual(other: NaturalUnit) = dimensions == other.dimensions
 
     /**
      * Returns true if all dimensions of this unit are greater than or equal to the other
      */
-    fun fits(other: NaturalUnit) : Boolean {
-        if (!dimensions.keys.containsAll(other.dimensions.keys)) {
+    fun fitsWithin(other: NaturalUnit) : Boolean {
+        if (!other.dimensions.keys.containsAll(dimensions.keys)
+            || !fitsWithin(factor, other.factor)) {
             return false
         }
 
         return dimensions.all { dimension ->
             other.dimensions.containsKey(dimension.key)
-            && (Integer.signum(dimension.value) == Integer.signum(other.dimensions[dimension.key]!!))
-            && (Math.abs(dimension.value) >= Math.abs(other.dimensions[dimension.key]!!))
+            && fitsWithin(dimension.value, other.dimensions[dimension.key]!!)
         }
     }
 
@@ -61,9 +60,58 @@ open class NaturalUnit(val dimensions: Map<String, Int> = mapOf(), val factor: B
         }
         return newMap
     }
+
+    /**
+     * Returns true iff a has a smaller or equal magnitude and the same sign as b
+     */
+    private fun fitsWithin(a: Int, b: Int) = (Integer.signum(a) == Integer.signum(b)) && (Math.abs(a) <= Math.abs(b))
+
+
+    /**
+     * Returns true iff fitsWithin(log10(factorA), log10(factorB))
+     */
+    private fun fitsWithin(factorA: BigDecimal, factorB: BigDecimal) =
+            factorA == BigDecimal.ONE ||
+                    if (factorA > BigDecimal.ONE) {
+                        factorA <= factorB
+                    } else {
+                        factorA >= factorB
+                    }
 }
 
-class HumanUnit(val abbreviation: String, val name: String, dimensions: Map<String, Int>, factor: BigDecimal = BigDecimal.ONE) : NaturalUnit(dimensions, factor)
+class AtomicHumanUnit(val abbreviation: String, val name: String, dimensions: Map<String, Int>, factor: BigDecimal = BigDecimal.ONE) : NaturalUnit(dimensions, factor) {
+    override fun toString() = abbreviation + " " + super.toString()
+}
+
+class HumanUnit(val components: Map<AtomicHumanUnit, Int>) : NaturalUnit() {
+    val underlyingUnit =
+            components.map { entry -> entry.key * entry.value }
+            .fold(UnitSystem.void, NaturalUnit::plus)
+
+    override val dimensions = underlyingUnit.dimensions
+    override val factor = underlyingUnit.factor
+
+    val abbreviation = components.map { entry -> entry.key.abbreviation + prettyExponent(entry.value) }.joinToString("")
+
+    override fun equals(other: Any?) =
+        other is HumanUnit && other.components == components
+
+    override fun toString(): String = "HumanUnit($components, $abbreviation)"
+}
+
+val superscriptMap = listOf("⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹")
+val superscriptMinus = "⁻"
+fun prettyExponent(number: Int) : String {
+    if (number == 1) {
+        return ""
+    }
+
+    val stringRepresentation = number.absoluteValue.toString()
+    val superscript = stringRepresentation.map { char -> superscriptMap[char - '0'] }
+    val sign = if (number < 0) superscriptMinus else ""
+
+    return sign + superscript
+}
 
 object UnitSystem { // Preferred Units?
     val length = mapOf("length" to 1)
@@ -79,28 +127,31 @@ object UnitSystem { // Preferred Units?
     val void = NaturalUnit(mapOf(), BigDecimal.ONE) // Called this to avoid confusion with "unit", the intended name
 
     val units = listOf(
-            HumanUnit("m", "meter", length),
-            HumanUnit("ft", "foot", length, BigDecimal("3.28084")),
-            HumanUnit("mi", "mile", length, BigDecimal("0.000621371")),
+            AtomicHumanUnit("m", "meter", length),
+            AtomicHumanUnit("ft", "foot", length, BigDecimal("3.28084")),
+            AtomicHumanUnit("mi", "mile", length, BigDecimal("0.000621371")),
 
-            HumanUnit("acre", "acre", area, BigDecimal("4046.86")),
+            AtomicHumanUnit("acre", "acre", area, BigDecimal("4046.86")),
 
-            HumanUnit("s", "second", time),
-            HumanUnit("min", "minute", time, BigDecimal.ONE.divide(BigDecimal(60), MathContext.DECIMAL32)),
-            HumanUnit("hr", "hour", time, BigDecimal.ONE.divide(BigDecimal(60 * 60), MathContext.DECIMAL32)),
+            AtomicHumanUnit("s", "second", time),
+            AtomicHumanUnit("min", "minute", time, BigDecimal.ONE.divide(BigDecimal(60), MathContext.DECIMAL32)),
+            AtomicHumanUnit("hr", "hour", time, BigDecimal.ONE.divide(BigDecimal(60 * 60), MathContext.DECIMAL32)),
 
-            HumanUnit("Hz", "hertz", frequency),
-            HumanUnit("g", "gram", mass),
+            AtomicHumanUnit("Hz", "hertz", frequency),
+            AtomicHumanUnit("g", "gram", mass),
 
-            HumanUnit("V", "volts", emf),
-            HumanUnit("A", "amps", current),
-            HumanUnit("Ω", "ohms", impedance),
-
-            HumanUnit("k", "kilo", tt, BigDecimal("1e3")),
-            HumanUnit("M", "mega", tt, BigDecimal("1e6"))
+            AtomicHumanUnit("V", "volts", emf),
+            AtomicHumanUnit("A", "amps", current),
+            AtomicHumanUnit("Ω", "ohms", impedance)
     )
-    
-    private val unitAbbreviations = units.associateBy(HumanUnit::abbreviation)
+
+    val prefixUnits = listOf(
+            AtomicHumanUnit("μ", "micro", tt, BigDecimal("1e-3", MathContext.DECIMAL128)),
+            AtomicHumanUnit("M", "mega", tt, BigDecimal("1e6", MathContext.DECIMAL128)),
+            AtomicHumanUnit("k", "kilo", tt, BigDecimal("1e3", MathContext.DECIMAL128))
+    )
+
+    private val unitAbbreviations = (prefixUnits + units).associateBy(AtomicHumanUnit::abbreviation)
 
     fun byAbbreviation(s: String) = unitAbbreviations[s]
 

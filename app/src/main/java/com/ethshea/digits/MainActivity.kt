@@ -32,12 +32,13 @@ class MainActivity : Activity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val result = evaluateExpression(input.text.toString())
+                val parseResult = evaluateExpression(input.text.toString())
 
-//                val humanUnit = humanize(result.value)
+                val quantity = parseResult.value.value
+                val humanUnit = humanize(parseResult.value)
 
-                result_preview.text = result.value.value.toString() + result.value.unit.toString()
-                input.errors = result.errors
+                result_preview.text = quantity.toString() + humanUnit.abbreviation
+                input.errors = parseResult.errors
             }
         })
 
