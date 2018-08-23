@@ -1,6 +1,7 @@
 package com.ethshea.digits.evaluator
 
 import com.ethshea.digits.NaturalUnit
+import com.ethshea.digits.SciNumber
 import com.ethshea.digits.UnitSystem
 import com.ethshea.digits.parser.DigitsLexer
 import com.ethshea.digits.parser.DigitsParser
@@ -8,7 +9,6 @@ import com.ethshea.digits.parser.DigitsParserBaseVisitor
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ConsoleErrorListener
-import java.math.BigDecimal
 
 /**
  * @author Ethan
@@ -38,7 +38,7 @@ fun evaluateExpression(input: String) : ParseResult<Quantity> {
 // A null ParseResult means use whatever the identity element for the operation is
 object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
-        val value = BigDecimal(ctx.value().text)
+        val value = SciNumber(ctx.value().text)
         val unitResult = parseUnit(TokenIterator(ctx.unit().text))
 
         return unitResult.invoke { unit -> Quantity(value, unit)}
@@ -79,7 +79,7 @@ fun parseUnit(tokens: TokenIterator) : ParseResult<NaturalUnit> {
     while (tokens.hasNext()) {
         val abbreviation = tokens.nextLargest(UnitSystem.abbreviations)
         if (abbreviation != null) {
-            val newUnit = UnitSystem.byAbbreviation(abbreviation)!!
+            val newUnit = UnitSystem.unitByAbbreviation(abbreviation)!!
             unit += if (invert) -newUnit else newUnit
             tokens.consume(abbreviation)
         } else if (tokens.isNext("/") && tokens.nextLargest(UnitSystem.abbreviations.map { a -> "/" + a }) != null) { // Lame fix for division at the end

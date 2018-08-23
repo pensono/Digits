@@ -1,6 +1,7 @@
 package com.ethshea.digits.evaluator
 
 import com.ethshea.digits.NaturalUnit
+import com.ethshea.digits.SciNumber
 import com.ethshea.digits.UnitSystem
 import org.junit.Test
 
@@ -11,8 +12,8 @@ import java.math.BigDecimal
  * @author Ethan
  */
 class QuantityTest {
-    val meters = UnitSystem.byAbbreviation("m")!!
-    val kilometers = NaturalUnit(mapOf("length" to 1), BigDecimal("1e3"))
+    val meters = NaturalUnit(mapOf("length" to 1))
+    val kilometers = NaturalUnit(mapOf("length" to 1), SciNumber.Kilo)
 
     @Test
     fun plus() {
@@ -37,5 +38,5 @@ class QuantityTest {
     fun div() {
     }
 
-    fun q(value: String, unit: NaturalUnit) = Quantity(BigDecimal(value), unit)
+    fun q(value: String, unit: NaturalUnit) = Quantity(SciNumber(value), unit)
 }

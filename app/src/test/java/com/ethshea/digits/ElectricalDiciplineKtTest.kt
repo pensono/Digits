@@ -5,7 +5,6 @@ import humanize
 import org.junit.Test
 
 import org.junit.Assert.*
-import java.math.BigDecimal
 
 /**
  * @author Ethan
@@ -13,25 +12,30 @@ import java.math.BigDecimal
 class ElectricalDiciplineKtTest {
     @Test
     fun humanize() {
-        assertEquals(HumanUnit(mapOf()), humanize(Quantity(BigDecimal.ONE)))
-        assertEquals(HumanUnit(mapOf(u("Ω") to 1, u("m") to 1)), humanize(Quantity(BigDecimal.ONE, u("Ω") + u("m"))))
-        assertEquals(HumanUnit(mapOf(u("M") to 1, u("V") to 1)), humanize(Quantity(BigDecimal.ONE, u("V") + u("M"))))
+        assertEquals(HumanUnit(mapOf()), humanize(Quantity(SciNumber.One)))
+        assertEquals(HumanUnit(mapOf(u("Ω") to 1, u("m") to 1)), humanize(Quantity(SciNumber.One, u("Ω") + u("m"))))
+        assertEquals(HumanUnit(mapOf(p("M") to 1, u("V") to 1)), humanize(Quantity(SciNumber.One, u("V") + p("M"))))
+    }
+
+    @Test
+    fun humanizeInverse() {
+        assertEquals(HumanUnit(mapOf(u("Ω") to 1, u("m") to -1)), humanize(Quantity(SciNumber.One, u("Ω") - u("m"))))
+        assertEquals(HumanUnit(mapOf(u("Ω") to 1, u("m") to -1, p("M") to 1)), humanize(Quantity(SciNumber.One, p("M") + u("Ω") - u("m"))))
     }
 
     @Test
     fun onePrefix() {
-        assertEquals(HumanUnit(mapOf(u("k") to 1)), humanize(Quantity(BigDecimal.ONE, u("k"))))
+        assertEquals(HumanUnit(mapOf(p("k") to 1)), humanize(Quantity(SciNumber.One, p("k"))))
     }
 
     @Test
     fun abbreviation() {
-        assertEquals("MV", humanize(Quantity(BigDecimal.ONE, u("M") + u("V"))).abbreviation)
+        assertEquals("MV", humanize(Quantity(SciNumber.One, p("M") + u("V"))).abbreviation)
+        assertEquals("kV", humanize(Quantity(SciNumber.One, p("k") + u("V"))).abbreviation)
+        assertEquals("mV", humanize(Quantity(SciNumber.One, p("m") + u("V"))).abbreviation)
+        assertEquals("TV", humanize(Quantity(SciNumber.One, p("T") + u("V"))).abbreviation)
     }
 
-    @Test
-    fun prefixFirst() {
-        assert(humanize(Quantity(BigDecimal.ONE, u("M") + u("Ω") + u("m"))).abbreviation.startsWith("M"))
-    }
-
-    private fun u(abbr: String) = UnitSystem.byAbbreviation(abbr)!!
+    private fun u(abbr: String) = UnitSystem.unitByAbbreviation(abbr)!!
+    private fun p(abbr: String) = UnitSystem.prefixByAbbreviation(abbr)!!
 }
