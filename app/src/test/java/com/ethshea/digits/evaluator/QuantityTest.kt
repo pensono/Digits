@@ -1,12 +1,10 @@
 package com.ethshea.digits.evaluator
 
-import com.ethshea.digits.NaturalUnit
+import com.ethshea.digits.units.NaturalUnit
 import com.ethshea.digits.SciNumber
-import com.ethshea.digits.UnitSystem
 import org.junit.Test
 
 import org.junit.Assert.*
-import java.math.BigDecimal
 
 /**
  * @author Ethan

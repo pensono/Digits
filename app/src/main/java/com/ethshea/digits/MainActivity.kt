@@ -17,7 +17,7 @@ class MainActivity : Activity() {
             if (prefix) {
                 displayUnits(listOf("T", "G", "M", "k", "1", "m", "μ", "n", "p"))
             } else {
-                displayUnits(listOf("Hz", "s", "m", "g", "V", "Ω", "H"))
+                displayUnits(listOf("A", "Hz", "s", "m", "g", "V", "Ω", "H"))
             }
         }
 
@@ -60,10 +60,10 @@ class MainActivity : Activity() {
                 input.text.replace(input.selectionStart, input.selectionEnd, "")
             }
         } else {
-            var insertText = buttonCommand.replace("|", "")
+            val insertText = buttonCommand.replace("|", "")
             input.text.replace(input.selectionStart, input.selectionEnd, insertText)
             if (buttonCommand.contains('|')) {
-                var offset = buttonCommand.indexOf('|')
+                val offset = buttonCommand.indexOf('|')
                 input.setSelection(input.selectionStart + offset - insertText.length)
             }
         }

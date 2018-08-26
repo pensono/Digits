@@ -1,7 +1,7 @@
 package com.ethshea.digits.evaluator
 
 import com.ethshea.digits.SciNumber
-import com.ethshea.digits.UnitSystem
+import com.ethshea.digits.units.UnitSystem
 import org.junit.Assert
 import org.junit.Test
 
@@ -46,7 +46,6 @@ class ParserTest {
     fun alternativeMultiplicationSign() {
         evalTest(Quantity(SciNumber("8")), "4×2")
     }
-
 
     @Test
     fun topLevelParentheses() {

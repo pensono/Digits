@@ -1,35 +1,35 @@
-import com.ethshea.digits.AtomicHumanUnit
-import com.ethshea.digits.HumanUnit
-import com.ethshea.digits.UnitSystem
+import com.ethshea.digits.units.AtomicHumanUnit
+import com.ethshea.digits.units.HumanUnit
+import com.ethshea.digits.SciNumber
+import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.evaluator.Quantity
+import com.ethshea.digits.units.PrefixUnit
 import java.util.*
 
 
 val prefixMagStart = -15
 val prefixes = listOf("f", "p", "n", "μ", "m", "", "k", "M", "G", "T")
-val preferredUnits = listOf(
-        UnitSystem.unitByAbbreviation("Ω")!!,
-        UnitSystem.unitByAbbreviation("V")!!,
-        UnitSystem.unitByAbbreviation("A")!!
-)
 
 /**
  * Returns an inverse unit that can be used to normalize the result
  */
 fun humanize(quantity: Quantity) : HumanUnit {
+    val expandedQuantity = quantity.normalizedValue
+    val prefixIndex = (Math.log10(expandedQuantity.abs().toDouble()).toInt() - prefixMagStart) / 3 // Double is not super accurate, but should be good enough
+    val prefixExponent = (prefixIndex * 3) + prefixMagStart
+    val prefixUnit = PrefixUnit(prefixes[prefixIndex], "prefix", factor = SciNumber(1).pow(prefixExponent))
+
     val visitedUnits = mutableSetOf<HumanUnit>()
     val visitQueue = PriorityQueue<HumanUnit>(compareBy(HumanUnit::exponentMagnitude))
 
-    // This is not a very good way of dealing with prefixes
-    visitQueue.addAll(UnitSystem.prefixes.map{ HumanUnit(mapOf(it to 1)) })
     visitQueue.add(HumanUnit(mapOf())) // No prefix
 
     while (visitQueue.isNotEmpty()) {
         val currentUnit = visitQueue.poll()
         visitedUnits.add(currentUnit)
 
-        if (currentUnit.representationEqual(quantity.unit)) {
-            return currentUnit
+        if (currentUnit.dimensionallyEqual(quantity.unit)) {
+            return currentUnit.withPrefix(prefixUnit)
         }
 
         // I'm not 100% on the fact that this temporarily creates a human unit that has atomic units with degree 0

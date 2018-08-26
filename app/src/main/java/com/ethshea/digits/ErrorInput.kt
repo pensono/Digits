@@ -50,8 +50,8 @@ class ErrorInput: EditText {
         val left = layout.getLineLeft(0)
 
         for (error in errors) {
-            val start = paint.measureText(text, 0, error.position)
-            val end = paint.measureText(text, 0, error.position + 1)
+            val start = paint.measureText(text, 0, error.position.a)
+            val end = paint.measureText(text, 0, error.position.b)
             canvas.drawLine(left + start, underlineY, left + end, underlineY, underlinePaint)
         }
 

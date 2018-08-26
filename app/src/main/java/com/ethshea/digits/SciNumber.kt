@@ -46,4 +46,5 @@ class SciNumber {
     override fun toString(): String = backing.toString()
 
     fun reciprocal() = SciNumber(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128))
+    fun toDouble(): Double = backing.toDouble()
 }

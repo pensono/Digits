@@ -1,16 +1,15 @@
 package com.ethshea.digits.evaluator
 
-import com.ethshea.digits.NaturalUnit
+import com.ethshea.digits.units.NaturalUnit
 import com.ethshea.digits.SciNumber
-import com.ethshea.digits.UnitSystem
-import java.math.BigDecimal
+import com.ethshea.digits.units.UnitSystem
 
 /**
  * @author Ethan
  */
 
-data class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
-    val normalizedValue = value.times(unit.factor)
+open class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
+    val normalizedValue = value * unit.factor
 
     /**
      * @requires this.unit.dimensionallyEqual(other.unit)
