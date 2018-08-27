@@ -2,8 +2,7 @@ package com.ethshea.digits
 
 import com.ethshea.digits.evaluator.Quantity
 import com.ethshea.digits.units.HumanUnit
-import com.ethshea.digits.units.UnitSystem
-import humanize
+import com.ethshea.digits.units.humanize
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,7 +10,7 @@ import org.junit.Assert.*
 /**
  * @author Ethan
  */
-class ElectricalDiciplineKtTest {
+class HumanizationTest {
     @Test
     fun humanize() {
         assertEquals(HumanUnit(mapOf()), humanize(Quantity(SciNumber.One)))
@@ -32,7 +31,4 @@ class ElectricalDiciplineKtTest {
         assertEquals("mV", humanize(Quantity(SciNumber.One, p("m") + u("V"))).abbreviation)
         assertEquals("TV", humanize(Quantity(SciNumber.One, p("T") + u("V"))).abbreviation)
     }
-
-    private fun u(abbr: String) = UnitSystem.unitByAbbreviation(abbr)!!
-    private fun p(abbr: String) = UnitSystem.prefixByAbbreviation(abbr)!!
 }

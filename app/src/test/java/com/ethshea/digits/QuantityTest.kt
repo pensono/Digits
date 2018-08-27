@@ -1,7 +1,6 @@
-package com.ethshea.digits.evaluator
+package com.ethshea.digits
 
 import com.ethshea.digits.units.NaturalUnit
-import com.ethshea.digits.SciNumber
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -35,6 +34,4 @@ class QuantityTest {
     @Test
     fun div() {
     }
-
-    fun q(value: String, unit: NaturalUnit) = Quantity(SciNumber(value), unit)
 }

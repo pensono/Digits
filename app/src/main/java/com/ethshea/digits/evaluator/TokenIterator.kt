@@ -66,7 +66,11 @@ class TokenIterator(tokens: String) {
      * is returned.
      */
     fun <T> nextLargest(possible:Map<String, T>) : T? {
-        return possible[possible.keys.sortedBy { -it.length }.firstOrNull(this::isNext)]
+        val token = possible.keys.sortedBy { -it.length }.firstOrNull(this::isNext)
+        if (token != null) {
+            consume(token)
+        }
+        return  possible[token]
     }
 
     /**

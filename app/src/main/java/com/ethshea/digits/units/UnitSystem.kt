@@ -1,7 +1,6 @@
 package com.ethshea.digits.units
 
 import com.ethshea.digits.SciNumber
-import kotlin.math.absoluteValue
 
 object UnitSystem { // Preferred Units?
     val length = mapOf("length" to 1)
@@ -49,11 +48,6 @@ object UnitSystem { // Preferred Units?
             PrefixUnit("E", "exa", SciNumber("1e18"))
     )
 
-    private val unitAbbreviations = units.associateBy(AtomicHumanUnit::abbreviation)
-    private val prefixAbbreviations = prefixes.associateBy(AtomicHumanUnit::abbreviation)
-
-    fun unitByAbbreviation(s: String) = unitAbbreviations[s]
-    fun prefixByAbbreviation(s: String) = prefixAbbreviations[s]
-
-    val abbreviations = unitAbbreviations.keys
+    val unitAbbreviations = units.associateBy(AtomicHumanUnit::abbreviation)
+    val prefixAbbreviations = prefixes.associateBy(AtomicHumanUnit::abbreviation)
 }

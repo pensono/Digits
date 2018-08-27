@@ -1,6 +1,7 @@
-package com.ethshea.digits.evaluator
+package com.ethshea.digits
 
-import com.ethshea.digits.SciNumber
+import com.ethshea.digits.evaluator.Quantity
+import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
 import org.junit.Assert
 import org.junit.Test
@@ -23,9 +24,9 @@ class ParserTest {
 
     @Test
     fun literalsWithUnits() {
-        evalTest(Quantity(SciNumber("123"), UnitSystem.unitByAbbreviation("m")!!), "123m")
-        evalTest(Quantity(SciNumber("123"), UnitSystem.unitByAbbreviation("m")!!), "123 m")
-        evalTest(Quantity(SciNumber("-123"), UnitSystem.unitByAbbreviation("m")!!), "-123m")
+        evalTest(Quantity(SciNumber("123"), u("m")), "123m")
+        evalTest(Quantity(SciNumber("123"), u("m")), "123 m")
+        evalTest(Quantity(SciNumber("-123"), u("m")), "-123m")
     }
 
     @Test

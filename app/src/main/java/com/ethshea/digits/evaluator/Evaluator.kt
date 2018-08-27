@@ -39,7 +39,7 @@ fun evaluateExpression(input: String) : ParseResult<Quantity> {
 object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
         val value = SciNumber(ctx.value().text)
-        val unitResult = parseUnit(TokenIterator(ctx.unit().text), ctx.unit().sourceInterval)
+        val unitResult = parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
 
         return unitResult.invoke { unit -> Quantity(value, unit) }
     }
@@ -71,18 +71,26 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     }
 }
 
-fun parseUnit(tokens: TokenIterator, location: Interval) : ParseResult<NaturalUnit> {
+fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
     var invert = false
     var unit = UnitSystem.void
     val errors = mutableListOf<ErrorMessage>()
+    val tokens = TokenIterator(input)
+
+    val prefix = tokens.nextLargest(UnitSystem.prefixAbbreviations)
+    if (prefix != null) {
+        if (prefix.abbreviation == "m" && input.length == 1) { // Special case for mili which conflicts with meters
+            unit += UnitSystem.unitAbbreviations["m"]!!
+        } else {
+            unit += prefix
+        }
+    }
 
     while (tokens.hasNext()) {
-        val abbreviation = tokens.nextLargest(UnitSystem.abbreviations)
-        if (abbreviation != null) {
-            val newUnit = UnitSystem.unitByAbbreviation(abbreviation)!!
+        val newUnit = tokens.nextLargest(UnitSystem.unitAbbreviations)
+        if (newUnit != null) {
             unit += if (invert) -newUnit else newUnit
-            tokens.consume(abbreviation)
-        } else if (tokens.isNext("/") && tokens.nextLargest(UnitSystem.abbreviations.map { a -> "/" + a }) != null) { // Lame fix for division at the end
+        } else if (tokens.isNext("/") && tokens.nextLargest(UnitSystem.unitAbbreviations.map { a -> "/" + a }) != null) { // Lame fix for division at the end
             invert = true
             tokens.consume("/")
         } else {

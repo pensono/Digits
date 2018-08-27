@@ -1,5 +1,4 @@
-# Don't know what this file is
-.idea/caches/
+.idea/caches/*
 
 
 *.iml
