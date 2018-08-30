@@ -1,0 +1,3 @@
+- Trig/log functions
+- Units with powers
+- Exponents in equations
