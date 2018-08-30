@@ -1,7 +1,5 @@
 .idea/caches/build_file_checksums.ser
 
-.idea/caches/*
-
 
 *.iml
 .gradle
@@ -9,7 +7,6 @@
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 
@@ -145,4 +142,3 @@ fabric.properties
 
 
 # End of https://www.gitignore.io/api/androidstudio
-

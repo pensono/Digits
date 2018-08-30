@@ -79,7 +79,7 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
 
     val prefix = tokens.nextLargest(UnitSystem.prefixAbbreviations)
     if (prefix != null) {
-        if (prefix.abbreviation == "m" && input.length == 1) { // Special case for mili which conflicts with meters
+        if (prefix.abbreviation == "m" && input.split("/")[0].length == 1) { // Special case for mili which conflicts with meters
             unit += UnitSystem.unitAbbreviations["m"]!!
         } else {
             unit += prefix
@@ -90,7 +90,7 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
         val newUnit = tokens.nextLargest(UnitSystem.unitAbbreviations)
         if (newUnit != null) {
             unit += if (invert) -newUnit else newUnit
-        } else if (tokens.isNext("/") && tokens.nextLargest(UnitSystem.unitAbbreviations.map { a -> "/" + a }) != null) { // Lame fix for division at the end
+        } else if (tokens.isNext("/")) {
             invert = true
             tokens.consume("/")
         } else {
