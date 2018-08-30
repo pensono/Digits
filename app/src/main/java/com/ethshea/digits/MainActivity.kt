@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import com.ethshea.digits.evaluator.evaluateExpression
@@ -11,6 +12,8 @@ import com.ethshea.digits.units.humanize
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity() {
+    val TAG = "Digits_MainActivity"
+
     private var prefix = true
         set(value) {
             field = value
@@ -35,13 +38,13 @@ class MainActivity : Activity() {
                 try {
                     val parseResult = evaluateExpression(input.text.toString())
 
-                    val quantity = parseResult.value.value
-                    val humanUnit = humanize(parseResult.value)
+                    val humanizedQuantity = humanize(parseResult.value)
 
-                    result_preview.text = quantity.toString() + humanUnit.abbreviation
+                    result_preview.text = humanizedQuantity.humanString()
                     input.errors = parseResult.errors
                 } catch (e: Exception) {
                     result_preview.text = "Error"
+                    Log.e(TAG, "Calculation error", e)
                 }
             }
         })

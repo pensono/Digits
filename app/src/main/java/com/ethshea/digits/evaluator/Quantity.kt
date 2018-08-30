@@ -2,13 +2,14 @@ package com.ethshea.digits.evaluator
 
 import com.ethshea.digits.units.NaturalUnit
 import com.ethshea.digits.SciNumber
+import com.ethshea.digits.units.HumanUnit
 import com.ethshea.digits.units.UnitSystem
 
 /**
  * @author Ethan
  */
 
-open class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
+class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     val normalizedValue = value * unit.factor
 
     /**
@@ -48,6 +49,10 @@ open class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void
         val One = Quantity(SciNumber.One)
         val Zero = Quantity(SciNumber.Zero)
     }
+}
+
+data class HumanQuantity(val value:SciNumber, val unit: HumanUnit) {
+    fun humanString() = value.toString() + unit.abbreviation
 }
 
 private fun doSum(a: Quantity, b: Quantity, operation: (SciNumber, SciNumber) -> SciNumber): Quantity {
