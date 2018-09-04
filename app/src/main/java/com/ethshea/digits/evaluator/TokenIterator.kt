@@ -1,6 +1,7 @@
 package com.ethshea.digits.evaluator
 
 import org.antlr.v4.runtime.misc.Interval
+import org.antlr.v4.runtime.misc.Predicate
 import java.util.*
 
 /**
@@ -45,6 +46,21 @@ class TokenIterator(tokens: String, private val location: Interval) {
             throw RuntimeException("$input is not next in $tokens at $position")
         }
         position += input.length
+    }
+
+    fun nextWhile(predicate: (Char) -> Boolean) : String {
+        for (i in position until tokens.length) {
+            if (!predicate(tokens[i])) {
+                val result = tokens.substring(position, i)
+                position = i
+                return result
+            }
+        }
+
+        // Predicate always true
+        val result = tokens.substring(position)
+        position = tokens.length
+        return result
     }
 
     /**

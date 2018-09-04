@@ -3,7 +3,7 @@ package com.ethshea.digits.units
 import kotlin.math.absoluteValue
 
 val superscriptMap = listOf('⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹')
-val superscriptMinus = "⁻"
+val superscriptMinus = '⁻'
 
 fun prettyExponent(number: Int) : String {
     if (number == 1) {
@@ -12,7 +12,7 @@ fun prettyExponent(number: Int) : String {
 
     val stringRepresentation = number.absoluteValue.toString()
     val superscript = stringRepresentation.map { char -> superscriptMap[char - '0'] }.joinToString("")
-    val sign = if (number < 0) superscriptMinus else ""
+    val sign = if (number < 0) superscriptMinus.toString() else ""
 
     return sign + superscript
 }
@@ -22,10 +22,10 @@ fun prettyExponent(number: Int) : String {
  */
 fun unsuperscript(input: String) : String {
     var result = input
-    for (i in 0..9) {
+    for (i in 0 until 10) {
         result = result.replace(superscriptMap[i], '0' + i)
     }
-    return result
+    return result.replace(superscriptMinus, '-')
 }
 
 /**
@@ -34,6 +34,6 @@ fun unsuperscript(input: String) : String {
 fun parseNumber(input: String) = Integer.parseInt(unsuperscript(input))
 
 /**
- * True if a number is a digit or a superscript
+ * True if a number is a digit or a superscript or a negative sign
  */
-fun isNumber(input: Char) = input.isDigit() || superscriptMap.contains(input)
+fun isNumber(input: Char) = input.isDigit() || superscriptMap.contains(input) || input == '-' || input == superscriptMinus

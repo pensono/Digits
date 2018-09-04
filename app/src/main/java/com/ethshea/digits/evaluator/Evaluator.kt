@@ -97,36 +97,30 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
 fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
     var invert = false
     var unit = UnitSystem.void
-    var lastUnit : NaturalUnit? = null
     val errors = mutableListOf<ErrorMessage>()
     val tokens = TokenIterator(input, location)
 
     val prefix = tokens.nextLargest(UnitSystem.prefixAbbreviations)
     if (prefix != null) {
-        if (prefix.abbreviation == "m" && !(input.length > 1 && input[1].isLetter())) {// Special case for mili which conflicts with meters
-            unit = UnitSystem.unitAbbreviations["m"]!!
-            lastUnit = unit
+        val beginning = input.substring(prefix.abbreviation.length).split("/")[0]
+        if (prefix.abbreviation == "m" && (beginning.isEmpty() || !beginning[0].isLetter())) { // Special case for mili which conflicts with meters
+            val exponentStr = tokens.nextWhile(::isNumber)
+            val exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
+
+            unit = UnitSystem.unitAbbreviations["m"]!! * exponent
         } else {
             unit = prefix
         }
     }
 
     while (tokens.hasNext()) {
-        if (isNumber(tokens.peek())) {
-            // Don't support multiple digit superscripts
-            val exponent = parseNumber("" + tokens.next())
-            if (lastUnit == null) {
-                errors.add(ErrorMessage("Exponent before unit", tokens.lastTokenLocation))
-            } else {
-                unit += lastUnit * (exponent - 1) // -1 because we already added the unit in
-            }
-            continue
-        }
-
         val newUnit = tokens.nextLargest(UnitSystem.unitAbbreviations)
         if (newUnit != null) {
-            lastUnit = if (invert) -newUnit else newUnit
-            unit += lastUnit
+            val baseUnit = if (invert) -newUnit else newUnit
+            val exponentStr = tokens.nextWhile(::isNumber)
+            val exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
+
+            unit += baseUnit * exponent
         } else if (tokens.isNext("/")) {
             invert = true
             tokens.consume("/")
