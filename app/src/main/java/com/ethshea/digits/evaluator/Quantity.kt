@@ -38,6 +38,10 @@ class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
         return Quantity(value / other.value, unit - other.unit)
     }
 
+    fun pow(exponent: Int) : Quantity {
+        return Quantity(value.pow(exponent), unit.times(exponent))
+    }
+
     override fun equals(other: Any?): Boolean =
         other is Quantity
                 && unit.dimensionallyEqual(other.unit)

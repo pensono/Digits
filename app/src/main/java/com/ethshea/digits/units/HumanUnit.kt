@@ -41,23 +41,8 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
     override fun toString(): String = "HumanUnit($components, $abbreviation)"
 }
 
-val superscriptMap = listOf("⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹")
-val superscriptMinus = "⁻"
-fun prettyExponent(number: Int) : String {
-    if (number == 1) {
-        return ""
-    }
-
-    val stringRepresentation = number.absoluteValue.toString()
-    val superscript = stringRepresentation.map { char -> superscriptMap[char - '0'] }.joinToString("")
-    val sign = if (number < 0) superscriptMinus else ""
-
-    return sign + superscript
-}
-
-
 val prefixMagStart = -15
-val prefixes = listOf("f", "p", "n", "μ", "m", "", "k", "M", "G", "T")
+val prefixes = listOf("f", "p", "n", "μ", "m", "", "k", "M", "G", "T") // TODO make this not exist by using UnitSystem instead
 
 /**
  * Returns an inverse unit that can be used to normalize the result

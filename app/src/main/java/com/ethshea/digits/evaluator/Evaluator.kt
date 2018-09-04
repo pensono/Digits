@@ -6,6 +6,7 @@ import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.parser.DigitsLexer
 import com.ethshea.digits.parser.DigitsParser
 import com.ethshea.digits.parser.DigitsParserBaseVisitor
+import com.ethshea.digits.units.unsuperscript
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ConsoleErrorListener
@@ -39,7 +40,9 @@ fun evaluateExpression(input: String) : ParseResult<Quantity> {
 object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
         val value = SciNumber(ctx.value().text)
-        val unitResult = parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
+        val unitResult = if (ctx.unit() == null)
+            ParseResult(NaturalUnit()) // Using parseresult is strange here
+            else parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
 
         return unitResult.invoke { unit -> Quantity(value, unit) }
     }
@@ -62,6 +65,13 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
         val operation = if (ctx.operation.type == DigitsLexer.TIMES) Quantity::times else Quantity::div
 
         return lhsResult.combine(rhsResult, operation)
+    }
+
+    override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity>? {
+        val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One)
+        val exponent = Integer.parseInt(unsuperscript(ctx.exponent.text))
+
+        return baseResult.invoke { base -> base.pow(exponent) }
     }
 
     override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity>? {

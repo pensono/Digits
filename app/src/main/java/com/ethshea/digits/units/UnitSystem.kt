@@ -23,8 +23,8 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("acre", "acre", area, SciNumber("4046.86")),
 
             AtomicHumanUnit("s", "second", time),
-            AtomicHumanUnit("min", "minute", time, SciNumber(60).reciprocal()),
-            AtomicHumanUnit("hr", "hour", time, SciNumber(60 * 60).reciprocal()),
+//            AtomicHumanUnit("min", "minute", time, SciNumber(60).reciprocal()),
+//            AtomicHumanUnit("hr", "hour", time, SciNumber(60 * 60).reciprocal()),
 
             AtomicHumanUnit("Hz", "hertz", frequency),
             AtomicHumanUnit("g", "gram", mass),

@@ -6,3 +6,4 @@ Astronomical: Angle, AU, Light year, Parsec, Solar Mass
 Surveying: Acre, ...
 Chemistry
 Physics: Electron Volt, Charge, Erg
+Carpenter: Foot, Inch
