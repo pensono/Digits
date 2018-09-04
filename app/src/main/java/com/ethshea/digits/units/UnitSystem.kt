@@ -20,7 +20,7 @@ object UnitSystem { // Preferred Units?
             // AtomicHumanUnit("ft", "foot", length, SciNumber("3.28084")),
             // AtomicHumanUnit("mi", "mile", length, SciNumber("0.000621371")),
 
-            AtomicHumanUnit("acre", "acre", area, SciNumber("4046.86")),
+            // AtomicHumanUnit("acre", "acre", area, SciNumber("4046.86")),
 
             AtomicHumanUnit("s", "second", time),
 //            AtomicHumanUnit("min", "minute", time, SciNumber(60).reciprocal()),

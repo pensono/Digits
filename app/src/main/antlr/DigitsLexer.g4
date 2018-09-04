@@ -17,7 +17,10 @@ RPAREN: ')' | ']' | '}';
 
 Digit
     : [0-9]
-    | [\u2070-\u207f\u00B2\u00B3] // Superscripts
+    ;
+
+Superscript
+    : [\u2070-\u207f\u00B2\u00B3]
     ;
 
 Letter

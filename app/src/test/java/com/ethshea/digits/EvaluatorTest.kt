@@ -89,11 +89,11 @@ class ParserTest {
     @Test
     fun squared() {
         evalTest(Quantity(SciNumber("4")), "(1+1)²")
-        evalTest(Quantity(SciNumber("4")), "(2)²")
+        evalTest(Quantity(SciNumber("4")), "2²")
         evalTest(Quantity(SciNumber("4")), "(2)²")
 
         evalTest(Quantity(SciNumber("4")), "(1+1)^2")
-        evalTest(Quantity(SciNumber("4")), "(2)^2")
+        evalTest(Quantity(SciNumber("4")), "2^2")
         evalTest(Quantity(SciNumber("4")), "(2)^2")
     }
 
