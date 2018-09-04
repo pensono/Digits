@@ -1,15 +1,19 @@
 package com.ethshea.digits.evaluator
 
+import org.antlr.v4.runtime.misc.Interval
 import java.util.*
 
 /**
  * @author Ethan
  */
-class TokenIterator(tokens: String) {
+class TokenIterator(tokens: String, private val location: Interval) {
     var position: Int = 0
         private set
     private var tokens = tokens.replace("""\s*""".toRegex(), "")
     private var speculations = Stack<Int>()
+
+    val lastTokenLocation
+        get() = Interval(location.a + position - 1, location.a + position)
 
     fun hasNext() = position < tokens.length
     val remaining get() = tokens.length - position

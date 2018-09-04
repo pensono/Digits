@@ -18,5 +18,5 @@ value
     ;
 
 unit
-    : Letter+
+    : Letter (Letter | Digit | Superscript)*
     ;

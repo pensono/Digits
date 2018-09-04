@@ -6,7 +6,8 @@ import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.parser.DigitsLexer
 import com.ethshea.digits.parser.DigitsParser
 import com.ethshea.digits.parser.DigitsParserBaseVisitor
-import com.ethshea.digits.units.unsuperscript
+import com.ethshea.digits.units.isNumber
+import com.ethshea.digits.units.parseNumber
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ConsoleErrorListener
@@ -81,7 +82,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
 
     override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity> {
         val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One)
-        val exponent = Integer.parseInt(unsuperscript(ctx.exponent.text))
+        val exponent = parseNumber(ctx.exponent.text)
 
         return baseResult.invoke { base -> base.pow(exponent) }
     }
@@ -96,22 +97,36 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
 fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
     var invert = false
     var unit = UnitSystem.void
+    var lastUnit : NaturalUnit? = null
     val errors = mutableListOf<ErrorMessage>()
-    val tokens = TokenIterator(input)
+    val tokens = TokenIterator(input, location)
 
     val prefix = tokens.nextLargest(UnitSystem.prefixAbbreviations)
     if (prefix != null) {
-        if (prefix.abbreviation == "m" && input.split("/")[0].length == 1) { // Special case for mili which conflicts with meters
-            unit += UnitSystem.unitAbbreviations["m"]!!
+        if (prefix.abbreviation == "m" && !(input.length > 1 && input[1].isLetter())) {// Special case for mili which conflicts with meters
+            unit = UnitSystem.unitAbbreviations["m"]!!
+            lastUnit = unit
         } else {
-            unit += prefix
+            unit = prefix
         }
     }
 
     while (tokens.hasNext()) {
+        if (isNumber(tokens.peek())) {
+            // Don't support multiple digit superscripts
+            val exponent = parseNumber("" + tokens.next())
+            if (lastUnit == null) {
+                errors.add(ErrorMessage("Exponent before unit", tokens.lastTokenLocation))
+            } else {
+                unit += lastUnit * (exponent - 1) // -1 because we already added the unit in
+            }
+            continue
+        }
+
         val newUnit = tokens.nextLargest(UnitSystem.unitAbbreviations)
         if (newUnit != null) {
-            unit += if (invert) -newUnit else newUnit
+            lastUnit = if (invert) -newUnit else newUnit
+            unit += lastUnit
         } else if (tokens.isNext("/")) {
             invert = true
             tokens.consume("/")

@@ -34,4 +34,10 @@ class UnitParserTest {
         assertEquals(u("V") - u("s"), parseUnit("V/s", Interval(0, 0)).value)
         assertEquals(u("m") - u("s"), parseUnit("m/s", Interval(0, 0)).value)
     }
+
+    @Test
+    fun exponentUnits() {
+        assertEquals(u("m") + u("m"), parseUnit("m²", Interval(0, 0)).value)
+        assertEquals(u("m") + u("m"), parseUnit("m2", Interval(0, 0)).value)
+    }
 }

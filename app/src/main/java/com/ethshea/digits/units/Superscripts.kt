@@ -27,3 +27,13 @@ fun unsuperscript(input: String) : String {
     }
     return result
 }
+
+/**
+ * Parse a number which could contain superscripts
+ */
+fun parseNumber(input: String) = Integer.parseInt(unsuperscript(input))
+
+/**
+ * True if a number is a digit or a superscript
+ */
+fun isNumber(input: Char) = input.isDigit() || superscriptMap.contains(input)
