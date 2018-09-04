@@ -24,6 +24,8 @@ data class ParseResult<T>(val value: T, val location: Interval? = null, val erro
     fun <R> invoke(operation: (T) -> R) = ParseResult(operation(value), location, errors)
 
     fun <R, A> combine(argument: ParseResult<A>, operation: (T, A) -> R) = ParseResult(operation(value, argument.value), location, errors + argument.errors)
+
+    fun error(message: ErrorMessage) = ParseResult(value, location, errors + listOf(message))
 }
 
 fun evaluateExpression(input: String) : ParseResult<Quantity> {
@@ -40,11 +42,21 @@ fun evaluateExpression(input: String) : ParseResult<Quantity> {
 object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
         val value = SciNumber(ctx.value().text)
-        val unitResult = if (ctx.unit() == null)
-            ParseResult(NaturalUnit()) // Using parseresult is strange here
-            else parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
 
-        return unitResult.invoke { unit -> Quantity(value, unit) }
+        return ParseResult(Quantity(value))
+    }
+
+    override fun visitAssignUnit(ctx: DigitsParser.AssignUnitContext): ParseResult<Quantity>? {
+        val valueResult = ctx.expression().accept(this)
+        val unitResult = parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
+
+        return if (valueResult == null) {
+            null // Not sure if this is what I want to return here
+        } else if (!valueResult.value.unit.dimensionallyEqual(NaturalUnit())) {
+            valueResult.error(ErrorMessage("Two units", ctx.unit().sourceInterval))
+        } else {
+            valueResult.combine(unitResult) { value, unit -> Quantity(value.value, unit) }
+        }
     }
 
     override fun visitParenthesizedExpression(ctx: DigitsParser.ParenthesizedExpressionContext): ParseResult<Quantity>? {
@@ -67,7 +79,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
         return lhsResult.combine(rhsResult, operation)
     }
 
-    override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity>? {
+    override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity> {
         val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One)
         val exponent = Integer.parseInt(unsuperscript(ctx.exponent.text))
 

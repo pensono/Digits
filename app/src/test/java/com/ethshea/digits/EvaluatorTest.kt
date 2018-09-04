@@ -98,6 +98,14 @@ class ParserTest {
     }
 
     @Test
+    fun squaredWithUnit() {
+        evalTest(Quantity(SciNumber("4"), u("m")), "2²m")
+        // Need squared in the units first
+//        evalTest(Quantity(SciNumber("4"), u("m") + u("m")), "2²m²")
+//         evalTest(Quantity(SciNumber("2"), u("m") + u("m")), "2m²")
+    }
+
+    @Test
     fun emptyInput() {
         evalTest(Quantity(SciNumber("0")), "")
     }
