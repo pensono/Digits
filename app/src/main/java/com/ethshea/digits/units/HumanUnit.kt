@@ -48,6 +48,10 @@ val prefixes = listOf("f", "p", "n", "μ", "m", "", "k", "M", "G", "T") // TODO 
  * Returns an inverse unit that can be used to normalize the result
  */
 fun humanize(quantity: Quantity) : HumanQuantity {
+    if (quantity.unit.dimensionallyEqual(UnitSystem.void)) {
+        return HumanQuantity(quantity.value * quantity.unit.factor, HumanUnit(mapOf()))
+    }
+
     val expandedQuantity = quantity.normalizedValue
     val prefixMagnitude =
             if (quantity.value == SciNumber.Zero)
@@ -59,7 +63,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     val prefixFactor = SciNumber(10).pow(prefixExponent)
     val prefixUnit = PrefixUnit(prefixes[prefixIndex], "prefix", factor = prefixFactor)
 
-    val humanizedValue = quantity.value / (prefixFactor / quantity.unit.factor)
+    val humanizedValue = quantity.value * quantity.unit.factor / prefixFactor
 
     val visitedUnits = mutableSetOf<HumanUnit>()
     val visitQueue = PriorityQueue<HumanUnit>(compareBy(HumanUnit::exponentMagnitude))

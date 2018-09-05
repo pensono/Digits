@@ -1,4 +1,4 @@
 - Trig/log functions
-- Units with powers
-- Exponents in equations
 - Equals button
+- Optimize unit humanization
+- Hold keys to get additional (square to cube and root)

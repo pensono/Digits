@@ -2,7 +2,10 @@ package com.ethshea.digits
 
 import com.ethshea.digits.evaluator.HumanQuantity
 import com.ethshea.digits.evaluator.Quantity
+import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.HumanUnit
+import com.ethshea.digits.units.NaturalUnit
+import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
 import org.junit.Test
 
@@ -42,5 +45,18 @@ class HumanizationTest {
     fun zero() {
         assertEquals(HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())), humanize(Quantity(SciNumber.Zero)))
         assertEquals(HumanQuantity(SciNumber.Zero, HumanUnit(mapOf(u("V") to 1))), humanize(Quantity(SciNumber.Zero, u("V"))))
+    }
+
+    @Test
+    fun noPrefixForVoid() {
+        assertEquals("", humanize(Quantity(SciNumber.Kilo)).unit.abbreviation)
+        assertEquals("", humanize(Quantity(SciNumber.Milli)).unit.abbreviation)
+        assertEquals("", humanize(Quantity(SciNumber.Mega)).unit.abbreviation)
+        assertEquals("", humanize(Quantity(SciNumber.Micro)).unit.abbreviation)
+    }
+
+    @Test
+    fun useDecimalNotation() {
+        assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString())
     }
 }
