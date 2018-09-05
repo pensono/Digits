@@ -19,13 +19,9 @@ class SciNumber {
 
     private val backing: BigDecimal
 
-    constructor(value: String) {
-        backing = BigDecimal(value, MathContext.DECIMAL128)
-    }
-
-    constructor(value: Int) {
-        backing = BigDecimal(value, MathContext.DECIMAL128)
-    }
+    constructor(value: String) : this(BigDecimal(value, MathContext.DECIMAL128))
+    constructor(value: Int) : this(BigDecimal(value, MathContext.DECIMAL128))
+    constructor(value: Double) : this(BigDecimal(value, MathContext.DECIMAL128))
 
     private constructor(value: BigDecimal) {
         backing = value
@@ -40,6 +36,12 @@ class SciNumber {
     operator fun compareTo(other: SciNumber) = backing.compareTo(other.backing)
     fun pow(n: Int) = SciNumber(backing.pow(n, MathContext.DECIMAL128)) // Context needed here?
     fun abs() = SciNumber(backing.abs())
+
+    fun sin() = doubleFunction(Math::sin)
+    fun cos() = doubleFunction(Math::cos)
+    fun tan() = doubleFunction(Math::tan)
+
+    private fun doubleFunction(op : (Double) -> Double) = SciNumber(BigDecimal(op(backing.toDouble()), MathContext(backing.precision())))
 
     override fun equals(other: Any?): Boolean = other is SciNumber && this.backing == other.backing
     override fun hashCode(): Int = backing.hashCode()

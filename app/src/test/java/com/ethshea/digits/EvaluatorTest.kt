@@ -2,7 +2,7 @@ package com.ethshea.digits
 
 import com.ethshea.digits.evaluator.Quantity
 import com.ethshea.digits.evaluator.evaluateExpression
-import com.ethshea.digits.units.UnitSystem
+import org.antlr.v4.runtime.misc.Interval
 import org.junit.Assert
 import org.junit.Test
 
@@ -10,7 +10,7 @@ import org.junit.Test
  * @author Ethan
  */
 
-class ParserTest {
+class EvaluatorTest {
     @Test
     fun numericLiterals() {
         evalTest(Quantity(SciNumber("1")), "1")
@@ -105,6 +105,25 @@ class ParserTest {
     }
 
     @Test
+    fun constants() {
+        evalTest(Quantity(SciNumber(Math.PI)), "π")
+        evalTest(Quantity(SciNumber(Math.PI)), "PI")
+        evalTest(Quantity(SciNumber(Math.PI)), "pi")
+        evalTest(Quantity(SciNumber(Math.E)), "e")
+    }
+
+    @Test
+    fun invalidConstants() {
+        errorTest(Interval(0, 11), "notAConstant")
+    }
+
+    @Test
+    fun trigFunctions() {
+        evalTest(Quantity(SciNumber("0")), "sin(0)")
+        evalTest(Quantity(SciNumber("1")), "sin(π/2)")
+    }
+
+    @Test
     fun emptyInput() {
         evalTest(Quantity(SciNumber("0")), "")
     }
@@ -112,5 +131,10 @@ class ParserTest {
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertEquals(expected, result.value)
+    }
+
+    private fun errorTest(location: Interval, input: String) {
+        val result = evaluateExpression(input)
+        Assert.assertTrue(result.errors.any { err -> err.location == location })
     }
 }

@@ -3,8 +3,6 @@ package com.ethshea.digits
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.widget.TextView
-import android.text.Layout
 import android.widget.EditText
 import com.ethshea.digits.evaluator.ErrorMessage
 import android.graphics.Paint
@@ -50,8 +48,8 @@ class ErrorInput: EditText {
         val left = layout.getLineLeft(0)
 
         for (error in errors) {
-            val start = paint.measureText(text, 0, error.position.a)
-            val end = paint.measureText(text, 0, error.position.b)
+            val start = paint.measureText(text, 0, error.location.a)
+            val end = paint.measureText(text, 0, error.location.b + 1)
             canvas.drawLine(left + start, underlineY, left + end, underlineY, underlinePaint)
         }
 

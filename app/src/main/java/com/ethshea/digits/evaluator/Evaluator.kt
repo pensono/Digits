@@ -17,7 +17,7 @@ import org.antlr.v4.runtime.misc.Interval
  * @author Ethan
  */
 
-data class ErrorMessage(val message: String, val position: Interval)
+data class ErrorMessage(val message: String, val location: Interval)
 
 // TODO Why does this have to be generic?
 data class ParseResult<T>(val value: T, val location: Interval? = null, val errors: Collection<ErrorMessage> = listOf()) {
@@ -41,27 +41,40 @@ fun evaluateExpression(input: String) : ParseResult<Quantity> {
 
 // A null ParseResult means use whatever the identity element for the operation is
 object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
+    private val constants = mapOf(
+            "π" to Math.PI,
+            "pi" to Math.PI,
+            "e" to Math.E
+    )
+
+    private val functions = mapOf(
+            "sin" to Quantity::sin,
+            "cos" to Quantity::cos,
+            "tan" to Quantity::tan
+    )
+
     override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
         val value = SciNumber(ctx.value().text)
 
         return ParseResult(Quantity(value))
     }
 
-    override fun visitAssignUnit(ctx: DigitsParser.AssignUnitContext): ParseResult<Quantity>? {
-        val valueResult = ctx.expression().accept(this)
-        val unitResult = parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
+    override fun visitConstant(ctx: DigitsParser.ConstantContext): ParseResult<Quantity>? {
+        val constantName = ctx.text.toLowerCase()
 
-        return if (valueResult == null) {
-            null // Not sure if this is what I want to return here
-        } else if (!valueResult.value.unit.dimensionallyEqual(NaturalUnit())) {
-            valueResult.error(ErrorMessage("Two units", ctx.unit().sourceInterval))
+        val constant = constants[constantName]
+        return if (constant == null) {
+            // Not sure what value to use here
+            ParseResult(Quantity.Zero, ctx.sourceInterval, listOf(ErrorMessage(ctx.text + " is not a known constant", ctx.sourceInterval)))
         } else {
-            valueResult.combine(unitResult) { value, unit -> Quantity(value.value, unit) }
+            ParseResult(Quantity(SciNumber(constant)))
         }
     }
 
-    override fun visitParenthesizedExpression(ctx: DigitsParser.ParenthesizedExpressionContext): ParseResult<Quantity>? {
-        return ctx.expression().accept(this)
+    override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity>? {
+        val argument = ctx.expression().accept(this)
+
+        return argument?.invoke(Quantity::unaryMinus)
     }
 
     override fun visitSumExpression(ctx: DigitsParser.SumExpressionContext): ParseResult<Quantity> {
@@ -87,10 +100,34 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
         return baseResult.invoke { base -> base.pow(exponent) }
     }
 
-    override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity>? {
-        val argument = ctx.expression().accept(this)
+    override fun visitFunction(ctx: DigitsParser.FunctionContext): ParseResult<Quantity>? {
+        val functionNameSyntax = ctx.functionName()
+        val functionName = functionNameSyntax.text
+        val expressionResult = ctx.argument.accept(this) ?: ParseResult(Quantity.Zero)
 
-        return argument?.invoke(Quantity::unaryMinus)
+        val operation = functions[functionName]
+        return if (operation == null) {
+            expressionResult.error(ErrorMessage("$functionName is not a function", functionNameSyntax.sourceInterval))
+        } else {
+            expressionResult.invoke(operation)
+        }
+    }
+
+    override fun visitParenthesizedExpression(ctx: DigitsParser.ParenthesizedExpressionContext): ParseResult<Quantity>? {
+        return ctx.expression().accept(this)
+    }
+
+    override fun visitAssignUnit(ctx: DigitsParser.AssignUnitContext): ParseResult<Quantity>? {
+        val valueResult = ctx.expression().accept(this)
+        val unitResult = parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
+
+        return if (valueResult == null) {
+            null // Not sure if this is what I want to return here
+        } else if (!valueResult.value.unit.dimensionallyEqual(NaturalUnit())) {
+            valueResult.error(ErrorMessage("Two units", ctx.unit().sourceInterval))
+        } else {
+            valueResult.combine(unitResult) { value, unit -> Quantity(value.value, unit) }
+        }
     }
 }
 
@@ -126,7 +163,7 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
             tokens.consume("/")
         } else {
             tokens.next()
-            errors.add(ErrorMessage("Unknown unit:", location)) // TODO fix position
+            errors.add(ErrorMessage("Unknown unit:", location)) // TODO fix location
         }
     }
 

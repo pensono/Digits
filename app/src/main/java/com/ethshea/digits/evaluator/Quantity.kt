@@ -42,6 +42,11 @@ class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
         return Quantity(value.pow(exponent), unit.times(exponent))
     }
 
+    // Really not sure what to do with units on this one
+    fun sin() = Quantity(value.sin(), unit)
+    fun cos() = Quantity(value.cos(), unit)
+    fun tan() = Quantity(value.tan(), unit)
+
     override fun equals(other: Any?): Boolean =
         other is Quantity
                 && unit.dimensionallyEqual(other.unit)

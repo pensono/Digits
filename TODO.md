@@ -1,4 +1,4 @@
-- Trig/log functions
+- Extended Trig/log functions (acos, hsin)
 - Equals button
 - Optimize unit humanization
 - Hold keys to get additional (square to cube and root)
