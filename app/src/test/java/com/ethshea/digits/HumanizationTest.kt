@@ -58,5 +58,6 @@ class HumanizationTest {
     @Test
     fun useDecimalNotation() {
         assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString())
+        assertEquals("56000", humanize(evaluateExpression("56k").value).humanString())
     }
 }

@@ -45,7 +45,7 @@ class SciNumber {
 
     override fun equals(other: Any?): Boolean = other is SciNumber && this.backing == other.backing
     override fun hashCode(): Int = backing.hashCode()
-    override fun toString(): String = backing.toString()
+    override fun toString(): String = backing.toPlainString()
 
     fun reciprocal() = SciNumber(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128))
     fun toDouble(): Double = backing.toDouble()
