@@ -11,6 +11,7 @@ import com.ethshea.digits.units.parseNumber
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ConsoleErrorListener
+import org.antlr.v4.runtime.Token
 import org.antlr.v4.runtime.misc.Interval
 
 /**
@@ -20,13 +21,16 @@ import org.antlr.v4.runtime.misc.Interval
 data class ErrorMessage(val message: String, val location: Interval)
 
 // TODO Why does this have to be generic?
-data class ParseResult<T>(val value: T, val location: Interval? = null, val errors: Collection<ErrorMessage> = listOf()) {
-    fun <R, A> invoke(argument: A, operation: (T, A) -> R) = ParseResult(operation(value, argument), location, errors)
-    fun <R> invoke(operation: (T) -> R) = ParseResult(operation(value), location, errors)
+data class ParseResult<T>(val value: T, val errors: Collection<ErrorMessage> = listOf(), val location: Interval? = null) {
+    constructor(value: T, location: Interval? = null, error: ErrorMessage) : this(value, listOf(error), location)
+    constructor(value: T, location: Interval, errorMessage: String) : this(value, location, ErrorMessage(errorMessage, location))
 
-    fun <R, A> combine(argument: ParseResult<A>, operation: (T, A) -> R) = ParseResult(operation(value, argument.value), location, errors + argument.errors)
+    fun <R, A> invoke(argument: A, operation: (T, A) -> R) = ParseResult(operation(value, argument), errors, location)
+    fun <R> invoke(operation: (T) -> R) = ParseResult(operation(value), errors, location)
 
-    fun error(message: ErrorMessage) = ParseResult(value, location, errors + listOf(message))
+    fun <R, A> combine(argument: ParseResult<A>, operation: (T, A) -> R) = ParseResult(operation(value, argument.value), errors + argument.errors, location)
+
+    fun error(message: ErrorMessage) = ParseResult(value, errors + listOf(message), location)
 }
 
 fun evaluateExpression(input: String) : ParseResult<Quantity> {
@@ -38,6 +42,8 @@ fun evaluateExpression(input: String) : ParseResult<Quantity> {
 
     return parser.expression()?.accept(Evaluator) ?: ParseResult(Quantity.Zero)
 }
+
+private fun intervalOf(operation: Token): Interval = Interval.of(operation.startIndex, operation.stopIndex)
 
 // A null ParseResult means use whatever the identity element for the operation is
 object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
@@ -65,7 +71,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
         val constant = constants[constantName]
         return if (constant == null) {
             // Not sure what value to use here
-            ParseResult(Quantity.Zero, ctx.sourceInterval, listOf(ErrorMessage(ctx.text + " is not a known constant", ctx.sourceInterval)))
+            ParseResult(Quantity.Zero, ctx.sourceInterval, ErrorMessage(ctx.text + " is not a known constant", ctx.sourceInterval))
         } else {
             ParseResult(Quantity(SciNumber(constant)))
         }
@@ -78,23 +84,23 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     }
 
     override fun visitSumExpression(ctx: DigitsParser.SumExpressionContext): ParseResult<Quantity> {
-        val lhsResult = ctx.lhs.accept(this) ?: ParseResult(Quantity.Zero)
-        val rhsResult = ctx.rhs.accept(this) ?: ParseResult(Quantity.Zero)
+        val lhsResult = ctx.lhs.accept(this) ?: ParseResult(Quantity.Zero, ctx.lhs.sourceInterval, ErrorMessage("Inferred lhs in +", intervalOf(ctx.operation)))
+        val rhsResult = ctx.rhs.accept(this) ?: ParseResult(Quantity.Zero, ctx.rhs.sourceInterval, ErrorMessage("Inferred rhs in +", intervalOf(ctx.operation)))
         val operation = if (ctx.operation.type == DigitsLexer.PLUS) Quantity::plus else Quantity::minus
 
         return lhsResult.combine(rhsResult, operation)
     }
 
     override fun visitProductExpression(ctx: DigitsParser.ProductExpressionContext): ParseResult<Quantity> {
-        val lhsResult = ctx.lhs.accept(this) ?: ParseResult(Quantity.One)
-        val rhsResult = ctx.rhs.accept(this) ?: ParseResult(Quantity.One)
+        val lhsResult = ctx.lhs.accept(this) ?: ParseResult(Quantity.One, ctx.lhs.sourceInterval, ErrorMessage("Inferred lhs in *", intervalOf(ctx.operation)))
+        val rhsResult = ctx.rhs.accept(this) ?: ParseResult(Quantity.One, ctx.rhs.sourceInterval, ErrorMessage("Inferred rhs in *", intervalOf(ctx.operation)))
         val operation = if (ctx.operation.type == DigitsLexer.TIMES) Quantity::times else Quantity::div
 
         return lhsResult.combine(rhsResult, operation)
     }
 
     override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity> {
-        val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One)
+        val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", intervalOf(ctx.exponent)))
         val exponent = parseNumber(ctx.exponent.text)
 
         return baseResult.invoke { base -> base.pow(exponent) }
@@ -103,7 +109,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     override fun visitFunction(ctx: DigitsParser.FunctionContext): ParseResult<Quantity>? {
         val functionNameSyntax = ctx.functionName()
         val functionName = functionNameSyntax.text
-        val expressionResult = ctx.argument.accept(this) ?: ParseResult(Quantity.Zero)
+        val expressionResult = ctx.argument.accept(this) ?: ParseResult(Quantity.Zero, ctx.sourceInterval, ErrorMessage("Inferred argument in function", ctx.sourceInterval))
 
         val operation = functions[functionName]
         return if (operation == null) {
@@ -167,5 +173,5 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
         }
     }
 
-    return ParseResult(unit, location, errors)
+    return ParseResult(unit, errors, location)
 }

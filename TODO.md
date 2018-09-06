@@ -2,3 +2,5 @@
 - Equals button
 - Optimize unit humanization
 - Hold keys to get additional (square to cube and root)
+- Unit corrections
+- Better job of showing sigfigs
