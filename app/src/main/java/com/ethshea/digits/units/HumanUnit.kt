@@ -74,13 +74,16 @@ fun humanize(quantity: Quantity) : HumanQuantity {
         val currentUnit = visitQueue.poll()
         visitedUnits.add(currentUnit)
 
-        if (currentUnit.dimensionallyEqual(quantity.unit)) {
-            return HumanQuantity(humanizedValue, currentUnit.withPrefix(prefixUnit))
+        // I'm not 100% on the fact that this temporarily creates a human unit that has atomic units with degree 0
+        val possibleNewUnits = UnitSystem.units.map(currentUnit::plus) + UnitSystem.units.map(currentUnit::minus)
+        val newUnits = possibleNewUnits.filter{ !visitedUnits.contains(it) && !it.components.values.contains(0) }
+
+        val correctUnit = newUnits.firstOrNull { unit -> unit.dimensionallyEqual(quantity.unit) }
+        if (correctUnit != null) {
+            return HumanQuantity(humanizedValue, correctUnit.withPrefix(prefixUnit))
         }
 
-        // I'm not 100% on the fact that this temporarily creates a human unit that has atomic units with degree 0
-        visitQueue.addAll(UnitSystem.units.map(currentUnit::plus).filter{ !visitedUnits.contains(it) && !it.components.values.contains(0) })
-        visitQueue.addAll(UnitSystem.units.map(currentUnit::minus).filter { !visitedUnits.contains(it) && !it.components.values.contains(0) })
+        visitQueue.addAll(newUnits)
     }
 
     // This code should never really execute because there should be a base unit for each dimension (like meters or seconds)
