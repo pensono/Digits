@@ -19,11 +19,11 @@ class MainActivity : Activity() {
         set(value) {
             if (field != value) {
                 field = value
-                if (showPrefix) {
-                    displayUnits(UnitSystem.prefixAbbreviations.values.map { u -> u.abbreviation })
-                } else {
-                    displayUnits(UnitSystem.unitAbbreviations.values.map { u -> u.abbreviation })
-                }
+                val unitsToDisplay =
+                        (if (showPrefix) UnitSystem.prefixAbbreviations.values
+                         else listOf()
+                        ) + UnitSystem.unitAbbreviations.values
+                displayUnits(unitsToDisplay.map { u -> u.abbreviation })
             }
         }
 
@@ -52,6 +52,8 @@ class MainActivity : Activity() {
             }
         })
 
+        input.addSelectionListener { _, _ -> updateUnitDisplay() }
+
         showPrefix = true
 
         input.showSoftInputOnFocus = false
@@ -73,7 +75,9 @@ class MainActivity : Activity() {
                 input.setSelection(input.selectionStart + offset - insertText.length)
             }
         }
+    }
 
+    fun updateUnitDisplay() {
         showPrefix = shouldShowPrefixes(input.text.toString(), input.selectionStart)
     }
 

@@ -31,6 +31,8 @@ class ErrorInput: EditText {
         get() = underlinePaint.strokeWidth
         set(value) { underlinePaint.strokeWidth = value }
 
+    private var selectionListeners : List<(Int, Int) -> Unit> = listOf()
+
     private fun init(context: Context?, attributeSet: AttributeSet?, defStyle: Int) {
         val density = context!!.resources.displayMetrics.density
 
@@ -54,5 +56,15 @@ class ErrorInput: EditText {
         }
 
         super.onDraw(canvas)
+    }
+
+    fun addSelectionListener(listener: (Int, Int) -> Unit) {
+        selectionListeners += listener
+    }
+
+    override fun onSelectionChanged(selStart: Int, selEnd: Int) {
+        super.onSelectionChanged(selStart, selEnd)
+        // For whatever reason this event is called before the object is fully initialized. -_-
+        selectionListeners?.forEach { it.invoke(selStart, selEnd) }
     }
 }

@@ -20,7 +20,7 @@ android {
         }
     }
     sourceSets {
-        main.java.srcDirs += 'src/main/java-gen'
+        main.java.srcDirs += 'gen/main/java'
     }
 }
 

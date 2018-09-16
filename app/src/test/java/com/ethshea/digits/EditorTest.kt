@@ -12,5 +12,7 @@ class EditorTest {
         assertFalse(MainActivity.shouldShowPrefixes("9k", 2))
         assertFalse(MainActivity.shouldShowPrefixes("9kV", 3))
         assertFalse(MainActivity.shouldShowPrefixes("9kV", 2))
+        assertTrue(MainActivity.shouldShowPrefixes("9V", 1))
+        assertFalse(MainActivity.shouldShowPrefixes("9kV", 2))
     }
 }
