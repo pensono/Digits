@@ -15,13 +15,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : Activity() {
     val TAG = "Digits_MainActivity"
 
-    private var prefix = true
+    private var showPrefix = false
         set(value) {
-            field = value
-            if (prefix) {
-                displayUnits(UnitSystem.prefixAbbreviations.values.map { u -> u.abbreviation })
-            } else {
-                displayUnits(UnitSystem.unitAbbreviations.values.map { u -> u.abbreviation })
+            if (field != value) {
+                field = value
+                if (showPrefix) {
+                    displayUnits(UnitSystem.prefixAbbreviations.values.map { u -> u.abbreviation })
+                } else {
+                    displayUnits(UnitSystem.unitAbbreviations.values.map { u -> u.abbreviation })
+                }
             }
         }
 
@@ -50,7 +52,7 @@ class MainActivity : Activity() {
             }
         })
 
-        prefix = true
+        showPrefix = true
 
         input.showSoftInputOnFocus = false
     }
@@ -71,11 +73,12 @@ class MainActivity : Activity() {
                 input.setSelection(input.selectionStart + offset - insertText.length)
             }
         }
+
+        showPrefix = shouldShowPrefixes(input.text.toString(), input.selectionStart)
     }
 
     fun calculatorUnitClick(button: View) {
         calculatorButtonClick(button)
-        prefix = !prefix
     }
 
     fun displayUnits(units : List<String>) {
@@ -85,6 +88,17 @@ class MainActivity : Activity() {
             newButton.tag = if (unit == "1") "" else unit
             newButton.text = unit
             unit_selector.addView(newButton)
+        }
+    }
+
+    // Kinda weird for this to be public, but it makes it testable
+    companion object {
+        fun shouldShowPrefixes(text: String, caretPosition: Int) : Boolean {
+            if (caretPosition == 0) {
+                return true
+            }
+
+            return caretPosition - 1 < text.length && !text[caretPosition - 1].isLetter()
         }
     }
 }
