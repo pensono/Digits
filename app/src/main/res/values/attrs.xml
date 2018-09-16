@@ -5,4 +5,10 @@
         <attr name="underlineOffset" format="dimension" />
         <attr name="underlineColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="CalculatorButton">
+        <attr name="primary" format="string" />
+        <attr name="secondary" format="string" /> <!-- Semicolon separated. A list would be better -->
+        <attr name="onLongClick" format="string" />
+    </declare-styleable>
 </resources>

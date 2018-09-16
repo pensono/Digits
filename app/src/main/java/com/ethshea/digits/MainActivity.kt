@@ -54,13 +54,15 @@ class MainActivity : Activity() {
 
         input.addSelectionListener { _, _ -> updateUnitDisplay() }
 
+
+
         showPrefix = true
 
         input.showSoftInputOnFocus = false
     }
 
     fun calculatorButtonClick(button: View) {
-        val buttonCommand = (button as Button).tag.toString()
+        val buttonCommand = (button as CalculatorButton).primary
         if (buttonCommand == "DEL") {
             if (input.selectionStart == input.selectionEnd && input.selectionStart != 0) {
                 input.text.replace(input.selectionStart-1, input.selectionStart, "")
@@ -77,12 +79,12 @@ class MainActivity : Activity() {
         }
     }
 
-    fun updateUnitDisplay() {
-        showPrefix = shouldShowPrefixes(input.text.toString(), input.selectionStart)
+    fun calculatorButtonLongClick(button: CalculatorButton) {
+        println("lol")
     }
 
-    fun calculatorUnitClick(button: View) {
-        calculatorButtonClick(button)
+    fun updateUnitDisplay() {
+        showPrefix = shouldShowPrefixes(input.text.toString(), input.selectionStart)
     }
 
     fun displayUnits(units : List<String>) {

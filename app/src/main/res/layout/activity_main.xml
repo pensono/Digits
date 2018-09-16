@@ -40,16 +40,16 @@
         android:layout_height="wrap_content"
         android:columnCount="5">
 
-        <Button android:tag="sin(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="cos(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="log₁₀(|)" android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="⁻¹" android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="²" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="π" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="(" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag=")" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <Button android:tag="DEL" android:text="DEL" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="sin(|)" app:secondary="asin(|):asin;csc(|):csc" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos(|):acos;sec(|):sec" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="log₁₀(|)" app:secondary="log₂(|):log₂;ln(|):ln"  android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="⁻¹" android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="²" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="π" app:secondary="φ:φ;τ:τ" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="(" app:secondary="{:{;[:[" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary=")" app:secondary="}:};]:]" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.ethshea.digits.CalculatorButton app:primary="DEL" android:text="DEL" style="@style/AppTheme.CalculatorButton.Advanced" />
     </GridLayout>
 
     <GridLayout android:id="@+id/button_grid"
@@ -57,22 +57,22 @@
         android:layout_height="wrap_content"
         android:columnCount="4">
 
-        <Button android:tag="7" android:text="7" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="8" android:text="8" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="9" android:text="9" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="/" android:text="÷" style="@style/AppTheme.CalculatorButton.Operator" />
-        <Button android:tag="4" android:text="4" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="5" android:text="5" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="6" android:text="6" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="×" android:text="×" style="@style/AppTheme.CalculatorButton.Operator" />
-        <Button android:tag="1" android:text="1" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="2" android:text="2" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="3" android:text="3" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="-" android:text="-" style="@style/AppTheme.CalculatorButton.Operator" />
-        <Button android:tag="0" android:text="0" style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="." android:text="." style="@style/AppTheme.CalculatorButton.Digit" />
-        <Button android:tag="=" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
-        <Button android:tag="+" android:text="+" style="@style/AppTheme.CalculatorButton.Operator" />
+        <com.ethshea.digits.CalculatorButton app:primary="7" android:text="7" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="8" android:text="8" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="9" android:text="9" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="/" android:text="÷" style="@style/AppTheme.CalculatorButton.Operator" />
+        <com.ethshea.digits.CalculatorButton app:primary="4" android:text="4" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="5" android:text="5" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="6" android:text="6" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="×" android:text="×" style="@style/AppTheme.CalculatorButton.Operator" />
+        <com.ethshea.digits.CalculatorButton app:primary="1" android:text="1" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="2" android:text="2" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="3" android:text="3" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="-" android:text="-" style="@style/AppTheme.CalculatorButton.Operator" />
+        <com.ethshea.digits.CalculatorButton app:primary="0" android:text="0" style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="." android:text="." style="@style/AppTheme.CalculatorButton.Digit" />
+        <com.ethshea.digits.CalculatorButton app:primary="=" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
+        <com.ethshea.digits.CalculatorButton app:primary="+" android:text="+" style="@style/AppTheme.CalculatorButton.Operator" />
     </GridLayout>
 
 </LinearLayout>
