@@ -1,0 +1,16 @@
+package com.ethshea.digits
+
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
+import org.junit.Test
+
+class EditorTest {
+    @Test
+    fun prefixWithCaretPosition() {
+        assertTrue(MainActivity.shouldShowPrefixes("", 0))
+        assertTrue(MainActivity.shouldShowPrefixes("9", 1))
+        assertFalse(MainActivity.shouldShowPrefixes("9k", 2))
+        assertFalse(MainActivity.shouldShowPrefixes("9kV", 3))
+        assertFalse(MainActivity.shouldShowPrefixes("9kV", 2))
+    }
+}
