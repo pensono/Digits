@@ -141,7 +141,6 @@ class EvaluatorTest {
         errorTest(Interval(2, 2), "4²2")
     }
 
-
     @Test
     fun emptyInput() {
         correctionTest(Quantity(SciNumber("0")), "")

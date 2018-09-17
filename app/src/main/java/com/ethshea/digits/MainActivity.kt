@@ -86,6 +86,11 @@ class MainActivity : Activity() {
 
     // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
+        if (button.primaryCommand == "DEL") {
+            input.text.clear()
+            return
+        }
+
         val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
 
         button.secondary.forEach { pair ->

@@ -13,3 +13,5 @@
 - support for sin^-1()
 - tangent
 - square root
+- Undo button
+- Clear all animation
