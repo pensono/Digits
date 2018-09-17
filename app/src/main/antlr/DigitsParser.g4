@@ -4,7 +4,7 @@ options { tokenVocab=DigitsLexer; }
 
 expression
     : MINUS expression # UnaryMinus
-    | value # Literal
+    | '+'? value # Literal
     | Letter+ # Constant
     | expression unit # AssignUnit
     | LPAREN expression RPAREN # ParenthesizedExpression

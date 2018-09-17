@@ -113,11 +113,6 @@ class EvaluatorTest {
     }
 
     @Test
-    fun invalidConstants() {
-        errorTest(Interval(0, 11), "notAConstant")
-    }
-
-    @Test
     fun trigFunctions() {
         evalTest(Quantity(SciNumber("0")), "sin(0)")
         evalTest(Quantity(SciNumber("1")), "sin(π/2)")
@@ -132,8 +127,24 @@ class EvaluatorTest {
     }
 
     @Test
+    fun invalidConstants() {
+        errorTest(Interval(0, 11), "notAConstant")
+    }
+
+    @Test
+    fun startWithSuperscript() {
+        errorTest(Interval(0, 0), "²2")
+    }
+
+    @Test
+    fun incompleteParse() {
+        errorTest(Interval(2, 2), "4²2")
+    }
+
+
+    @Test
     fun emptyInput() {
-        evalTest(Quantity(SciNumber("0")), "")
+        correctionTest(Quantity(SciNumber("0")), "")
     }
 
     private fun evalTest(expected: Quantity, input: String) {

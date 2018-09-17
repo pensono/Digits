@@ -8,11 +8,9 @@ import com.ethshea.digits.parser.DigitsParser
 import com.ethshea.digits.parser.DigitsParserBaseVisitor
 import com.ethshea.digits.isNumber
 import com.ethshea.digits.parseNumber
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
-import org.antlr.v4.runtime.ConsoleErrorListener
-import org.antlr.v4.runtime.Token
+import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.misc.Interval
+import kotlin.math.exp
 
 /**
  * @author Ethan
@@ -31,6 +29,7 @@ data class ParseResult<T>(val value: T, val errors: Collection<ErrorMessage> = l
     fun <R, A> combine(argument: ParseResult<A>, operation: (T, A) -> R) = ParseResult(operation(value, argument.value), errors + argument.errors, location)
 
     fun error(message: ErrorMessage) = ParseResult(value, errors + listOf(message), location)
+    fun error(newErrors: Collection<ErrorMessage>) = ParseResult(value, errors + newErrors, location)
 }
 
 fun evaluateExpression(input: String) : ParseResult<Quantity> {
@@ -40,7 +39,21 @@ fun evaluateExpression(input: String) : ParseResult<Quantity> {
     val parser = DigitsParser(tokens)
     parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
 
-    return parser.expression()?.accept(Evaluator) ?: ParseResult(Quantity.Zero)
+    val syntaxErrors = mutableListOf<ErrorMessage>()
+    parser.addErrorListener(object : BaseErrorListener() {
+        override fun syntaxError(recognizer: Recognizer<*, *>, offendingSymbol: Any?, line: Int, charPositionInLine: Int, msg: String, e: RecognitionException?) {
+            syntaxErrors += ErrorMessage(msg, intervalOf(offendingSymbol as Token) )
+        }
+    })
+
+    val expression = parser.expression()
+    val result = expression?.accept(Evaluator) ?: ParseResult(Quantity.Zero)
+
+    if (expression.sourceInterval != Interval(0, input.length - 1)) {
+        syntaxErrors += ErrorMessage("Incomplete parse", Interval(expression.sourceInterval.b + 1, input.length - 1))
+    }
+
+    return result.error(syntaxErrors)
 }
 
 private fun intervalOf(operation: Token): Interval = Interval.of(operation.startIndex, operation.stopIndex)

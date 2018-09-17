@@ -1,6 +1,6 @@
 lexer grammar DigitsLexer;
 
-WS: [ \t\r\n\u000C]+ -> skip;
+WS: [ \t\r\n\u000C]+ -> channel(HIDDEN);
 
 TIMES: '\u00D7' | '*';
 DIVIDE: '\u00F7' | '/';
