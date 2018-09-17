@@ -1,11 +1,16 @@
 package com.ethshea.digits
 
 import android.app.Activity
+import android.graphics.Rect
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
@@ -62,7 +67,7 @@ class MainActivity : Activity() {
     }
 
     fun calculatorButtonClick(button: View) {
-        val buttonCommand = (button as CalculatorButton).primary
+        val buttonCommand = (button as CalculatorButton).primaryCommand
         if (buttonCommand == "DEL") {
             if (input.selectionStart == input.selectionEnd && input.selectionStart != 0) {
                 input.text.replace(input.selectionStart-1, input.selectionStart, "")
@@ -79,8 +84,71 @@ class MainActivity : Activity() {
         }
     }
 
+    // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
-        println("lol")
+        val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
+
+        button.secondary.forEach { pair ->
+            val secondaryButton = layoutInflater.inflate(R.layout.button_calc_secondary, layout, false) as CalculatorButton
+            secondaryButton.text = pair.first
+            secondaryButton.primaryCommand = pair.second
+
+            layout.addView(secondaryButton)
+        }
+
+        val buttonLoc = intArrayOf(0, 0)
+        button.getLocationInWindow(buttonLoc) // Not sure if this or getLocationInScreen is correct.
+
+        val rootLoc = intArrayOf(0, 0)
+        mainRootLayout.getLocationInWindow(rootLoc) // Not sure if this or getLocationInScreen is correct.
+
+        // Keep this here in case we want to tweak the offset amount
+        val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
+
+        // https://stackoverflow.com/a/24035591/2496050
+        layout.post {
+            layout.x = (buttonLoc[0] + (button.width - layout.width) / 2 - rootLoc[0]).toFloat()
+            layout.y = buttonLoc[1] - rootLoc[1] - layout.height - offsetPx
+            layout.visibility = View.VISIBLE
+        }
+        // Hide it until it has been laid out correctly.
+        // Must use invisible instead of gone because gone won't lay it out (and width and height won't be calculated)
+        layout.visibility = View.INVISIBLE
+
+        mainRootLayout.addView(layout)
+
+        button.setOnTouchListener { view, motionEvent ->
+            val buttonRect = Rect()
+            val xPos = motionEvent.rawX.toInt()
+            val yPos = motionEvent.rawY.toInt()
+
+            val layoutLoc = intArrayOf(0, 0)
+            layout.getLocationInWindow(layoutLoc)
+
+            when (motionEvent.action) {
+                MotionEvent.ACTION_MOVE -> {
+                    for (i in 0 until layout.childCount) {
+                        val secondaryButton = layout.getChildAt(i)
+                        secondaryButton.getHitRect(buttonRect)
+                        buttonRect.offset(layoutLoc[0], layoutLoc[1]) // Rect in parent space, translate to screen
+                        secondaryButton.isHovered = buttonRect.contains(xPos, yPos)
+                    }
+                }
+                MotionEvent.ACTION_UP -> {
+                    for (i in 0 until layout.childCount) {
+                        val secondaryButton = layout.getChildAt(i)
+                        secondaryButton.getHitRect(buttonRect)
+                        buttonRect.offset(layoutLoc[0], layoutLoc[1]) // Rect in parent space, translate to screen
+                        if (buttonRect.contains(xPos, yPos)) {
+                            secondaryButton.performClick()
+                        }
+                    }
+
+                    mainRootLayout.removeView(layout)
+                }
+            }
+            false
+        }
     }
 
     fun updateUnitDisplay() {
@@ -90,8 +158,8 @@ class MainActivity : Activity() {
     fun displayUnits(units : List<String>) {
         unit_selector.removeAllViews()
         for (unit in units) {
-            var newButton = layoutInflater.inflate(R.layout.unit_button, null) as Button
-            newButton.tag = if (unit == "1") "" else unit
+            var newButton = layoutInflater.inflate(R.layout.button_unit, null) as CalculatorButton
+            newButton.primaryCommand = if (unit == "1") "" else unit
             newButton.text = unit
             unit_selector.addView(newButton)
         }

@@ -2,5 +2,9 @@
 - Equals button
 - Optimize unit humanization
 - Hold keys to get additional (square to cube and root)
+- Unparenthesized functions
 - Unit corrections
 - Better job of showing sigfigs
+- Better prefix selector
+- Long press DEL clears everything
+- Expressions such as "2π" or "eπ"
