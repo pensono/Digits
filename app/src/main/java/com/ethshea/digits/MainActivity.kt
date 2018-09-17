@@ -158,7 +158,7 @@ class MainActivity : Activity() {
     fun displayUnits(units : List<String>) {
         unit_selector.removeAllViews()
         for (unit in units) {
-            var newButton = layoutInflater.inflate(R.layout.button_unit, null) as CalculatorButton
+            val newButton = layoutInflater.inflate(R.layout.button_unit, null) as CalculatorButton
             newButton.primaryCommand = if (unit == "1") "" else unit
             newButton.text = unit
             unit_selector.addView(newButton)

@@ -1,4 +1,4 @@
-package com.ethshea.digits.units
+package com.ethshea.digits
 
 import kotlin.math.absoluteValue
 

@@ -1,10 +1,13 @@
-- Extended Trig/log functions (acos, hsin)
 - Equals button
 - Optimize unit humanization
-- Hold keys to get additional (square to cube and root)
 - Unparenthesized functions
 - Unit corrections
 - Better job of showing sigfigs
 - Better prefix selector
 - Long press DEL clears everything
 - Expressions such as "2π" or "eπ"
+- Larger secondary button hit boxes (https://stackoverflow.com/questions/8176105/how-to-increase-hit-area-of-android-button-without-scaling-background)
+- Spacing in the secondary buttons
+- Disciplines
+- Error message for tan(π/2)
+- support for sin^-1()

@@ -38,7 +38,7 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
 
                     secondary = secondarySettingString.split(";")
                             .map { it.split(":") }
-                            .map { it[0] to it[1] }
+                            .map { it[0] to if (it.size < 2) it[0] else it[1] }
                 }
                 R.styleable.CalculatorButton_onLongClick -> {
                     // https://stackoverflow.com/questions/5706038/long-press-definition-at-xml-layout-like-androidonclick-does

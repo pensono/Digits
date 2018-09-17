@@ -40,6 +40,12 @@ class SciNumber {
     fun sin() = doubleFunction(Math::sin)
     fun cos() = doubleFunction(Math::cos)
     fun tan() = doubleFunction(Math::tan)
+    fun sinh() = doubleFunction(Math::sinh)
+    fun cosh() = doubleFunction(Math::cosh)
+    fun tanh() = doubleFunction(Math::tanh)
+    fun asin() = doubleFunction(Math::asin)
+    fun acos() = doubleFunction(Math::acos)
+    fun atan() = doubleFunction(Math::atan)
 
     private fun doubleFunction(op : (Double) -> Double) = SciNumber(BigDecimal(op(backing.toDouble()), MathContext(backing.precision())))
 

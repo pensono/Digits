@@ -73,17 +73,17 @@ class EvaluatorTest {
     @Test
     fun partialAddition() {
         evalTest(Quantity(SciNumber("1")), "+1")
-        evalTest(Quantity(SciNumber("1")), "1+")
-        evalTest(Quantity(SciNumber("1")), "1+-")
-        evalTest(Quantity(SciNumber("2")), "1+1+")
-        evalTest(Quantity(SciNumber("123")), "123+")
+        correctionTest(Quantity(SciNumber("1")), "1+")
+        correctionTest(Quantity(SciNumber("1")), "1+-")
+        correctionTest(Quantity(SciNumber("2")), "1+1+")
+        correctionTest(Quantity(SciNumber("123")), "123+")
     }
 
     @Test
     fun partialMultiplication() {
-        evalTest(Quantity(SciNumber("4")), "4*")
-        evalTest(Quantity(SciNumber("-4")), "-4*")
-        evalTest(Quantity(SciNumber("4")), "4*-") // It would be nice to get -4 here, but that's alot of work
+        correctionTest(Quantity(SciNumber("4")), "4*")
+        correctionTest(Quantity(SciNumber("-4")), "-4*")
+        correctionTest(Quantity(SciNumber("4")), "4*-") // It would be nice to get -4 here, but that's alot of work
     }
 
     @Test
@@ -121,6 +121,14 @@ class EvaluatorTest {
     fun trigFunctions() {
         evalTest(Quantity(SciNumber("0")), "sin(0)")
         evalTest(Quantity(SciNumber("1")), "sin(π/2)")
+        evalTest(Quantity(SciNumber("1")), "cos(0)")
+        evalTest(Quantity(SciNumber("0")), "cos(π/2)")
+        evalTest(Quantity(SciNumber("0")), "tan(0)")
+        evalTest(Quantity(SciNumber("1")), "tan(π/4)")
+
+        evalTest(Quantity(SciNumber("0")), "sinh(0)")
+        evalTest(Quantity(SciNumber("1")), "cosh(0)")
+        evalTest(Quantity(SciNumber("0")), "tanh(0)")
     }
 
     @Test
@@ -130,7 +138,14 @@ class EvaluatorTest {
 
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
-        Assert.assertEquals(expected, result.value)
+        Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
+        Assert.assertTrue(result.errors.isEmpty())
+    }
+
+    private fun correctionTest(expected: Quantity, input: String) {
+        val result = evaluateExpression(input)
+        Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
+        Assert.assertTrue(result.errors.isNotEmpty())
     }
 
     private fun errorTest(location: Interval, input: String) {

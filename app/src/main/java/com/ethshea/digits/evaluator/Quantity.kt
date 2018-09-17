@@ -46,6 +46,12 @@ class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     fun sin() = Quantity(value.sin(), unit)
     fun cos() = Quantity(value.cos(), unit)
     fun tan() = Quantity(value.tan(), unit)
+    fun sinh() = Quantity(value.sinh(), unit)
+    fun cosh() = Quantity(value.cosh(), unit)
+    fun tanh() = Quantity(value.tanh(), unit)
+    fun asin() = Quantity(value.asin(), unit)
+    fun acos() = Quantity(value.acos(), unit)
+    fun atan() = Quantity(value.atan(), unit)
 
     override fun equals(other: Any?): Boolean =
         other is Quantity

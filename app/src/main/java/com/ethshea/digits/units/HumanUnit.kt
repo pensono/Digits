@@ -3,6 +3,7 @@ package com.ethshea.digits.units
 import com.ethshea.digits.SciNumber
 import com.ethshea.digits.evaluator.HumanQuantity
 import com.ethshea.digits.evaluator.Quantity
+import com.ethshea.digits.prettyExponent
 import java.util.*
 import kotlin.math.absoluteValue
 

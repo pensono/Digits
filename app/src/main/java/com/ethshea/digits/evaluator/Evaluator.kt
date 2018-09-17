@@ -6,8 +6,8 @@ import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.parser.DigitsLexer
 import com.ethshea.digits.parser.DigitsParser
 import com.ethshea.digits.parser.DigitsParserBaseVisitor
-import com.ethshea.digits.units.isNumber
-import com.ethshea.digits.units.parseNumber
+import com.ethshea.digits.isNumber
+import com.ethshea.digits.parseNumber
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ConsoleErrorListener
@@ -56,7 +56,15 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     private val functions = mapOf(
             "sin" to Quantity::sin,
             "cos" to Quantity::cos,
-            "tan" to Quantity::tan
+            "tan" to Quantity::tan,
+
+            "sinh" to Quantity::sinh,
+            "cosh" to Quantity::cosh,
+            "tanh" to Quantity::tanh,
+
+            "asin" to Quantity::asin,
+            "acos" to Quantity::acos,
+            "atan" to Quantity::atan
     )
 
     override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
