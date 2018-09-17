@@ -104,11 +104,15 @@ class MainActivity : Activity() {
 
         // Keep this here in case we want to tweak the offset amount
         val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
+        val horizMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
 
         // https://stackoverflow.com/a/24035591/2496050
         layout.post {
-            layout.x = (buttonLoc[0] + (button.width - layout.width) / 2 - rootLoc[0]).toFloat()
+            val xPos = (buttonLoc[0] + (button.width - layout.width) / 2 - rootLoc[0]).toFloat()
+
+            layout.x = Math.min(Math.max(horizMarginPx, xPos), resources.displayMetrics.widthPixels - horizMarginPx - layout.width)
             layout.y = buttonLoc[1] - rootLoc[1] - layout.height - offsetPx
+
             layout.visibility = View.VISIBLE
         }
         // Hide it until it has been laid out correctly.

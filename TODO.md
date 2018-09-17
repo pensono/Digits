@@ -11,3 +11,5 @@
 - Disciplines
 - Error message for tan(π/2)
 - support for sin^-1()
+- tangent
+- square root
