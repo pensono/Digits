@@ -2,6 +2,7 @@ package com.ethshea.digits
 
 import com.ethshea.digits.evaluator.parseUnit
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import org.antlr.v4.runtime.misc.Interval
 import org.junit.Test
 
@@ -27,6 +28,15 @@ class UnitParserTest {
     @Test
     fun withPrefix() {
         assertEquals(u("V") + p("k"), parseUnit("kV", Interval(0, 0)).value)
+    }
+
+    @Test
+    fun needsPrefix() {
+        assertTrue(parseUnit("k", Interval(0, 0)).errors.size == 1)
+        assertTrue(parseUnit("M", Interval(0, 0)).errors.size == 1)
+        assertTrue(parseUnit("μ", Interval(0, 0)).errors.size == 1)
+        assertTrue(parseUnit("G", Interval(0, 0)).errors.size == 1)
+        assertTrue(parseUnit("p", Interval(0, 0)).errors.size == 1)
     }
 
     @Test

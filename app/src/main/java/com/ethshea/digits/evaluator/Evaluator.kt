@@ -174,6 +174,10 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
             unit = UnitSystem.unitAbbreviations["m"]!! * exponent
         } else {
             unit = prefix
+
+            if (!tokens.hasNext()) {
+                errors += ErrorMessage("Prefix without unit", location)
+            }
         }
     }
 
