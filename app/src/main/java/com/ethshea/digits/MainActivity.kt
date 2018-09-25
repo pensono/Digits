@@ -2,7 +2,6 @@ package com.ethshea.digits
 
 import android.app.Activity
 import android.graphics.Rect
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,7 +10,7 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
@@ -59,8 +58,6 @@ class MainActivity : Activity() {
 
         input.addSelectionListener { _, _ -> updateUnitDisplay() }
 
-
-
         showPrefix = true
 
         input.showSoftInputOnFocus = false
@@ -74,6 +71,11 @@ class MainActivity : Activity() {
             } else {
                 input.text.replace(input.selectionStart, input.selectionEnd, "")
             }
+        } else if (buttonCommand == "ENT") {
+            val historyElement = layoutInflater.inflate(R.layout.text_history_element, historyLayout, false) as TextView
+            historyElement.text = result_preview.text // Feels weird taking this from a UI element
+            historyLayout.addView(historyElement)
+            input.text.replace(0, input.text.length, result_preview.text)
         } else {
             val insertText = buttonCommand.replace("|", "")
             input.text.replace(input.selectionStart, input.selectionEnd, insertText)
