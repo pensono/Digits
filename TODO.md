@@ -15,3 +15,4 @@
 - square root
 - Undo button
 - Clear all animation
+- Center prefix scroll view

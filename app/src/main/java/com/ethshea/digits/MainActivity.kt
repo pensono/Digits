@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity() {
     val TAG = "Digits_MainActivity"
+    val history = mutableListOf<HistoryItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +58,9 @@ class MainActivity : Activity() {
             } else {
                 input.text.replace(input.selectionStart, input.selectionEnd, "")
             }
+        } else if (buttonCommand == "ENT") {
+            history += HistoryItem(input.text.toString(), result_preview.text.toString())
+            input.text.replace(0, input.text.length, result_preview.text)
         } else {
             val insertText = buttonCommand.replace("|", "")
             input.text.replace(input.selectionStart, input.selectionEnd, insertText)

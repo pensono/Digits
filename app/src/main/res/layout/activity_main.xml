@@ -88,7 +88,7 @@
             <com.ethshea.digits.CalculatorButton app:primary="-" android:text="-" style="@style/AppTheme.CalculatorButton.Operator" />
             <com.ethshea.digits.CalculatorButton app:primary="0" android:text="0" style="@style/AppTheme.CalculatorButton.Digit" />
             <com.ethshea.digits.CalculatorButton app:primary="." android:text="." style="@style/AppTheme.CalculatorButton.Digit" />
-            <com.ethshea.digits.CalculatorButton app:primary="=" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
+            <com.ethshea.digits.CalculatorButton app:primary="ENT" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
             <com.ethshea.digits.CalculatorButton app:primary="+" android:text="+" style="@style/AppTheme.CalculatorButton.Operator" />
         </GridLayout>
 
