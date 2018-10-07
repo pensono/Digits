@@ -1,5 +1,7 @@
 package com.ethshea.digits
 
+import java.lang.Integer.max
+import java.lang.Integer.min
 import java.math.BigDecimal
 import java.math.MathContext
 
@@ -18,19 +20,32 @@ class SciNumber {
     }
 
     private val backing: BigDecimal
+    val sigFigs: Int
+    val magnitude: Int
+        get() =
+            if (this == SciNumber.Zero)
+                0
+            else
+                Math.log10(backing.abs().toDouble()).toInt() // Double is not super accurate, but should be good enough
 
     constructor(value: String) : this(BigDecimal(value, MathContext.DECIMAL128))
     constructor(value: Int) : this(BigDecimal(value, MathContext.DECIMAL128))
     constructor(value: Double) : this(BigDecimal(value, MathContext.DECIMAL128))
 
-    private constructor(value: BigDecimal) {
+    private constructor(value: BigDecimal) : this(value, value.precision())
+
+    private constructor(value: BigDecimal, sigFigs : Int) {
         backing = value
+        this.sigFigs = sigFigs
     }
 
-    operator fun plus(other: SciNumber) = SciNumber(backing.add(other.backing, MathContext.DECIMAL128))
-    operator fun minus(other: SciNumber) = SciNumber(backing - other.backing)
-    operator fun times(other: SciNumber) = SciNumber(backing * other.backing)
-    operator fun div(other: SciNumber) = SciNumber(backing.divide(other.backing, MathContext.DECIMAL128))
+    operator fun plus(other: SciNumber) = SciNumber(backing + other.backing, sigFigsWith(other))
+    operator fun minus(other: SciNumber) = SciNumber(backing - other.backing, sigFigsWith(other))
+    operator fun times(other: SciNumber) = SciNumber(backing * other.backing, sigFigsWith(other))
+    operator fun div(other: SciNumber) = SciNumber(backing / other.backing, sigFigsWith(other))
+
+    private fun sigFigsWith(other: SciNumber) =
+            min(sigFigs + magnitude, other.sigFigs + other.magnitude) - max(magnitude, other.magnitude)
 
     operator fun unaryMinus() = SciNumber(-backing)
     operator fun compareTo(other: SciNumber) = backing.compareTo(other.backing)
@@ -47,7 +62,7 @@ class SciNumber {
     fun acos() = doubleFunction(Math::acos)
     fun atan() = doubleFunction(Math::atan)
 
-    private fun doubleFunction(op : (Double) -> Double) = SciNumber(BigDecimal(op(backing.toDouble()), MathContext(backing.precision())))
+    private fun doubleFunction(op : (Double) -> Double) = SciNumber(BigDecimal(op(backing.toDouble()), MathContext.DECIMAL128), sigFigs)
 
     override fun equals(other: Any?): Boolean = other is SciNumber && this.backing == other.backing
     override fun hashCode(): Int = backing.hashCode()

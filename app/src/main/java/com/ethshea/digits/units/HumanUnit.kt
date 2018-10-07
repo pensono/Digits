@@ -53,12 +53,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
         return HumanQuantity(quantity.value * quantity.unit.factor, HumanUnit(mapOf()))
     }
 
-    val expandedQuantity = quantity.normalizedValue
-    val prefixMagnitude =
-            if (quantity.value == SciNumber.Zero)
-                0
-            else
-                Math.log10(expandedQuantity.abs().toDouble()).toInt() // Double is not super accurate, but should be good enough
+    val prefixMagnitude = quantity.magnitude
     val prefixIndex = (prefixMagnitude - prefixMagStart) / 3
     val prefixExponent = (prefixIndex * 3) + prefixMagStart
     val prefixFactor = SciNumber(10).pow(prefixExponent)

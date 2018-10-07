@@ -28,6 +28,7 @@ class UnitParserTest {
     @Test
     fun withPrefix() {
         assertEquals(u("V") + p("k"), parseUnit("kV", Interval(0, 0)).value)
+        assertEquals(u("m") + p("k"), parseUnit("km", Interval(0, 0)).value)
     }
 
     @Test
