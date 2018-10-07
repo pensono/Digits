@@ -6,27 +6,53 @@
     android:id="@+id/mainRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     tools:context="com.ethshea.digits.MainActivity">
 
+    <!-- Not useless because we dynamically add the secondary buttons to the parent -->
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <com.ethshea.digits.ErrorInput android:id="@+id/input"
-            style="@style/AppTheme.Display"
+        <LinearLayout
+            style="@style/AppTheme.Display.Group"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:inputType="text|textNoSuggestions"
-            android:lines="1"
-            />
+            android:orientation="vertical">
 
-        <TextView android:id="@+id/result_preview"
-            style="@style/AppTheme.Display.Preview"
+            <com.ethshea.digits.ErrorInput
+                android:id="@+id/input"
+                style="@style/AppTheme.Display"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:inputType="text|textNoSuggestions"
+                android:lines="1"
+                android:textSize="70dp" />
+
+            <TextView
+                android:id="@+id/result_preview"
+                style="@style/AppTheme.Display.Preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textSize="40dp" />
+        </LinearLayout>
+
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:background="@color/primary">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/prefix_selector">
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -76,7 +102,7 @@
             <com.ethshea.digits.CalculatorButton app:primary="-" android:text="-" style="@style/AppTheme.CalculatorButton.Operator" />
             <com.ethshea.digits.CalculatorButton app:primary="0" android:text="0" style="@style/AppTheme.CalculatorButton.Digit" />
             <com.ethshea.digits.CalculatorButton app:primary="." android:text="." style="@style/AppTheme.CalculatorButton.Digit" />
-            <com.ethshea.digits.CalculatorButton app:primary="=" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
+            <com.ethshea.digits.CalculatorButton app:primary="ENT" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
             <com.ethshea.digits.CalculatorButton app:primary="+" android:text="+" style="@style/AppTheme.CalculatorButton.Operator" />
         </GridLayout>
 

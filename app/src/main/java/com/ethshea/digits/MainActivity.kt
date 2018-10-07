@@ -11,7 +11,6 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
@@ -19,19 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity() {
     val TAG = "Digits_MainActivity"
-
-    private var showPrefix = false
-        set(value) {
-            if (field != value) {
-                field = value
-                val unitsToDisplay =
-                        (if (showPrefix) UnitSystem.prefixAbbreviations.values
-                         else listOf()
-                        ) + UnitSystem.unitAbbreviations.values
-                displayUnits(unitsToDisplay.map { u -> u.abbreviation })
-            }
-        }
-
+    val history = mutableListOf<HistoryItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +44,8 @@ class MainActivity : Activity() {
             }
         })
 
-        input.addSelectionListener { _, _ -> updateUnitDisplay() }
-
-
-
-        showPrefix = true
+        displayUnits(UnitSystem.unitAbbreviations.values.map { u -> u.abbreviation }, unit_selector)
+        displayUnits(UnitSystem.prefixAbbreviations.values.map { u -> u.abbreviation }, prefix_selector)
 
         input.showSoftInputOnFocus = false
     }
@@ -74,6 +58,9 @@ class MainActivity : Activity() {
             } else {
                 input.text.replace(input.selectionStart, input.selectionEnd, "")
             }
+        } else if (buttonCommand == "ENT") {
+            history += HistoryItem(input.text.toString(), result_preview.text.toString())
+            input.text.replace(0, input.text.length, result_preview.text)
         } else {
             val insertText = buttonCommand.replace("|", "")
             input.text.replace(input.selectionStart, input.selectionEnd, insertText)
@@ -86,6 +73,11 @@ class MainActivity : Activity() {
 
     // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
+        if (button.primaryCommand == "DEL") {
+            input.text.clear()
+            return
+        }
+
         val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
 
         button.secondary.forEach { pair ->
@@ -155,17 +147,13 @@ class MainActivity : Activity() {
         }
     }
 
-    fun updateUnitDisplay() {
-        showPrefix = shouldShowPrefixes(input.text.toString(), input.selectionStart)
-    }
-
-    fun displayUnits(units : List<String>) {
-        unit_selector.removeAllViews()
+    fun displayUnits(units : List<String>, container: ViewGroup) {
+        container.removeAllViews()
         for (unit in units) {
             val newButton = layoutInflater.inflate(R.layout.button_unit, null) as CalculatorButton
             newButton.primaryCommand = if (unit == "1") "" else unit
             newButton.text = unit
-            unit_selector.addView(newButton)
+            container.addView(newButton)
         }
     }
 

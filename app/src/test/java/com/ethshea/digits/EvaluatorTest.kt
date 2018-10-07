@@ -57,6 +57,29 @@ class EvaluatorTest {
     }
 
     @Test
+    fun auxillaryParentheses() {
+        evalTest(Quantity(SciNumber("30")), "[4+2]*5")
+        evalTest(Quantity(SciNumber("30")), "{4+2}*5")
+    }
+
+    // Functionality not yet implemented, but it should be
+//    @Test
+//    fun mismatchedParentheses() {
+//        errorTest(Quantity(SciNumber("30")), "(4+2]*5")
+//        errorTest(Quantity(SciNumber("30")), "(4+2}*5")
+//        errorTest(Quantity(SciNumber("30")), "[4+2)*5")
+//        errorTest(Quantity(SciNumber("30")), "[4+2}*5")
+//        errorTest(Quantity(SciNumber("30")), "{4+2)*5")
+//        errorTest(Quantity(SciNumber("30")), "{4+2]*5")
+//    }
+//
+//    @Test
+//    fun unevenParentheses() {
+//        evalTest(Quantity(SciNumber("30")), "(4+2)*5)")
+//        evalTest(Quantity(SciNumber("30")), "((4+2)*5") // Evals ok, but a parse error
+//    }
+
+    @Test
     fun orderOfOperations() {
         evalTest(Quantity(SciNumber("11")), "4*2+3")
         evalTest(Quantity(SciNumber("11")), "3+4*2")
@@ -140,7 +163,6 @@ class EvaluatorTest {
     fun incompleteParse() {
         errorTest(Interval(2, 2), "4²2")
     }
-
 
     @Test
     fun emptyInput() {

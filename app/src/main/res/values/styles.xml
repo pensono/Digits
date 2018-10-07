@@ -5,16 +5,18 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.Display.Group">
+        <item name="android:background">@color/background</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
     <style name="AppTheme.Display" parent="android:Widget.Material.EditText">
         <item name="android:gravity">end|bottom</item>
-        <item name="android:textSize">60sp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:paddingEnd">10dp</item>
     </style>
 
     <style name="AppTheme.Display.Preview" parent="AppTheme.Display">
-        <item name="android:textSize">40sp</item>
-        <item name="android:layout_height">40sp</item>
         <item name="android:textColor">@color/secondary_text</item>
     </style>
 
@@ -25,7 +27,7 @@
         <item name="android:minWidth">25dp</item>
         <item name="android:minHeight">65dp</item>
         <item name="android:textColor">@color/icons</item>
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/calc_button_background</item>
         <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -41,7 +43,7 @@
     </style>
 
     <style name="AppTheme.CalculatorButton.Digit" parent="AppTheme.CalculatorButton">
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/calc_button_background</item>
         <item name="android:theme">@style/AppTheme.CalculatorButton.DigitTheme</item>
     </style>
 
@@ -55,7 +57,7 @@
     </style>
 
     <style name="AppTheme.CalculatorButton.Equals" parent="AppTheme.CalculatorButton">
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/calc_button_background</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Advanced" parent="AppTheme.CalculatorButton">
@@ -67,5 +69,10 @@
     <style name="AppTheme.CalculatorButton.Secondary" parent="AppTheme.CalculatorButton">
         <item name="android:minHeight">40dp</item>
         <item name="android:background">@drawable/background_calc_secondary</item>
+    </style>
+
+    <style name="AppTheme.SecondaryGroup">
+        <item name="android:background">@drawable/background_calc_secondary</item>
+        <item name="android:elevation">4dp</item>
     </style>
 </resources>
