@@ -1,7 +1,8 @@
-- Optimize unit humanization
+- Optimize unit humanization (for large exponents which may occur accidentally?)
 - Unparenthesized functions
 - Unit corrections
-- Better job of showing sigfigs
+- Better job of showing sigfigs in answer
+- Better job of showing sigfigs in input
 - Expressions such as "2π" or "eπ"
 - Larger secondary button hit boxes (https://stackoverflow.com/questions/8176105/how-to-increase-hit-area-of-android-button-without-scaling-background)
 - Spacing in the secondary buttons
@@ -14,3 +15,4 @@
 - Clear all animation
 - Center prefix scroll view
 - Animate secondary button appearing
+- Scientific notation button (*10^x)
