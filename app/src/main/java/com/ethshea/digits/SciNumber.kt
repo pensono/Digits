@@ -95,9 +95,9 @@ class SciNumber {
                 precision = Precision.SigFigs(backing.precision())
             }
             else -> {
-                // Handle the ambiguity of trailing zeroes by always treating zeroes as insignificant
+                // Handle the ambiguity of trailing zeroes by always treating zeroes as significant
                 backing = BigDecimal(noLeadingZeroes)
-                precision = Precision.SigFigs(noLeadingZeroes.trimEnd('0').length)
+                precision = Precision.SigFigs(noLeadingZeroes.length)
             }
         }
     }

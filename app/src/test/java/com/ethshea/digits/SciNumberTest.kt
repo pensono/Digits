@@ -9,11 +9,11 @@ class SciNumberTest {
     fun precisionLiteral() {
         assertEquals(sf(1), SciNumber("1").precision)
         assertEquals(Precision.Infinite, SciNumber(10).precision)
-        assertEquals(sf(1), SciNumber("10").precision)
+        assertEquals(sf(2), SciNumber("10").precision)
         assertEquals(sf(2), SciNumber("10.").precision)
         assertEquals(sf(3), SciNumber("10.0").precision)
         assertEquals(sf(2), SciNumber("11").precision)
-        assertEquals(sf(2), SciNumber("110").precision)
+        assertEquals(sf(3), SciNumber("110").precision)
         assertEquals(sf(3), SciNumber("1.00").precision)
         assertEquals(sf(3), SciNumber("01.00").precision)
 
@@ -67,7 +67,7 @@ class SciNumberTest {
     @Test
     fun precisionAddition() {
         assertEquals(sf(1), (SciNumber("1") + SciNumber("2")).precision)
-        assertEquals(sf(1), (SciNumber("10") + SciNumber("20")).precision)
+        assertEquals(sf(2), (SciNumber("10") + SciNumber("20")).precision)
         assertEquals(sf(2), (SciNumber("10.") + SciNumber("20.")).precision)
         assertEquals(sf(3), (SciNumber("10.0") + SciNumber("20.0")).precision)
 
@@ -75,7 +75,7 @@ class SciNumberTest {
         assertEquals(sf(1), (SciNumber(".01") + SciNumber(".02")).precision)
 
         assertEquals(sf(2), (SciNumber("11") + SciNumber("2")).precision)
-        assertEquals(sf(1), (SciNumber("11") + SciNumber("20")).precision)
+        assertEquals(sf(2), (SciNumber("11") + SciNumber("20")).precision)
         assertEquals(sf(2), (SciNumber("11.0") + SciNumber("2")).precision)
         assertEquals(sf(2), (SciNumber("1.1") + SciNumber(".2")).precision)
         assertEquals(sf(1), (SciNumber("1.1") + SciNumber("2")).precision)
