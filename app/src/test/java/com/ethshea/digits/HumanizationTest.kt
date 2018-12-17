@@ -38,7 +38,7 @@ class HumanizationTest {
 
     @Test
     fun changeFactor() {
-        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("V") to 1), p("k"))), humanize(Quantity(SciNumber.Kilo, u("V"))))
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("V") to 1), p("k"))), humanize(Quantity(Kilo, u("V"))))
     }
 
     @Test
@@ -49,15 +49,20 @@ class HumanizationTest {
 
     @Test
     fun noPrefixForVoid() {
-        assertEquals("", humanize(Quantity(SciNumber.Kilo)).unit.abbreviation)
-        assertEquals("", humanize(Quantity(SciNumber.Milli)).unit.abbreviation)
-        assertEquals("", humanize(Quantity(SciNumber.Mega)).unit.abbreviation)
-        assertEquals("", humanize(Quantity(SciNumber.Micro)).unit.abbreviation)
+        assertEquals("", humanize(Quantity(Kilo)).unit.abbreviation)
+        assertEquals("", humanize(Quantity(Milli)).unit.abbreviation)
+        assertEquals("", humanize(Quantity(Mega)).unit.abbreviation)
+        assertEquals("", humanize(Quantity(Micro)).unit.abbreviation)
     }
 
     @Test
     fun useDecimalNotation() {
         assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString())
         assertEquals("56000", humanize(evaluateExpression("56k").value).humanString())
+    }
+
+    @Test
+    fun keepsPrecision() {
+        assertEquals(sf(4), humanize(Quantity(SciNumber("99.99"))).value.precision)
     }
 }

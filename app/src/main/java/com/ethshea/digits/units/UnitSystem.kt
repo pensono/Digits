@@ -1,6 +1,7 @@
 package com.ethshea.digits.units
 
 import com.ethshea.digits.SciNumber
+import java.math.BigDecimal
 
 object UnitSystem { // Preferred Units?
     val length = mapOf("length" to 1)
@@ -35,17 +36,17 @@ object UnitSystem { // Preferred Units?
     )
 
     val prefixes = listOf(
-            PrefixUnit("f", "femto", SciNumber("1e-15")),
-            PrefixUnit("p", "pico", SciNumber("1e-12")),
-            PrefixUnit("n", "nano", SciNumber("1e-9")),
-            PrefixUnit("μ", "micro", SciNumber.Micro),
-            PrefixUnit("m", "milli", SciNumber.Milli),
-            PrefixUnit("k", "kilo", SciNumber.Kilo),
-            PrefixUnit("M", "mega", SciNumber.Mega),
-            PrefixUnit("G", "giga", SciNumber("1e9")),
-            PrefixUnit("T", "tera", SciNumber("1e12")),
-            PrefixUnit("P", "peta", SciNumber("1e15")),
-            PrefixUnit("E", "exa", SciNumber("1e18"))
+            PrefixUnit("f", "femto", "1e-15"),
+            PrefixUnit("p", "pico", "1e-12"),
+            PrefixUnit("n", "nano", "1e-9"),
+            PrefixUnit("μ", "micro", "1e-6"),
+            PrefixUnit("m", "milli", "1e-3"),
+            PrefixUnit("k", "kilo", "1e3"),
+            PrefixUnit("M", "mega", "1e6"),
+            PrefixUnit("G", "giga", "1e9"),
+            PrefixUnit("T", "tera", "1e12"),
+            PrefixUnit("P", "peta", "1e15"),
+            PrefixUnit("E", "exa", "1e18")
     )
 
     val unitAbbreviations = units.associateBy(AtomicHumanUnit::abbreviation)

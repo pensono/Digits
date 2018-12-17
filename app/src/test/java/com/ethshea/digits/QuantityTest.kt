@@ -10,7 +10,7 @@ import org.junit.Assert.*
  */
 class QuantityTest {
     val meters = NaturalUnit(mapOf("length" to 1))
-    val kilometers = NaturalUnit(mapOf("length" to 1), SciNumber.Kilo)
+    val kilometers = NaturalUnit(mapOf("length" to 1), Kilo)
 
     @Test
     fun plus() {

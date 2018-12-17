@@ -4,7 +4,7 @@ import java.lang.Integer.*
 import java.math.BigDecimal
 import java.math.MathContext
 
-abstract class Precision private constructor() : Comparable<Precision> {
+sealed class Precision : Comparable<Precision> {
     abstract operator fun plus(value: Int) : Precision
     abstract operator fun minus(value: Int) : Precision
 
@@ -41,13 +41,8 @@ abstract class Precision private constructor() : Comparable<Precision> {
  */
 class SciNumber {
     companion object {
-        val One = SciNumber("1")
-        val Zero = SciNumber("0")
-
-        val Kilo = SciNumber("1e3")
-        val Mega = SciNumber("1e6")
-        val Milli = SciNumber("1e-3")
-        val Micro = SciNumber("1e-6")
+        val One = SciNumber(1)
+        val Zero = SciNumber(0)
     }
 
     private val backing: BigDecimal
@@ -63,7 +58,7 @@ class SciNumber {
      */
     val magnitude: Int
         get() =
-            if (this == SciNumber.Zero)
+            if (backing == BigDecimal.ZERO)
                 0
             else
                 // Double is not super accurate, but should be good enough
@@ -106,6 +101,8 @@ class SciNumber {
     constructor(value: Int) : this(BigDecimal(value, MathContext.DECIMAL128), Precision.Infinite)
     constructor(value: Double) : this(BigDecimal(value, MathContext.DECIMAL128))
     constructor(value: Double, sigFigs: Int) : this(BigDecimal(value, MathContext.DECIMAL128), Precision.SigFigs(sigFigs))
+
+    constructor(value: String, precision: Precision) : this(BigDecimal(value), precision)
 
     private constructor(value: BigDecimal) : this(value, Precision.SigFigs(value.precision()))
 

@@ -2,15 +2,19 @@ package com.ethshea.digits
 
 import android.app.Activity
 import android.graphics.Rect
-import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
+import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import com.ethshea.digits.evaluator.HumanQuantity
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
@@ -34,8 +38,9 @@ class MainActivity : Activity() {
                     val parseResult = evaluateExpression(input.text.toString())
 
                     val humanizedQuantity = humanize(parseResult.value)
+                    val coloredText = colorizePrecision(humanizedQuantity)
 
-                    result_preview.text = humanizedQuantity.humanString()
+                    result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
                     input.errors = parseResult.errors
                 } catch (e: Exception) {
                     result_preview.text = "Error"
@@ -157,14 +162,51 @@ class MainActivity : Activity() {
         }
     }
 
-    // Kinda weird for this to be public, but it makes it testable
     companion object {
+        // Kinda weird for this to be public, but it makes it testable
         fun shouldShowPrefixes(text: String, caretPosition: Int) : Boolean {
             if (caretPosition == 0) {
                 return true
             }
 
             return caretPosition - 1 < text.length && !text[caretPosition - 1].isLetter()
+        }
+
+        private fun colorizePrecision(humanQuantity: HumanQuantity) : Spanned {
+            val rawText = humanQuantity.humanString()
+            val precision = humanQuantity.value.precision
+
+            val sigfigsEndLocation = insignificantStart(rawText, precision)
+            val coloredText = rawText.replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='blue'>") + "</font>"
+
+            // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.fromHtml(coloredText,  Html.FROM_HTML_MODE_LEGACY)
+            } else {
+                Html.fromHtml(coloredText)
+            }
+        }
+
+        /***
+         * @param rawText Must be produced by HumanQuantity
+         */
+        fun insignificantStart(rawText: String, precision: Precision): Int {
+            val startPos = rawText.length - rawText.trimStart('0', '.').length
+
+            val sigfigsEndLocation = when (precision) {
+                is Precision.Infinite -> rawText.length
+                is Precision.SigFigs -> {
+                    val decimalAdjustment =
+                        if (rawText.substring(startPos, Math.min(precision.amount + startPos, rawText.length))
+                                .contains('.'))
+                            1
+                        else
+                            0
+                    precision.amount + startPos + decimalAdjustment
+                }
+            }
+
+            return sigfigsEndLocation
         }
     }
 }

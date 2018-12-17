@@ -19,8 +19,8 @@ class UnitSystemTest {
 
     @Test
     fun subtract() {
-        assertEquals(NaturalUnit(mapOf("length" to 1), SciNumber.Kilo), NaturalUnit(mapOf("length" to 2), SciNumber.Kilo) - NaturalUnit(mapOf("length" to 1)))
-        assertEquals(NaturalUnit(mapOf("length" to 1), SciNumber.Milli), NaturalUnit(mapOf("length" to 2)) - NaturalUnit(mapOf("length" to 1), SciNumber.Kilo))
+        assertEquals(NaturalUnit(mapOf("length" to 1), Kilo), NaturalUnit(mapOf("length" to 2), Kilo) - NaturalUnit(mapOf("length" to 1)))
+        assertEquals(NaturalUnit(mapOf("length" to 1), Milli), NaturalUnit(mapOf("length" to 2)) - NaturalUnit(mapOf("length" to 1), Kilo))
     }
 
     @Test
@@ -37,10 +37,10 @@ class UnitSystemTest {
 
     @Test
     fun fitsWithinDifferentFactor() {
-        assertTrue(NaturalUnit(mapOf("length" to 1)).fitsWithin(NaturalUnit(mapOf("length" to 1), SciNumber.Kilo)))
-        assertFalse(NaturalUnit(mapOf("length" to 1), SciNumber.Kilo).fitsWithin(NaturalUnit(mapOf("length" to 1))))
+        assertTrue(NaturalUnit(mapOf("length" to 1)).fitsWithin(NaturalUnit(mapOf("length" to 1), Kilo)))
+        assertFalse(NaturalUnit(mapOf("length" to 1), Kilo).fitsWithin(NaturalUnit(mapOf("length" to 1))))
 
-        assertFalse(NaturalUnit(mapOf("length" to 1), SciNumber.Milli).fitsWithin(NaturalUnit(mapOf("length" to 1))))
-        assertTrue(NaturalUnit(mapOf("length" to 1)).fitsWithin(NaturalUnit(mapOf("length" to 1), SciNumber.Milli)))
+        assertFalse(NaturalUnit(mapOf("length" to 1), Milli).fitsWithin(NaturalUnit(mapOf("length" to 1))))
+        assertTrue(NaturalUnit(mapOf("length" to 1)).fitsWithin(NaturalUnit(mapOf("length" to 1), Milli)))
     }
 }

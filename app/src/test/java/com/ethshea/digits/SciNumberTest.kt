@@ -22,6 +22,8 @@ class SciNumberTest {
         assertEquals(sf(2), SciNumber(".011").precision)
         assertEquals(sf(1), SciNumber(".001").precision)
         assertEquals(sf(2), SciNumber(".0010").precision)
+
+        assertEquals(sf(3), SciNumber("99.1").precision)
     }
 
     @Test
@@ -117,6 +119,4 @@ class SciNumberTest {
     }
 
     // Test that other operations preserve precision
-    
-    private fun sf(i: Int) = Precision.SigFigs(i)
 }
