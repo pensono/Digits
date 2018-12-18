@@ -119,4 +119,10 @@ class SciNumberTest {
     }
 
     // Test that other operations preserve precision
+    @Test
+    fun powPrecision() {
+        // May not be correct https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions
+        assertEquals(Precision.Infinite, SciNumber(10).pow(5).precision)
+        assertEquals(sf(2), SciNumber("10").pow(5).precision)
+    }
 }

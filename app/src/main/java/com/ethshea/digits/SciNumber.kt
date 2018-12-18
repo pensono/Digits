@@ -122,7 +122,7 @@ class SciNumber {
 
     operator fun unaryMinus() = SciNumber(-backing)
     operator fun compareTo(other: SciNumber) = backing.compareTo(other.backing)
-    fun pow(n: Int) = SciNumber(backing.pow(n, MathContext.DECIMAL128)) // Context needed here?
+    fun pow(n: Int) = SciNumber(backing.pow(n, MathContext.DECIMAL128), precision) // Context needed here?
     fun abs() = SciNumber(backing.abs())
 
     fun sin() = doubleFunction(Math::sin)

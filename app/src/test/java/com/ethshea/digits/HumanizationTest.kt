@@ -64,5 +64,6 @@ class HumanizationTest {
     @Test
     fun keepsPrecision() {
         assertEquals(sf(4), humanize(Quantity(SciNumber("99.99"))).value.precision)
+        assertEquals(sf(4), humanize(Quantity(SciNumber("99.99"), u("m"))).value.precision)
     }
 }

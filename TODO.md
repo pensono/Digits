@@ -1,3 +1,4 @@
+Pre-release:
 - Optimize unit humanization (for large exponents which may occur accidentally?)
 - Unparenthesized functions
 - Unit corrections
@@ -15,3 +16,6 @@
 - Animate secondary button appearing
 - Scientific notation button (*10^x)
 - Better job of showing sigfigs in input
+
+Post-release:
+- Sigfigs for transindental numbers (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
