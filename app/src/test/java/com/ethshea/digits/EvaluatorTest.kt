@@ -150,6 +150,13 @@ class EvaluatorTest {
     }
 
     @Test
+    fun mismatchedUnits() {
+        errorTest(Interval(4,5), "10m+2A")
+        errorTest(Interval(5,9), "10m+(2A+3A)")
+        errorTest(Interval(6,10), "(10m+(2A+3A))/4")
+    }
+
+    @Test
     fun invalidConstants() {
         errorTest(Interval(0, 11), "notAConstant")
     }

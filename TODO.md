@@ -3,6 +3,7 @@ Pre-release:
 - Unparenthesized functions
 - Unit corrections
 - Expressions such as "2π" or "eπ"
+- Change units by tapping on the answer preview
 - Larger secondary button hit boxes (https://stackoverflow.com/questions/8176105/how-to-increase-hit-area-of-android-button-without-scaling-background)
 - Spacing in the secondary buttons
 - Disciplines
