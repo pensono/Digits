@@ -53,8 +53,14 @@ fun humanize(quantity: Quantity) : HumanQuantity {
         return HumanQuantity(quantity.value * quantity.unit.factor, HumanUnit(mapOf()))
     }
 
-    val prefixMagnitude = quantity.magnitude
-    val prefixIndex = (prefixMagnitude - prefixMagStart) / 3
+    val prefixMagnitude =
+        if (quantity.normalizedValue.valueEqual(SciNumber.Zero))
+            quantity.unit.factor.magnitude
+        else
+            quantity.normalizedValue.magnitude
+
+    // Use the one to round up and avoid 0 digits in the front (like in .123m)
+    val prefixIndex = (prefixMagnitude - prefixMagStart - 1) / 3
     val prefixExponent = (prefixIndex * 3) + prefixMagStart
     val prefixFactor = SciNumber(10).pow(prefixExponent)
     val prefixUnit = PrefixUnit(prefixes[prefixIndex], "prefix", factor = prefixFactor)

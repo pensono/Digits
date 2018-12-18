@@ -11,7 +11,6 @@ import com.ethshea.digits.units.UnitSystem
 
 class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     val normalizedValue = value * unit.factor
-    val magnitude = normalizedValue.magnitude
 
     /**
      * @requires this.unit.dimensionallyEqual(other.unit)
@@ -70,8 +69,8 @@ class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
 }
 
 data class HumanQuantity(val value:SciNumber, val unit: HumanUnit) {
-    fun humanString() = value.toString() + unit.abbreviation
-    fun humanValueString() = value.toString()
+    fun humanString() = humanValueString() + humanUnitString()
+    fun humanValueString() = value.valueString()
     fun humanUnitString() = unit.abbreviation
 }
 

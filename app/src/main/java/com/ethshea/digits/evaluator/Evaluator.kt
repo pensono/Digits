@@ -159,7 +159,6 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
 }
 
 fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
-    var invert = false
     var unit = UnitSystem.void
     val errors = mutableListOf<ErrorMessage>()
     val tokens = TokenIterator(input, location)
@@ -181,6 +180,7 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
         }
     }
 
+    var invert = false
     while (tokens.hasNext()) {
         val newUnit = tokens.nextLargest(UnitSystem.unitAbbreviations)
         if (newUnit != null) {

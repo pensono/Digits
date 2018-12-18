@@ -54,8 +54,8 @@ class SciNumber {
      */
     val magnitude: Int
         get() =
-            if (backing == BigDecimal.ZERO)
-                0
+            if (backing.compareTo(BigDecimal.ZERO) == 0)
+                1
             else
                 // Double is not super accurate, but should be good enough
                 Math.floor(Math.log10(backing.abs().toDouble())).toInt() + 1
@@ -74,7 +74,7 @@ class SciNumber {
         }
 
         // Algorithm based on concise rules: https://en.wikipedia.org/wiki/Significant_figures
-        val noLeadingZeroes = value.trimStart('0')
+        val noLeadingZeroes = value.trimStart('0', '-')
         when {
             noLeadingZeroes.trim('0', '.').isEmpty() -> { // Only 0s
                 backing = BigDecimal.ZERO
@@ -82,12 +82,12 @@ class SciNumber {
             }
             noLeadingZeroes.contains('.') -> {
                 // All trailing zeroes are significant
-                backing = BigDecimal(noLeadingZeroes)
+                backing = BigDecimal(value)
                 precision = Precision.SigFigs(backing.precision())
             }
             else -> {
                 // Handle the ambiguity of trailing zeroes by always treating zeroes as significant
-                backing = BigDecimal(noLeadingZeroes)
+                backing = BigDecimal(value)
                 precision = Precision.SigFigs(noLeadingZeroes.length)
             }
         }
@@ -120,7 +120,7 @@ class SciNumber {
     private fun precisionOfLsd(other: SciNumber) =
             minOf(precision - magnitude, other.precision - other.magnitude) + max(magnitude, other.magnitude)
 
-    operator fun unaryMinus() = SciNumber(-backing)
+    operator fun unaryMinus() = SciNumber(-backing, precision)
     operator fun compareTo(other: SciNumber) = backing.compareTo(other.backing)
     fun pow(n: Int) = SciNumber(backing.pow(n, MathContext.DECIMAL128), precision) // Context needed here?
     fun abs() = SciNumber(backing.abs())
@@ -137,10 +137,12 @@ class SciNumber {
 
     private fun doubleFunction(op : (Double) -> Double) = SciNumber(BigDecimal(op(backing.toDouble()), MathContext.DECIMAL128), precision)
 
-    override fun equals(other: Any?): Boolean = other is SciNumber && this.backing == other.backing
+    override fun equals(other: Any?): Boolean = other is SciNumber && this.backing == other.backing && this.precision == other.precision
     override fun hashCode(): Int = backing.hashCode()
-    override fun toString(): String = backing.toPlainString()
+    override fun toString(): String = backing.toPlainString() + " precision: $precision"
 
-    fun reciprocal() = SciNumber(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128))
+    fun reciprocal() = SciNumber(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128), precision)
     fun toDouble(): Double = backing.toDouble()
+    fun valueEqual(other: SciNumber): Boolean = backing.compareTo(other.backing) == 0
+    fun valueString(): String = backing.toPlainString()
 }

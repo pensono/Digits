@@ -1,5 +1,6 @@
 package com.ethshea.digits
 
+import com.ethshea.digits.evaluator.Quantity
 import com.ethshea.digits.units.NaturalUnit
 import org.junit.Test
 
@@ -14,8 +15,8 @@ class QuantityTest {
 
     @Test
     fun plus() {
-        assertEquals(q("456.123", kilometers), q("123", meters) + q("456", kilometers))
-        assertEquals(q("123.456", kilometers),q("123", kilometers) + q("456", meters))
+        assertEquals(q("456.123", kilometers), q("123", meters) + q("456.000", kilometers))
+        assertEquals(q("123.456", kilometers),q("123.000", kilometers) + q("456", meters))
     }
 
     @Test
@@ -23,8 +24,8 @@ class QuantityTest {
         assertEquals(q("-1", meters), q("4", meters) - q("5", meters))
         assertEquals(q("1", meters), q("5", meters) - q("4", meters))
 
-        assertEquals(q("999", meters), q("1", kilometers) - q("1", meters))
-        assertEquals(q("-999", meters), q("1", meters) - q("1", kilometers))
+        assertEquals(Quantity(SciNumber(".999", sf(1)), kilometers), q("1", kilometers) - q("1", meters))
+        assertEquals(Quantity(SciNumber("-999", sf(1)), meters), q("1", meters) - q("1", kilometers)) // Should only have one sigfig
     }
 
     @Test

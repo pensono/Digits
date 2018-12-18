@@ -27,6 +27,31 @@ class SciNumberTest {
     }
 
     @Test
+    fun negativeLiteral() {
+        assertEquals(sf(1), SciNumber("-1").precision)
+        assertEquals(sf(2), SciNumber("-10").precision)
+        assertEquals(sf(3), SciNumber("-100").precision)
+
+        assertEquals(sf(1), SciNumber("-.1").precision)
+        assertEquals(sf(2), SciNumber("-.010").precision)
+        assertEquals(sf(3), SciNumber("-.00100").precision)
+    }
+
+    @Test
+    fun negate() {
+        assertEquals(sf(1), (-SciNumber("4")).precision)
+        assertEquals(sf(3), (-SciNumber("400.")).precision)
+        assertEquals(Precision.Infinite, (-SciNumber(400)).precision)
+    }
+
+    @Test
+    fun reciprocal() {
+        assertEquals(sf(1), (SciNumber("4").reciprocal()).precision)
+        assertEquals(sf(3), (SciNumber("400.").reciprocal()).precision)
+        assertEquals(Precision.Infinite, (SciNumber(400).reciprocal()).precision)
+    }
+
+    @Test
     fun parseDecimal() {
         assertTrue(SciNumber(".01") < SciNumber("1"))
         assertTrue(SciNumber("00.01") < SciNumber("1"))
@@ -87,6 +112,13 @@ class SciNumberTest {
         assertEquals(sf(1), (SciNumber(".0011") + SciNumber(".002")).precision)
 
         assertEquals(sf(3), (SciNumber("123")+SciNumber(".456")).precision)
+    }
+
+    @Test
+    fun precisionMinus() {
+        assertEquals(sf(1), (SciNumber("1") - SciNumber("2")).precision)
+        assertEquals(sf(1), (SciNumber("2") - SciNumber("1")).precision)
+        assertEquals(sf(1), (SciNumber("4") - SciNumber("5")).precision)
     }
 
     @Test

@@ -44,7 +44,7 @@ open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open v
     }
 
     override fun hashCode() = dimensions.hashCode() xor factor.hashCode()
-    override fun toString() = dimensions.toString() + " " + factor.toString()
+    override fun toString() = "NaturalUnit(dimensions: $dimensions, factor: $factor)"
 
     private fun combineMapsDefault(a: Map<String, Int>, b: Map<String, Int>, operation: (Int, Int) -> Int): Map<String, Int> {
         val newMap = mutableMapOf<String, Int>()
@@ -75,4 +75,5 @@ open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open v
                     } else {
                         factorA >= factorB
                     }
+
 }

@@ -43,8 +43,9 @@ class HumanizationTest {
 
     @Test
     fun zero() {
-        assertEquals(HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())), humanize(Quantity(SciNumber.Zero)))
-        assertEquals(HumanQuantity(SciNumber.Zero, HumanUnit(mapOf(u("V") to 1))), humanize(Quantity(SciNumber.Zero, u("V"))))
+        assertEquals(HumanQuantity(SciNumber("0"), HumanUnit(mapOf())), humanize(Quantity(SciNumber("0"))))
+        assertEquals(HumanQuantity(SciNumber("0"), HumanUnit(mapOf(u("V") to 1))), humanize(Quantity(SciNumber("0"), u("V"))))
+        assertEquals(HumanQuantity(SciNumber("0"), HumanUnit(mapOf(u("V") to 1), p("m"))), humanize(Quantity(SciNumber("0"), p("m") + u("V"))))
     }
 
     @Test
@@ -59,6 +60,17 @@ class HumanizationTest {
     fun useDecimalNotation() {
         assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString())
         assertEquals("56000", humanize(evaluateExpression("56k").value).humanString())
+    }
+
+    @Test
+    fun engineeringNotation() {
+        assertEquals("123", humanize(evaluateExpression("123").value).humanString())
+
+        assertEquals("1m", humanize(evaluateExpression("1m").value).humanString())
+        assertEquals("123m", humanize(evaluateExpression("123m").value).humanString())
+        assertEquals("12.3m", humanize(evaluateExpression("12.3m").value).humanString())
+        assertEquals("1.23m", humanize(evaluateExpression("1.23m").value).humanString())
+        assertEquals("123mm", humanize(evaluateExpression(".123m").value).humanString())
     }
 
     @Test
