@@ -7,6 +7,7 @@
     <color name="accent">#FFC107</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
+    <color name="detail_text">#bdbdbd</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="calc_button_background">#212121</color>

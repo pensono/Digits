@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.text.Editable
 import android.text.Html
 import android.text.Spanned
@@ -38,7 +39,7 @@ class MainActivity : Activity() {
                     val parseResult = evaluateExpression(input.text.toString())
 
                     val humanizedQuantity = humanize(parseResult.value)
-                    val coloredText = colorizePrecision(humanizedQuantity)
+                    val coloredText = colorizePrecision(humanizedQuantity, R.color.detail_text)
 
                     result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
                     input.errors = parseResult.errors
@@ -162,6 +163,22 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun colorizePrecision(humanQuantity: HumanQuantity, colorResourceId: Int) : Spanned {
+        val colorStr = ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
+        val rawText = humanQuantity.humanString()
+        val precision = humanQuantity.value.precision
+
+        val sigfigsEndLocation = insignificantStart(rawText, precision)
+        val coloredText = rawText.replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='#$colorStr'>") + "</font>"
+
+        // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(coloredText,  Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(coloredText)
+        }
+    }
+
     companion object {
         // Kinda weird for this to be public, but it makes it testable
         fun shouldShowPrefixes(text: String, caretPosition: Int) : Boolean {
@@ -170,21 +187,6 @@ class MainActivity : Activity() {
             }
 
             return caretPosition - 1 < text.length && !text[caretPosition - 1].isLetter()
-        }
-
-        private fun colorizePrecision(humanQuantity: HumanQuantity) : Spanned {
-            val rawText = humanQuantity.humanString()
-            val precision = humanQuantity.value.precision
-
-            val sigfigsEndLocation = insignificantStart(rawText, precision)
-            val coloredText = rawText.replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='blue'>") + "</font>"
-
-            // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.fromHtml(coloredText,  Html.FROM_HTML_MODE_LEGACY)
-            } else {
-                Html.fromHtml(coloredText)
-            }
         }
 
         /***

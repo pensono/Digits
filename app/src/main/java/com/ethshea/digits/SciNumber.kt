@@ -21,10 +21,6 @@ sealed class Precision : Comparable<Precision> {
     }
 
     data class SigFigs(val amount: Int) : Precision() {
-        init {
-            assert(amount > 0)
-        }
-
         override fun compareTo(other: Precision): Int =
                 when (other) {
                     is SigFigs -> compare(amount, other.amount) // Might be backwards
