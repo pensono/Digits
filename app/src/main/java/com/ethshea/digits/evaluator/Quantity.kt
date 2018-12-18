@@ -71,6 +71,8 @@ class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
 
 data class HumanQuantity(val value:SciNumber, val unit: HumanUnit) {
     fun humanString() = value.toString() + unit.abbreviation
+    fun humanValueString() = value.toString()
+    fun humanUnitString() = unit.abbreviation
 }
 
 private fun doSum(a: Quantity, b: Quantity, operation: (SciNumber, SciNumber) -> SciNumber): Quantity {

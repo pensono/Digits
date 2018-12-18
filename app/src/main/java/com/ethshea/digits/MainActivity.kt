@@ -165,11 +165,12 @@ class MainActivity : Activity() {
 
     private fun colorizePrecision(humanQuantity: HumanQuantity, colorResourceId: Int) : Spanned {
         val colorStr = ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
-        val rawText = humanQuantity.humanString()
+        val rawNumberText = humanQuantity.humanValueString()
         val precision = humanQuantity.value.precision
 
-        val sigfigsEndLocation = insignificantStart(rawText, precision)
-        val coloredText = rawText.replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='#$colorStr'>") + "</font>"
+        val sigfigsEndLocation = insignificantStart(rawNumberText, precision)
+        val coloredText = rawNumberText.replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='#$colorStr'>") +
+                "</font>" + humanQuantity.humanUnitString()
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
