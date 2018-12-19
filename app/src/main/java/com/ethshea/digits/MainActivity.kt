@@ -85,6 +85,10 @@ class MainActivity : Activity() {
             return
         }
 
+        if (button.secondary.isEmpty()) {
+            return
+        }
+
         val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
 
         button.secondary.forEach { pair ->

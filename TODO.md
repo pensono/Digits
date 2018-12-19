@@ -16,6 +16,7 @@ Pre-release:
 - Animate secondary button appearing
 - Scientific notation button (*10^x)
 - Better job of showing sigfigs in input
+- Fix bug where selecting ^9 also does ^2
 
 Post-release:
 - Sigfigs for transindental numbers (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
