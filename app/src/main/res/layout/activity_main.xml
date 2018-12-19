@@ -75,7 +75,7 @@
             <com.ethshea.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos:acos(|);cosh:cosh(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
             <com.ethshea.digits.CalculatorButton app:primary="log₁₀(|)" app:secondary="log₂:log₂(|);ln:ln(|)"  android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
             <com.ethshea.digits.CalculatorButton app:primary="⁻¹" android:text="¹/ₓ" style="@style/AppTheme.CalculatorButton.Advanced" />
-            <com.ethshea.digits.CalculatorButton app:primary="²" app:secondary="'⁰;¹;²;³;⁴;⁵;⁶;⁷;⁸;⁹" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
+            <com.ethshea.digits.CalculatorButton app:primary="²" app:secondary="⁰;¹;²;³;⁴;⁵;⁶;⁷;⁸;⁹" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
             <com.ethshea.digits.CalculatorButton app:primary="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
             <com.ethshea.digits.CalculatorButton app:primary="π" app:secondary="φ;τ" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
             <com.ethshea.digits.CalculatorButton app:primary="(" app:secondary="{;[" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
