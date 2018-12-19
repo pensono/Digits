@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/accent" android:state_hovered="true" />
-    <item android:drawable="@color/accent" android:state_focused="true" />
-    <item android:drawable="@color/accent" android:state_drag_hovered="true" />
-    <item android:drawable="@color/primary_light" />
-</selector>
+
+<shape  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle">
+    <solid android:color="@color/hover_highlight_selector" />
+    <corners android:radius="4dp" />
+</shape>

@@ -102,7 +102,7 @@ class MainActivity : Activity() {
         mainRootLayout.getLocationInWindow(rootLoc) // Not sure if this or getLocationInScreen is correct.
 
         // Keep this here in case we want to tweak the offset amount
-        val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
+        val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics)
         val horizMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
 
         // https://stackoverflow.com/a/24035591/2496050
