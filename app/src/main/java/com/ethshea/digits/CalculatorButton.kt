@@ -3,6 +3,7 @@ package com.ethshea.digits
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.widget.Button
@@ -24,6 +25,12 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
      * Pair is from display text to command
      */
     var secondary = listOf<Pair<String, String>>()
+
+    /**
+     * How far to extend the click rectangle below the normal bounds. This is intended to be used
+     * by the
+     */
+    var targetBottomExtendPx = 0
 
     init {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.CalculatorButton)
@@ -60,6 +67,9 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
                         }
                     })
                 }
+                R.styleable.CalculatorButton_targetBottomExtend -> {
+                    targetBottomExtendPx = attributes.getDimensionPixelSize(attribute, 0)
+                }
             }
         }
 
@@ -69,5 +79,10 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
     // Android says this needs to be overridden. Ok sure?
     override fun performClick(): Boolean {
         return super.performClick()
+    }
+
+    override fun getHitRect(outRect: Rect) {
+        super.getHitRect(outRect)
+        outRect.bottom += targetBottomExtendPx
     }
 }

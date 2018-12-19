@@ -21,6 +21,7 @@ import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : Activity() {
     val TAG = "Digits_MainActivity"
     val history = mutableListOf<HistoryItem>()

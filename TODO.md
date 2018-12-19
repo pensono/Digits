@@ -4,7 +4,6 @@ Pre-release:
 - Unit corrections
 - Expressions such as "2π" or "eπ"
 - Change units by tapping on the answer preview
-- Larger secondary button hit boxes (https://stackoverflow.com/questions/8176105/how-to-increase-hit-area-of-android-button-without-scaling-background)
 - Spacing in the secondary buttons
 - Disciplines
 - Error message for tan(π/2)
@@ -20,3 +19,4 @@ Pre-release:
 
 Post-release:
 - Sigfigs for transindental numbers (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
+- Refactor CalculatorButton into two subclasses and a superclass for the secondary and primary buttons
