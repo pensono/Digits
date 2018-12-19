@@ -124,6 +124,7 @@ class MainActivity : Activity() {
 
         mainRootLayout.addView(layout)
 
+        button.isPressed = false
         button.setOnTouchListener { view, motionEvent ->
             val buttonRect = Rect()
             val xPos = motionEvent.rawX.toInt()
