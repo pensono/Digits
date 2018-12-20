@@ -2,6 +2,7 @@ package com.ethshea.digits.units
 
 import com.ethshea.digits.Precision
 import com.ethshea.digits.SciNumber
+import kotlin.math.absoluteValue
 
 
 /**
@@ -9,6 +10,9 @@ import com.ethshea.digits.SciNumber
  */
 open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open val factor: SciNumber) {
     constructor(dimensions: Map<String, Int> = mapOf(), factor: String = "1") : this(dimensions, SciNumber(factor, Precision.Infinite))
+
+     val dimensionMagnitude : Int
+         get() = dimensions.map { it.value.absoluteValue }.sum()
 
     operator fun plus(other: NaturalUnit) =
             NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::plus), factor * other.factor)

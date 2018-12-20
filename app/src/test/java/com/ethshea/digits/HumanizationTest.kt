@@ -4,8 +4,6 @@ import com.ethshea.digits.evaluator.HumanQuantity
 import com.ethshea.digits.evaluator.Quantity
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.HumanUnit
-import com.ethshea.digits.units.NaturalUnit
-import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
 import org.junit.Test
 
@@ -54,6 +52,21 @@ class HumanizationTest {
         assertEquals("", humanize(Quantity(Milli)).unit.abbreviation)
         assertEquals("", humanize(Quantity(Mega)).unit.abbreviation)
         assertEquals("", humanize(Quantity(Micro)).unit.abbreviation)
+    }
+
+    @Test(timeout = 10000)
+    fun largeUnitQuick() {
+        val components = humanize(evaluateExpression("4m99").value).unit.components
+        assertEquals(1, components.size)
+    }
+
+
+    @Test(timeout = 10000)
+    fun largeUnitQuickCached() {
+        for (i in 0..1000) {
+            val components = humanize(evaluateExpression("4m99").value).unit.components
+            assertEquals(1, components.size)
+        }
     }
 
     @Test

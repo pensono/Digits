@@ -1,5 +1,4 @@
 Pre-release:
-- Optimize unit humanization (for large exponents which may occur accidentally?)
 - Unit corrections
 - Expressions such as "2π" or "eπ"
 - Change units by tapping on the answer preview
@@ -13,6 +12,7 @@ Pre-release:
 - Clear all animation
 - Center prefix scroll view
 - Scientific notation button (*10^x)
+- Horizontal mode
 
 Post-release:
 - Small space between every three digits in the output

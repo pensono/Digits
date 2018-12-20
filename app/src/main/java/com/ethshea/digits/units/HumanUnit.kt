@@ -45,6 +45,8 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
 val prefixMagStart = -15
 val prefixes = listOf("f", "p", "n", "μ", "m", "", "k", "M", "G", "T") // TODO make this not exist by using UnitSystem instead
 
+val humanizationCache = mutableMapOf<Map<String, Int>, HumanUnit>()
+
 /**
  * Returns an inverse unit that can be used to normalize the result
  */
@@ -67,8 +69,15 @@ fun humanize(quantity: Quantity) : HumanQuantity {
 
     val humanizedValue = quantity.value * quantity.unit.factor / prefixFactor
 
+    val cacheLookup = humanizationCache[quantity.unit.dimensions]
+    if (cacheLookup != null) {
+        return HumanQuantity(humanizedValue, cacheLookup.withPrefix(prefixUnit))
+    }
+
     val visitedUnits = mutableSetOf<HumanUnit>()
-    val visitQueue = PriorityQueue<HumanUnit>(compareBy(HumanUnit::exponentMagnitude))
+    val comparator = compareBy<HumanUnit> { (it - quantity.unit).dimensionMagnitude }
+            .thenBy(HumanUnit::exponentMagnitude)
+    val visitQueue = PriorityQueue<HumanUnit>(comparator)
 
     visitQueue.add(HumanUnit(mapOf())) // No prefix
 
@@ -82,6 +91,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
 
         val correctUnit = newUnits.firstOrNull { unit -> unit.dimensionallyEqual(quantity.unit) }
         if (correctUnit != null) {
+            humanizationCache[quantity.unit.dimensions] = correctUnit
             return HumanQuantity(humanizedValue, correctUnit.withPrefix(prefixUnit))
         }
 
