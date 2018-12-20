@@ -11,12 +11,17 @@ expression
     | functionName LPAREN argument=expression RPAREN # Function
     | lhs=expression operation=(TIMES | DIVIDE) rhs=expression # ProductExpression
     | lhs=expression operation=(PLUS | MINUS) rhs=expression # SumExpression
-    | base=expression (exponent=Superscript+ | CARET exponent=Digit+) # Exponent
+    | base=expression exponent=exponentValue # Exponent // Not totally happy with this rule, but eh it works
     ;
 
 value
     : Digit+ (DOT Digit*)?
     | DOT Digit+
+    ;
+
+exponentValue
+    : CARET sign=MINUS? number=Digit+
+    | sign=SUPERSCRIPT_MINUS? number=Superscript+
     ;
 
 unit

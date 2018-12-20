@@ -20,8 +20,10 @@ Digit
     ;
 
 Superscript
-    : [\u2070-\u207f\u00B2\u00B3]
+    : [\u2070-\u207a\u207c-\u207f\u00B2\u00B3]
     ;
+
+SUPERSCRIPT_MINUS: '\u207B';
 
 Letter
     : [a-zA-Z$_] // these are the "java letters" below 0x7F

@@ -125,10 +125,11 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     }
 
     override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity> {
-        val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", intervalOf(ctx.exponent)))
-        val exponent = parseNumber(ctx.exponent.text)
+        val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", ctx.base.sourceInterval))
+        val exponent = parseNumber(ctx.exponent.number.text)
+        val sign = if (ctx.exponent.sign == null) 1 else -1
 
-        return baseResult.invoke { base -> base.pow(exponent) }
+        return baseResult.invoke { base -> base.pow(sign * exponent) }
     }
 
     override fun visitFunction(ctx: DigitsParser.FunctionContext): ParseResult<Quantity>? {

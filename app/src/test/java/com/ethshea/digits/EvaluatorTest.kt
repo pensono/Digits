@@ -44,6 +44,18 @@ class EvaluatorTest {
     }
 
     @Test
+    fun exponentiation() {
+        evalTest(Quantity(SciNumber("8")), "2^3")
+        evalTest(Quantity(SciNumber("8")), "2³")
+    }
+
+    @Test
+    fun negativeExponentiation() {
+        evalTest(Quantity(SciNumber(".125")), "2^-3")
+        evalTest(Quantity(SciNumber(".125")), "2⁻³")
+    }
+
+    @Test
     fun alternativeMultiplicationSign() {
         evalTest(Quantity(SciNumber("8")), "4×2")
     }

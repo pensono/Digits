@@ -1,6 +1,5 @@
 Pre-release:
 - Optimize unit humanization (for large exponents which may occur accidentally?)
-- Unparenthesized functions
 - Unit corrections
 - Expressions such as "2π" or "eπ"
 - Change units by tapping on the answer preview
@@ -13,10 +12,12 @@ Pre-release:
 - Undo button
 - Clear all animation
 - Center prefix scroll view
-- Animate secondary button appearing
 - Scientific notation button (*10^x)
-- Better job of showing sigfigs in input
 
 Post-release:
+- Animate secondary button appearing
+- Better job of showing sigfigs in input
 - Sigfigs for transindental numbers (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
 - Refactor CalculatorButton into two subclasses and a superclass for the secondary and primary buttons
+- Nonintegral powers
+- Unparenthesized functions
