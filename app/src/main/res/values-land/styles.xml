@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme.CalculatorButton" parent="AppTheme.BaseCalculatorButton">
+        <item name="android:textSize">25dp</item>
+        <item name="android:minWidth">25dp</item>
+        <item name="android:minHeight">60dp</item>
+    </style>
+
+    <style name="AppTheme.CalculatorButton.Unit" parent="AppTheme.BaseCalculatorButton.Unit">
+        <item name="android:minWidth">80dp</item>
+    </style>
+
+    <style name="AppTheme.CalculatorButton.Digit" parent="AppTheme.BaseCalculatorButton.Digit">
+    </style>
+
+    <style name="AppTheme.CalculatorButton.Operator" parent="AppTheme.BaseCalculatorButton.Operator">
+    </style>
+
+    <style name="AppTheme.CalculatorButton.Equals" parent="AppTheme.BaseCalculatorButton.Equals">
+    </style>
+
+    <style name="AppTheme.CalculatorButton.Advanced" parent="AppTheme.BaseCalculatorButton.Advanced">
+        <item name="android:minHeight">40dp</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+</resources>

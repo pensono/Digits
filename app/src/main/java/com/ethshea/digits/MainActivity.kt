@@ -181,7 +181,7 @@ class MainActivity : Activity() {
         val unitWidth = result_preview.paint.measureText(unitText)
         val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft - unitWidth
         var rawNumberText = humanQuantity.humanValueString()
-        while (result_preview.paint.measureText(rawNumberText) >= availableSpacePx) {
+        while (result_preview.paint.measureText(rawNumberText) >= availableSpacePx && rawNumberText.length > 0) {
             rawNumberText = humanQuantity.humanValueString(rawNumberText.length - 1)
         }
 

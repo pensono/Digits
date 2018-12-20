@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    tools:context="com.ethshea.digits.MainActivity">
+
+    <!-- Not useless because we dynamically add the secondary buttons to the parent -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/AppTheme.Display.Group"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.ethshea.digits.ErrorInput
+                android:id="@+id/input"
+                style="@style/AppTheme.Display"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:inputType="text|textNoSuggestions"
+                android:textSize="60dp" />
+
+            <TextView
+                android:id="@+id/result_preview"
+                style="@style/AppTheme.Display.Preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textSize="30dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <GridLayout android:id="@+id/button_grid"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:columnCount="4">
+
+                <com.ethshea.digits.CalculatorButton app:primary="7" android:text="7" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="8" android:text="8" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="9" android:text="9" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="/" android:text="÷" style="@style/AppTheme.CalculatorButton.Operator" />
+                <com.ethshea.digits.CalculatorButton app:primary="4" android:text="4" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="5" android:text="5" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="6" android:text="6" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="×" android:text="×" style="@style/AppTheme.CalculatorButton.Operator" />
+                <com.ethshea.digits.CalculatorButton app:primary="1" android:text="1" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="2" android:text="2" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="3" android:text="3" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="-" android:text="-" style="@style/AppTheme.CalculatorButton.Operator" />
+                <com.ethshea.digits.CalculatorButton app:primary="0" android:text="0" style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="." android:text="." style="@style/AppTheme.CalculatorButton.Digit" />
+                <com.ethshea.digits.CalculatorButton app:primary="ENT" android:text="=" style="@style/AppTheme.CalculatorButton.Equals" />
+                <com.ethshea.digits.CalculatorButton app:primary="+" android:text="+" style="@style/AppTheme.CalculatorButton.Operator" />
+            </GridLayout>
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/primary">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/prefix_selector">
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/primary">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/unit_selector">
+                </LinearLayout>
+            </ScrollView>
+
+            <GridLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:columnCount="2">
+
+                <com.ethshea.digits.CalculatorButton app:primary="log₁₀(|)" app:secondary="log₂:log₂(|);ln:ln(|)"  android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="DEL" android:text="DEL" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="⁻¹" android:text="¹/ₓ" app:secondary="⁻⁰;⁻¹;⁻²;⁻³;⁻⁴;⁻⁵;⁻⁶;⁻⁷;⁻⁸;⁻⁹" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="²" app:secondary="⁰;¹;²;³;⁴;⁵;⁶;⁷;⁸;⁹" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="(" app:secondary="{;[" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary=")" app:secondary="};]" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="π" app:secondary="φ;τ" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="sin(|)" app:secondary="asin:asin(|);sinh:sinh(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos:acos(|);cosh:cosh(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
+            </GridLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
