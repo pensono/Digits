@@ -10,8 +10,8 @@ Pre-release:
 - square root
 - Undo button
 - Clear all animation
-- Center prefix scroll view
 - Scientific notation button (*10^x)
+- Error for just an operator being typed
 
 Post-release:
 - Small space between every three digits in the output

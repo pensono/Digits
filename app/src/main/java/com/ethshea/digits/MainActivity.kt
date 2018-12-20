@@ -14,6 +14,8 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
+import android.widget.ScrollView
 import android.widget.TextView
 import com.ethshea.digits.evaluator.HumanQuantity
 import com.ethshea.digits.evaluator.evaluateExpression
@@ -54,8 +56,19 @@ class MainActivity : Activity() {
 
         displayUnits(UnitSystem.unitAbbreviations.values.map { u -> u.abbreviation }, unit_selector)
         displayUnits(UnitSystem.prefixAbbreviations.values.map { u -> u.abbreviation }, prefix_selector)
+        prefix_selector_container.post { centerScroll(prefix_selector_container) }
 
         input.showSoftInputOnFocus = false
+    }
+
+    private fun centerScroll(container: View) {
+        if (container is HorizontalScrollView) {
+            val location = (prefix_selector.width - container.width) / 2
+            container.scrollTo(location, 0)
+        } else if (container is ScrollView) { // No subclass relation between these, sad.
+            val location = (prefix_selector.height - container.height) / 2
+            container.scrollTo(0, location)
+        }
     }
 
     fun calculatorButtonClick(button: View) {
@@ -90,39 +103,7 @@ class MainActivity : Activity() {
             return
         }
 
-        val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
-
-        button.secondary.forEach { pair ->
-            val secondaryButton = layoutInflater.inflate(R.layout.button_calc_secondary, layout, false) as CalculatorButton
-            secondaryButton.text = pair.first
-            secondaryButton.primaryCommand = pair.second
-
-            layout.addView(secondaryButton)
-        }
-
-        val buttonLoc = intArrayOf(0, 0)
-        button.getLocationInWindow(buttonLoc) // Not sure if this or getLocationInScreen is correct.
-
-        val rootLoc = intArrayOf(0, 0)
-        mainRootLayout.getLocationInWindow(rootLoc) // Not sure if this or getLocationInScreen is correct.
-
-        // Keep this here in case we want to tweak the offset amount
-        val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics)
-        val horizMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
-
-        // https://stackoverflow.com/a/24035591/2496050
-        layout.post {
-            val xPos = (buttonLoc[0] + (button.width - layout.width) / 2 - rootLoc[0]).toFloat()
-
-            layout.x = Math.min(Math.max(horizMarginPx, xPos), resources.displayMetrics.widthPixels - horizMarginPx - layout.width)
-            layout.y = buttonLoc[1] - rootLoc[1] - layout.height - offsetPx
-
-            layout.visibility = View.VISIBLE
-        }
-        // Hide it until it has been laid out correctly.
-        // Must use invisible instead of gone because gone won't lay it out (and width and height won't be calculated)
-        layout.visibility = View.INVISIBLE
-
+        val layout = createSecondaryFor(button)
         mainRootLayout.addView(layout)
 
         button.isPressed = false
@@ -158,6 +139,43 @@ class MainActivity : Activity() {
             }
             false
         }
+    }
+
+    private fun createSecondaryFor(button: CalculatorButton): ViewGroup {
+        val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
+
+        button.secondary.forEach { pair ->
+            val secondaryButton = layoutInflater.inflate(R.layout.button_calc_secondary, layout, false) as CalculatorButton
+            secondaryButton.text = pair.first
+            secondaryButton.primaryCommand = pair.second
+
+            layout.addView(secondaryButton)
+        }
+
+        val buttonLoc = intArrayOf(0, 0)
+        button.getLocationInWindow(buttonLoc) // Not sure if this or getLocationInScreen is correct.
+
+        val rootLoc = intArrayOf(0, 0)
+        mainRootLayout.getLocationInWindow(rootLoc) // Not sure if this or getLocationInScreen is correct.
+
+        // Keep this here in case we want to tweak the offset amount
+        val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics)
+        val horizMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+
+        // https://stackoverflow.com/a/24035591/2496050
+        layout.post {
+            val xPos = (buttonLoc[0] + (button.width - layout.width) / 2 - rootLoc[0]).toFloat()
+
+            layout.x = Math.min(Math.max(horizMarginPx, xPos), resources.displayMetrics.widthPixels - horizMarginPx - layout.width)
+            layout.y = buttonLoc[1] - rootLoc[1] - layout.height - offsetPx
+
+            layout.visibility = View.VISIBLE
+        }
+        // Hide it until it has been laid out correctly.
+        // Must use invisible instead of gone because gone won't lay it out (and width and height won't be calculated)
+        layout.visibility = View.INVISIBLE
+
+        return layout
     }
 
     fun displayUnits(units : List<String>, container: ViewGroup) {
