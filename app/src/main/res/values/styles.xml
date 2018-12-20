@@ -17,6 +17,7 @@
     </style>
 
     <style name="AppTheme.Display.Preview" parent="AppTheme.Display">
+        <item name="android:paddingStart">10dp</item>
         <item name="android:textColor">@color/secondary_text</item>
     </style>
 

@@ -15,9 +15,12 @@ Pre-release:
 - Scientific notation button (*10^x)
 
 Post-release:
+- Small space between every three digits in the output
 - Animate secondary button appearing
 - Better job of showing sigfigs in input
 - Sigfigs for transindental numbers (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
 - Refactor CalculatorButton into two subclasses and a superclass for the secondary and primary buttons
 - Nonintegral powers
 - Unparenthesized functions
+- Calculation History
+- Option: Always use scientific vs natural notation for the results

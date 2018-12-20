@@ -30,7 +30,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:inputType="text|textNoSuggestions"
-                android:lines="1"
                 android:textSize="70dp" />
 
             <TextView

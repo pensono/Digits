@@ -25,4 +25,10 @@ class EditorTest {
         assertEquals(5, MainActivity.insignificantStart("0.0020", sf(1)))
         assertEquals(5, MainActivity.insignificantStart("0.0022", sf(1)))
     }
+
+    @Test
+    fun insignificantWithEllipsis() {
+        // Put it at the end, all digits are significant
+        assertEquals(9, MainActivity.insignificantStart("1.2345…E4", sf(10)))
+    }
 }

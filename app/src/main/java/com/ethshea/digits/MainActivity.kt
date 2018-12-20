@@ -40,7 +40,7 @@ class MainActivity : Activity() {
                     val parseResult = evaluateExpression(input.text.toString())
 
                     val humanizedQuantity = humanize(parseResult.value)
-                    val coloredText = colorizePrecision(humanizedQuantity, R.color.detail_text)
+                    val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
 
                     result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
                     input.errors = parseResult.errors
@@ -169,10 +169,18 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun colorizePrecision(humanQuantity: HumanQuantity, colorResourceId: Int) : Spanned {
+    private fun formatResultForDisplay(humanQuantity: HumanQuantity, colorResourceId: Int) : Spanned {
         val colorStr = ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
-        val rawNumberText = humanQuantity.humanValueString()
         val precision = humanQuantity.value.precision
+
+        // Find something that fits
+        // This loop may potentially run quite a few times if the starting number is very long,
+        // But it should be quick enough
+        val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
+        var rawNumberText = humanQuantity.humanValueString()
+        while (result_preview.paint.measureText(rawNumberText) >= availableSpacePx) {
+            rawNumberText = humanQuantity.humanValueString(rawNumberText.length - 1)
+        }
 
         val sigfigsEndLocation = insignificantStart(rawNumberText, precision)
         val coloredText = rawNumberText.replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='#$colorStr'>") +
@@ -205,13 +213,17 @@ class MainActivity : Activity() {
             val sigfigsEndLocation = when (precision) {
                 is Precision.Infinite -> rawText.length
                 is Precision.SigFigs -> {
-                    val decimalAdjustment =
-                        if (rawText.substring(startPos, Math.min(precision.amount + startPos, rawText.length))
-                                .contains('.'))
-                            1
-                        else
-                            0
-                    precision.amount + startPos + decimalAdjustment
+                    if (rawText.contains('…')) {
+                        return rawText.length
+                    } else {
+                        val decimalAdjustment =
+                                if (rawText.substring(startPos, Math.min(precision.amount + startPos, rawText.length))
+                                                .contains('.'))
+                                    1
+                                else
+                                    0
+                        precision.amount + startPos + decimalAdjustment
+                    }
                 }
             }
 

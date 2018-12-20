@@ -78,4 +78,20 @@ class HumanizationTest {
         assertEquals(sf(4), humanize(Quantity(SciNumber("99.99"))).value.precision)
         assertEquals(sf(4), humanize(Quantity(SciNumber("99.99"), u("m"))).value.precision)
     }
+
+    @Test
+    fun limitedHumanString() {
+        assertEquals("1.2…E-1", HumanQuantity(SciNumber(".1234567"), HumanUnit(mapOf())).humanValueString(7))
+        assertEquals("0.12345", HumanQuantity(SciNumber(".12345"), HumanUnit(mapOf())).humanValueString(7))
+        assertEquals("0.12345", HumanQuantity(SciNumber(".12345"), HumanUnit(mapOf())).humanValueString(10))
+        assertEquals("1.2…E-4", HumanQuantity(SciNumber(".00012345"), HumanUnit(mapOf())).humanValueString(7))
+        assertEquals("1.2345…E-4", HumanQuantity(SciNumber(".000123456"), HumanUnit(mapOf())).humanValueString(10))
+
+        assertEquals("12345", HumanQuantity(SciNumber("12345"), HumanUnit(mapOf())).humanValueString(7))
+        assertEquals("12345", HumanQuantity(SciNumber("12345"), HumanUnit(mapOf())).humanValueString(10))
+
+        assertEquals("1.234…E8", HumanQuantity(SciNumber("123456789"), HumanUnit(mapOf())).humanValueString(8))
+
+        // Untested is small maxChars values < 4
+    }
 }
