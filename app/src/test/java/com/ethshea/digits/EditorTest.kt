@@ -28,7 +28,9 @@ class EditorTest {
 
     @Test
     fun insignificantWithEllipsis() {
-        // Put it at the end, all digits are significant
-        assertEquals(9, MainActivity.insignificantStart("1.2345…E4", sf(10)))
+        assertEquals(6, MainActivity.insignificantStart("1.2345…E4", sf(10)))
+
+        assertEquals(3, MainActivity.insignificantStart("1.3333…E4", sf(2)))
+        assertEquals(6, MainActivity.insignificantStart("1.3333…E4", sf(5)))
     }
 }

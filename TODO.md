@@ -24,3 +24,6 @@ Post-release:
 - Unparenthesized functions
 - Calculation History
 - Option: Always use scientific vs natural notation for the results
+- Refactor how insignificant highlighting works (maybe put it into the humanization)
+- Truncated result preview uses engineering notation
+- Setting for engineering vs scientific notation

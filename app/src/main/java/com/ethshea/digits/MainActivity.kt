@@ -20,6 +20,7 @@ import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Integer.min
 
 
 class MainActivity : Activity() {
@@ -176,15 +177,19 @@ class MainActivity : Activity() {
         // Find something that fits
         // This loop may potentially run quite a few times if the starting number is very long,
         // But it should be quick enough
-        val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
+        val unitText = humanQuantity.humanUnitString()
+        val unitWidth = result_preview.paint.measureText(unitText)
+        val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft - unitWidth
         var rawNumberText = humanQuantity.humanValueString()
         while (result_preview.paint.measureText(rawNumberText) >= availableSpacePx) {
             rawNumberText = humanQuantity.humanValueString(rawNumberText.length - 1)
         }
 
         val sigfigsEndLocation = insignificantStart(rawNumberText, precision)
-        val coloredText = rawNumberText.replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='#$colorStr'>") +
-                "</font>" + humanQuantity.humanUnitString()
+        val colorEndLocation = if (rawNumberText.contains('…')) rawNumberText.indexOf('…') else rawNumberText.length
+        val coloredText = rawNumberText.replaceRange(colorEndLocation, colorEndLocation, "</font>" )
+                .replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='#$colorStr'>") +
+                unitText
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -213,17 +218,15 @@ class MainActivity : Activity() {
             val sigfigsEndLocation = when (precision) {
                 is Precision.Infinite -> rawText.length
                 is Precision.SigFigs -> {
-                    if (rawText.contains('…')) {
-                        return rawText.length
-                    } else {
-                        val decimalAdjustment =
-                                if (rawText.substring(startPos, Math.min(precision.amount + startPos, rawText.length))
-                                                .contains('.'))
-                                    1
-                                else
-                                    0
-                        precision.amount + startPos + decimalAdjustment
-                    }
+                    val lastPosition = if (rawText.contains('…')) rawText.indexOf('…') else rawText.length
+                    val decimalAdjustment =
+                            if (rawText.substring(startPos, Math.min(precision.amount + startPos, lastPosition))
+                                            .contains('.'))
+                                1
+                            else
+                                0
+
+                    min(precision.amount + startPos + decimalAdjustment, lastPosition)
                 }
             }
 
