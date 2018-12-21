@@ -11,6 +11,7 @@ Pre-release:
 - Undo button
 - Clear all animation
 - Scientific notation button (*10^x)
+- Fix slowness for accidentally big units (timeout?) (like 4m66.7m)
 
 Post-release:
 - Small space between every three digits in the output

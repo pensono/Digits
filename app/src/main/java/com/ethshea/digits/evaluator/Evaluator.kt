@@ -80,9 +80,13 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     )
 
     override fun visitLiteral(ctx: DigitsParser.LiteralContext): ParseResult<Quantity> {
+        val isNumeric = { it : Char -> it.isDigit() || it == '.' }
         val text = ctx.value().text
+
         return if (text.isEmpty())
             ParseResult(Quantity(SciNumber.Zero), ctx.sourceInterval, "Incomplete literal")
+        else if (!text.all(isNumeric))
+            ParseResult(Quantity(SciNumber(text.filter(isNumeric))), ctx.sourceInterval, "Non-numeric literal")
         else
             ParseResult(Quantity(SciNumber(text)), ctx.sourceInterval)
     }

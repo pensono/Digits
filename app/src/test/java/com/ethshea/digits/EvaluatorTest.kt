@@ -195,6 +195,11 @@ class EvaluatorTest {
         errorTest(Interval(0,0), "*")
     }
 
+    @Test
+    fun weirdInputGivesError() {
+        errorTest(Interval(0,2), "+*4")
+    }
+
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
