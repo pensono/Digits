@@ -115,6 +115,12 @@ class SciNumberTest {
     }
 
     @Test
+    fun roundingUpGainsSigfig() {
+        assertEquals(sf(2), (SciNumber("6") + SciNumber("8")).precision)
+        assertEquals(sf(2), (SciNumber("100") - SciNumber("1")).precision)
+    }
+
+    @Test
     fun precisionMinus() {
         assertEquals(sf(1), (SciNumber("1") - SciNumber("2")).precision)
         assertEquals(sf(1), (SciNumber("2") - SciNumber("1")).precision)

@@ -26,3 +26,4 @@ Post-release:
 - Refactor how insignificant highlighting works (maybe put it into the humanization)
 - Truncated result preview uses engineering notation
 - Setting for engineering vs scientific notation
+- Option to always round results to a certain decimal place or the number of sigfigs

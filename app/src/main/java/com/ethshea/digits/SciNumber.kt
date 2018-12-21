@@ -3,6 +3,7 @@ package com.ethshea.digits
 import java.lang.Integer.*
 import java.math.BigDecimal
 import java.math.MathContext
+import java.util.*
 
 sealed class Precision : Comparable<Precision> {
     abstract operator fun plus(value: Int) : Precision
@@ -53,13 +54,22 @@ class SciNumber {
      * until the decimal if less than 1
      */
     val magnitude: Int
-        get() =
-            if (backing.compareTo(BigDecimal.ZERO) == 0)
-                1
-            else
-                // Double is not super accurate, but should be good enough
-                Math.floor(Math.log10(backing.abs().toDouble())).toInt() + 1
+        get() = magnitudeOf(backing)
 
+    private fun magnitudeOf(number: BigDecimal): Int {
+        return if (number.compareTo(BigDecimal.ZERO) == 0)
+            1
+        else
+        // Double is not super accurate, but should be good enough
+            Math.floor(Math.log10(number.abs().toDouble())).toInt() + 1
+    }
+
+    val lsd  : Int?
+        get() =
+            when (precision) {
+                is Precision.Infinite -> null
+                is Precision.SigFigs -> precision.amount - magnitude
+            }
 
     /***
      * @param value A non-empty string containing only digits
@@ -108,17 +118,36 @@ class SciNumber {
     }
 
     // Precision based on algorithm described in https://en.wikipedia.org/wiki/Significant_figures#Arithmetic
-    operator fun plus(other: SciNumber) = SciNumber(backing + other.backing, precisionOfLsd(other))
-    operator fun minus(other: SciNumber) = SciNumber(backing - other.backing, precisionOfLsd(other))
+    operator fun plus(other: SciNumber) = additiveOperation(other, BigDecimal::add)
+    operator fun minus(other: SciNumber) = additiveOperation(other, BigDecimal::minus)
     operator fun times(other: SciNumber) = SciNumber(backing * other.backing, minPrecision(other))
     operator fun div(other: SciNumber) = SciNumber(backing.divide(other.backing, MathContext.DECIMAL128), minPrecision(other))
 
+    private fun additiveOperation(other: SciNumber, op: (BigDecimal, BigDecimal) -> BigDecimal) : SciNumber {
+        val result = op(backing, other.backing)
+
+        val newLsd = minLsd(lsd, other.lsd)
+        val newMag = magnitudeOf(result)
+
+        return if (newLsd == null) {
+            SciNumber(result, Precision.Infinite)
+        } else {
+            SciNumber(result, Precision.SigFigs(newMag + newLsd))
+        }
+    }
+
+    private fun minLsd(lsdA: Int?, lsdB: Int?): Int? =
+        if (lsdA == null) {
+            lsdB
+        } else {
+            if (lsdB == null) {
+                lsdA
+            } else {
+                min(lsdA, lsdB)
+            }
+        }
+
     private fun minPrecision(other: SciNumber) = minOf(precision, other.precision)
-    /***
-     * Precision of Least Significant Digit
-     */
-    private fun precisionOfLsd(other: SciNumber) =
-            minOf(precision - magnitude, other.precision - other.magnitude) + max(magnitude, other.magnitude)
 
     operator fun unaryMinus() = SciNumber(-backing, precision)
     operator fun compareTo(other: SciNumber) = backing.compareTo(other.backing)
