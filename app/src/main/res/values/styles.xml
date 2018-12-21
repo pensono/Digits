@@ -1,7 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
+    <!-- Non appcompat theme: android:Theme.Material.Light.NoActionBar -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
 
@@ -72,5 +73,12 @@
     <style name="AppTheme.SecondaryGroup">
         <item name="android:background">@drawable/background_calc_secondary</item>
         <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="AppTheme.MenuButton">
+        <item name="android:src">@drawable/ic_menu_black_24dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:contentDescription">@string/open_side_menu</item>
+        <item name="android:padding">16dp</item>
     </style>
 </resources>

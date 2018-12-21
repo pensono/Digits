@@ -11,8 +11,12 @@ Pre-release:
 - Undo button
 - Clear all animation
 - Scientific notation button (*10^x)
+- acos() preview weirdness
+- Unit buttons are too big
 
 Post-release:
+- Report bug button
+- Suggest feature button
 - Small space between every three digits in the output
 - Animate secondary button appearing
 - Better job of showing sigfigs in input

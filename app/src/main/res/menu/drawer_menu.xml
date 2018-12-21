@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:orderInCategory="1"
+        android:id="@+id/discipline_menu_group">
+        <!--<item android:id="@+id/menu_custom_discipline"-->
+            <!--android:title="@string/custom_discipline"-->
+            <!--android:icon="@drawable/ic_add_black_24dp" />-->
+    </group>
+    <!--<group android:orderInCategory="2"-->
+        <!--android:checkableBehavior="single">-->
+        <!--<item android:id="@+id/menu_settings"-->
+            <!--android:title="@string/settings"-->
+            <!--android:icon="@drawable/ic_settings_black_24dp" />-->
+        <!--<item android:id="@+id/menu_customize"-->
+            <!--android:title="@string/customize"-->
+            <!--android:icon="@drawable/ic_palette_black_24dp" />-->
+        <!--<item android:id="@+id/menu_suggest_feature"-->
+            <!--android:title="@string/suggest_feature"-->
+            <!--android:icon="@drawable/ic_record_voice_over_black_24dp" />-->
+        <!--<item android:id="@+id/menu_submit_bug"-->
+            <!--android:title="@string/report_bug"-->
+            <!--android:icon="@drawable/ic_bug_report_black_24dp" />-->
+    <!--</group>-->
+</menu>

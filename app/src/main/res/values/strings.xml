@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Digits</string>
+    <string name="discipline_electrical">Electrical</string>
+    <string name="discipline_signals">Signals</string>
+    <string name="discipline_data">Data</string>
+    <string name="discipline_mechanical">Mechanical</string>
+    <string name="discipline_astronomical">Astronomical</string>
+    <string name="discipline_surveying">Surveying</string>
+    <string name="discipline_chemistry">Chemistry</string>
+    <string name="discipline_physics">Physics</string>
+    <string name="discipline_carpentry">Carpentry</string>
+
+    <string name="custom_discipline">Add custom</string>
+    <string name="report_bug">Report an issue</string>
+    <string name="suggest_feature">Suggest a feature</string>
+    <string name="customize">Customize theme</string>
+    <string name="settings">Settings</string>
+    <string name="open_side_menu">Open side menu</string>
 </resources>

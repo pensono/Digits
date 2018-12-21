@@ -5,15 +5,14 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
+import android.support.v4.view.GravityCompat
 import android.text.Editable
 import android.text.Html
 import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
 import android.widget.TextView
@@ -22,6 +21,7 @@ import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.coroutines.*
 import java.lang.Integer.min
 
@@ -61,6 +61,12 @@ class MainActivity : Activity() {
         displayUnits(UnitSystem.prefixAbbreviations.values.map { u -> u.abbreviation }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
 
+        disciplines.forEach { discipline ->
+            val item = nav_view.menu.add(R.id.discipline_menu_group, Menu.NONE, Menu.NONE, discipline.nameResource)
+            if (discipline.iconResource != 0)
+                item.setIcon(discipline.iconResource)
+        }
+
         input.showSoftInputOnFocus = false
     }
 
@@ -72,6 +78,10 @@ class MainActivity : Activity() {
             val location = (prefix_selector.height - container.height) / 2
             container.scrollTo(0, location)
         }
+    }
+
+    fun openSideMenu(view: View) {
+        drawer_layout.openDrawer(GravityCompat.START)
     }
 
     fun calculatorButtonClick(button: View) {
