@@ -188,6 +188,13 @@ class EvaluatorTest {
         correctionTest(Quantity(SciNumber("0")), "")
     }
 
+    @Test
+    fun justAnOperatorGivesError() {
+        errorTest(Interval(0,0), "+")
+        errorTest(Interval(0,0), "/")
+        errorTest(Interval(0,0), "*")
+    }
+
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)

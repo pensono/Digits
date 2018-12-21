@@ -11,7 +11,6 @@ Pre-release:
 - Undo button
 - Clear all animation
 - Scientific notation button (*10^x)
-- Error for just an operator being typed
 
 Post-release:
 - Small space between every three digits in the output
