@@ -62,7 +62,9 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
     private val constants = mapOf(
             "π" to Math.PI,
             "pi" to Math.PI,
-            "e" to Math.E
+            "e" to Math.E,
+            "τ" to Math.PI / 2,
+            "φ" to 1.618033988749894848204586834
     )
 
     private val functions = mapOf(

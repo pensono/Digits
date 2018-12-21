@@ -17,6 +17,7 @@ val disciplines = listOf(
         Discipline(R.string.discipline_chemistry, R.drawable.ic_flask_black_24dp, listOf()),
         Discipline(R.string.discipline_data, R.drawable.ic_bits, listOf()), // 1001 design
         Discipline(R.string.discipline_electrical, R.drawable.ic_flash_on_black_24dp, listOf(u("V"), u("A"), u("Ω"))),
+        Discipline(R.string.discipline_fluids, R.drawable.ic_flash_on_black_24dp, listOf(u("V"), u("A"), u("Ω"))),
         Discipline(R.string.discipline_mechanical, R.drawable.ic_two_gears, listOf()),
         Discipline(R.string.discipline_physics, R.drawable.ic_atom_black_24dp, listOf()),
         Discipline(R.string.discipline_signals, R.drawable.ic_current_ac_black_24dp, listOf(u("Hz"))), // Sine wave

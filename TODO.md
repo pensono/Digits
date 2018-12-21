@@ -8,7 +8,6 @@ Pre-release:
 - support for sin^-1()
 - tangent
 - square root
-- Undo button
 - Clear all animation
 - Scientific notation button (*10^x)
 - acos() preview weirdness
@@ -25,6 +24,7 @@ Post-release:
 - Nonintegral powers
 - Unparenthesized functions
 - Calculation History
+- Undo button
 - Option: Always use scientific vs natural notation for the results
 - Refactor how insignificant highlighting works (maybe put it into the humanization)
 - Truncated result preview uses engineering notation

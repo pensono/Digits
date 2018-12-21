@@ -9,6 +9,7 @@
     <string name="discipline_chemistry">Chemistry</string>
     <string name="discipline_physics">Physics</string>
     <string name="discipline_carpentry">Carpentry</string>
+    <string name="discipline_fluids">Fluids</string>
 
     <string name="custom_discipline">Add custom</string>
     <string name="report_bug">Report an issue</string>
