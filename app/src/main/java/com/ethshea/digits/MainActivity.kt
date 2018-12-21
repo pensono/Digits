@@ -22,6 +22,7 @@ import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 import java.lang.Integer.min
 
 
@@ -47,6 +48,8 @@ class MainActivity : Activity() {
 
                     result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
                     input.errors = parseResult.errors
+                } catch (e: TimeoutCancellationException) {
+                    result_preview.text = "Timeout"
                 } catch (e: Exception) {
                     result_preview.text = "Error"
                     Log.e(TAG, "Calculation error", e)

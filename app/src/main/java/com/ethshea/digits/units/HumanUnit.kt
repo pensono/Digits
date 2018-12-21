@@ -51,7 +51,7 @@ val humanizationCache = mutableMapOf<Map<String, Int>, HumanUnit>()
  * Returns an inverse unit that can be used to normalize the result
  */
 fun humanize(quantity: Quantity) : HumanQuantity {
-    if (quantity.unit.dimensionallyEqual(UnitSystem.void)) {
+    if (quantity.unit.dimensionallyEqual(UnitSystem.void) || quantity.unit.dimensionMagnitude >= 100) { // Just give up for huge units
         return HumanQuantity(quantity.value * quantity.unit.factor, HumanUnit(mapOf()))
     }
 
