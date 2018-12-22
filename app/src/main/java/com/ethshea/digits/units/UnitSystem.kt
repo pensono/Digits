@@ -6,6 +6,7 @@ import java.math.BigDecimal
 object UnitSystem { // Preferred Units?
     val length = mapOf("length" to 1)
     val area = mapOf("length" to 2)
+    val volume = mapOf("length" to 3)
     val time = mapOf("time" to 1)
     val frequency = mapOf("time" to -1)
     val angle = mapOf("length" to 1, "circular" to 1) // Circular is orthogonal to length
@@ -34,6 +35,8 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("m", "meters", length),
 //            AtomicHumanUnit("ft", "feet", length, SciNumber("3.28084")),
 //            AtomicHumanUnit("mi", "miles", length, SciNumber("0.000621371")),
+//            AtomicHumanUnit("L", "liters", length, SciNumber(1000).reciprocal()),
+
             AtomicHumanUnit("rad", "radian", angle),
             AtomicHumanUnit("°", "degrees", angle, SciNumber(Math.PI / 180.0)),
             AtomicHumanUnit("sr", "steradian", solid_angle),

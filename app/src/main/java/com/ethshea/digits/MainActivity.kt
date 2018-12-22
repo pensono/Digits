@@ -57,12 +57,13 @@ class MainActivity : Activity() {
             }
         })
 
-        displayUnits(UnitSystem.unitAbbreviations.values.map { u -> u.abbreviation }, unit_selector)
-        displayUnits(UnitSystem.prefixAbbreviations.values.map { u -> u.abbreviation }, prefix_selector)
+        displayUnits(UnitSystem.unitAbbreviations.values.map { it.abbreviation }, unit_selector)
+        displayUnits(UnitSystem.prefixAbbreviations.values.map { it.abbreviation }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
 
         disciplines.forEach { discipline ->
             val item = nav_view.menu.add(R.id.discipline_menu_group, Menu.NONE, Menu.NONE, discipline.nameResource)
+            item.setOnMenuItemClickListener(disciplineListener(discipline))
             if (discipline.iconResource != 0)
                 item.setIcon(discipline.iconResource)
         }
@@ -229,6 +230,13 @@ class MainActivity : Activity() {
             Html.fromHtml(coloredText)
         }
     }
+
+    private fun disciplineListener(discipline: Discipline): MenuItem.OnMenuItemClickListener =
+        MenuItem.OnMenuItemClickListener {
+            drawer_layout.closeDrawers()
+            displayUnits(discipline.units.map { it.abbreviation }, unit_selector)
+            true
+        }
 
     companion object {
         // Kinda weird for this to be public, but it makes it testable
