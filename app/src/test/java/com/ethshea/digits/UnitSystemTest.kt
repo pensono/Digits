@@ -1,9 +1,8 @@
 package com.ethshea.digits
 
 import com.ethshea.digits.units.NaturalUnit
-import org.junit.Test
-
 import org.junit.Assert.*
+import org.junit.Test
 
 /**
  * @author Ethan

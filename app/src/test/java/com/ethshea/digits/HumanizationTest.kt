@@ -5,9 +5,8 @@ import com.ethshea.digits.evaluator.Quantity
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.units.HumanUnit
 import com.ethshea.digits.units.humanize
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * @author Ethan

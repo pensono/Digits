@@ -1,17 +1,16 @@
 package com.ethshea.digits.evaluator
 
-import com.ethshea.digits.units.NaturalUnit
 import com.ethshea.digits.SciNumber
-import com.ethshea.digits.units.UnitSystem
+import com.ethshea.digits.isNumber
+import com.ethshea.digits.parseNumber
 import com.ethshea.digits.parser.DigitsLexer
 import com.ethshea.digits.parser.DigitsParser
 import com.ethshea.digits.parser.DigitsParserBaseVisitor
-import com.ethshea.digits.isNumber
-import com.ethshea.digits.parseNumber
+import com.ethshea.digits.units.NaturalUnit
+import com.ethshea.digits.units.UnitSystem
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.misc.Interval
 import kotlin.math.abs
-import kotlin.math.exp
 
 /**
  * @author Ethan
