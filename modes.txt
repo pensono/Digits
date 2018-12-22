@@ -8,4 +8,4 @@ Chemistry
 Physics: Electron Volt, Charge, Erg
 Carpenter: Foot, Inch
 Fluids: Gallons, liters, per day, hour
-Cooking: Ounce, pound, liter, gram, serving
+Cooking: Ounce, pound, liter, gram, serving, dozen
