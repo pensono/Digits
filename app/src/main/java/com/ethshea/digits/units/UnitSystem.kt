@@ -12,27 +12,37 @@ object UnitSystem { // Preferred Units?
     val current = mapOf("current" to 1)
     val emf = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -1)
     val impedance = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -2)
+    val capacitance = mapOf("mass" to -1, "length" to -2, "time" to 4, "current" to 2)
+    val power = mapOf("mass" to 1, "length" to 2, "time" to -3)
+    val magnetic_flux = mapOf("mass" to 1, "length" to 2, "time" to 2, "current" to -3)
+    val magnetic_flux_density = mapOf("mass" to 1, "time" to 2, "current" to -3)
+    val inductance = mapOf("mass" to 1, "length" to 2, "time" to -3)
     val tt = mapOf<String, Int>()
 
     val void = NaturalUnit(mapOf()) // Called this to avoid confusion with "unit", the intended name
 
     val units = listOf(
-            AtomicHumanUnit("m", "meter", length),
-            // AtomicHumanUnit("ft", "foot", length, SciNumber("3.28084")),
-            // AtomicHumanUnit("mi", "mile", length, SciNumber("0.000621371")),
+            AtomicHumanUnit("m", "meters", length),
+             AtomicHumanUnit("ft", "feet", length, SciNumber("3.28084")),
+             AtomicHumanUnit("mi", "miles", length, SciNumber("0.000621371")),
 
-            // AtomicHumanUnit("acre", "acre", area, SciNumber("4046.86")),
+//             AtomicHumanUnit("acre", "acres", area, SciNumber("4046.86")),
 
-            AtomicHumanUnit("s", "second", time),
-//            AtomicHumanUnit("min", "minute", time, SciNumber(60).reciprocal()),
-//            AtomicHumanUnit("hr", "hour", time, SciNumber(60 * 60).reciprocal()),
+            AtomicHumanUnit("s", "seconds", time),
+            AtomicHumanUnit("min", "minutes", time, SciNumber(60).reciprocal()),
+            AtomicHumanUnit("hr", "hours", time, SciNumber(60 * 60).reciprocal()),
 
             AtomicHumanUnit("Hz", "hertz", frequency),
-            AtomicHumanUnit("g", "gram", mass),
+            AtomicHumanUnit("g", "grams", mass),
 
             AtomicHumanUnit("V", "volts", emf),
             AtomicHumanUnit("A", "amps", current),
-            AtomicHumanUnit("Ω", "ohms", impedance)
+            AtomicHumanUnit("Ω", "ohms", impedance),
+            AtomicHumanUnit("F", "farads", capacitance),
+            AtomicHumanUnit("W", "watts", power),
+            AtomicHumanUnit("T", "tesla", magnetic_flux_density),
+            AtomicHumanUnit("Wb", "weber", magnetic_flux),
+            AtomicHumanUnit("H", "henry", inductance)
     )
 
     val prefixes = listOf(

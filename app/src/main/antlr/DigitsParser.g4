@@ -26,7 +26,7 @@ exponentValue
     ;
 
 unit
-    : (Letter (Digit+ | Superscript+)?)+
+    : (Letter (Digit+ | Superscript+)?)+ (DIVIDE (Letter (Digit+ | Superscript+)?)+)?
     ;
 
 // Here so that we can use this as a syntax node for nice things like sourceInterval

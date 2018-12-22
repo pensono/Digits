@@ -176,14 +176,16 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
     val errors = mutableListOf<ErrorMessage>()
     val tokens = TokenIterator(input, location)
 
+    val doubleUnits = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
+
     val prefix = tokens.nextLargest(UnitSystem.prefixAbbreviations)
     if (prefix != null) {
         val beginning = input.substring(prefix.abbreviation.length).split("/")[0]
-        if (prefix.abbreviation == "m" && (beginning.isEmpty() || !beginning[0].isLetter())) { // Special case for mili which conflicts with meters
+        if (doubleUnits.contains(prefix.abbreviation) && (beginning.isEmpty() || !beginning[0].isLetter())) { // Special case for mili which conflicts with meters
             val exponentStr = tokens.nextWhile(::isNumber)
             val exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
 
-            unit = UnitSystem.unitAbbreviations["m"]!! * exponent
+            unit = UnitSystem.unitAbbreviations[prefix.abbreviation]!! * exponent
         } else {
             unit = prefix
 

@@ -30,6 +30,13 @@ class EvaluatorTest {
     }
 
     @Test
+    fun literalWithPerUnits() {
+        evalTest(Quantity(SciNumber("123"), u("m") - u("s")), "123m/s")
+        evalTest(Quantity(SciNumber("123"), u("m") - u("s")), "123 m/s")
+        evalTest(Quantity(SciNumber("-123"), u("m") - u("s")), "-123m/s")
+    }
+
+    @Test
     fun addition() {
         evalTest(Quantity(SciNumber("2")), "1+1")
         evalTest(Quantity(SciNumber("3")), "1+1+1")

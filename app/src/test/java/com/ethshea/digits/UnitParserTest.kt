@@ -21,8 +21,19 @@ class UnitParserTest {
     }
 
     @Test
+    fun teslas() {
+        assertEquals(u("T"), parseUnit("T", Interval(0, 0)).value)
+        assertEquals(u("T") + p("T"), parseUnit("TT", Interval(0, 0)).value)
+    }
+
+    @Test
     fun milliSomething() {
         assertEquals(u("V") + p("m"), parseUnit("mV", Interval(0, 0)).value)
+    }
+
+    @Test
+    fun terraSomething() {
+        assertEquals(u("V") + p("T"), parseUnit("TV", Interval(0, 0)).value)
     }
 
     @Test

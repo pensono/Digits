@@ -65,7 +65,7 @@ class HumanizationTest {
     fun largeUnitQuickCached() {
         for (i in 0..1000) {
             val components = humanize(evaluateExpression("4m99").value).unit.components
-            assertEquals(1, components.size)
+                assertEquals(1, components.size)
         }
     }
 

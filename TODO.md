@@ -30,3 +30,5 @@ Post-release:
 - Truncated result preview uses engineering notation
 - Setting for engineering vs scientific notation
 - Option to always round results to a certain decimal place or the number of sigfigs
+- Support for affine units (temperature)
+- Support for area units (like the acre)

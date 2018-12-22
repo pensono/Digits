@@ -76,6 +76,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
 
     val visitedUnits = mutableSetOf<HumanUnit>()
     val comparator = compareBy<HumanUnit> { (it - quantity.unit).dimensionMagnitude }
+            .thenBy { it.dimensions.size }
             .thenBy(HumanUnit::exponentMagnitude)
     val visitQueue = PriorityQueue<HumanUnit>(comparator)
 
