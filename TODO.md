@@ -32,3 +32,4 @@ Post-release:
 - Option to always round results to a certain decimal place or the number of sigfigs
 - Support for affine units (temperature)
 - Support for area units (like the acre)
+- Make the unit exponent too large error only highlight the number which is too large instead of the entire unit

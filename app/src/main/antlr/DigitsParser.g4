@@ -6,7 +6,7 @@ expression
     : MINUS expression # UnaryMinus
     | '+'? value # Literal
     | Letter+ # Constant
-    | expression unit # AssignUnit
+    | expression unit=unitLiteral # AffixUnit
     | LPAREN expression RPAREN # ParenthesizedExpression
     | functionName LPAREN argument=expression RPAREN # Function
     | lhs=expression operation=(TIMES | DIVIDE) rhs=expression # ProductExpression
@@ -25,7 +25,7 @@ exponentValue
     | sign=SUPERSCRIPT_MINUS? number=Superscript+
     ;
 
-unit
+unitLiteral
     : (Letter (Digit+ | Superscript+)?)+ (DIVIDE (Letter (Digit+ | Superscript+)?)+)?
     ;
 

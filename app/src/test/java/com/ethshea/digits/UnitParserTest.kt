@@ -12,34 +12,34 @@ import org.junit.Test
 class UnitParserTest {
     @Test
     fun millimeters() {
-        assertEquals(p("m") + u("m"), parseUnit("mm", Interval(0, 0)).value)
+        assertEquals(p("m") + u("m"), parseUnit("mm").value)
     }
 
     @Test
     fun meters() {
-        assertEquals(u("m"), parseUnit("m", Interval(0, 0)).value)
+        assertEquals(u("m"), parseUnit("m").value)
     }
 
     @Test
     fun teslas() {
         assertEquals(u("T"), parseUnit("T", Interval(0, 0)).value)
-        assertEquals(u("T") + p("T"), parseUnit("TT", Interval(0, 0)).value)
+        assertEquals(u("T") + p("T"), parseUnit("TT").value)
     }
 
     @Test
     fun milliSomething() {
-        assertEquals(u("V") + p("m"), parseUnit("mV", Interval(0, 0)).value)
+        assertEquals(u("V") + p("m"), parseUnit("mV").value)
     }
 
     @Test
     fun terraSomething() {
-        assertEquals(u("V") + p("T"), parseUnit("TV", Interval(0, 0)).value)
+        assertEquals(u("V") + p("T"), parseUnit("TV").value)
     }
 
     @Test
     fun withPrefix() {
-        assertEquals(u("V") + p("k"), parseUnit("kV", Interval(0, 0)).value)
-        assertEquals(u("m") + p("k"), parseUnit("km", Interval(0, 0)).value)
+        assertEquals(u("V") + p("k"), parseUnit("kV").value)
+        assertEquals(u("m") + p("k"), parseUnit("km").value)
     }
 
     @Test
@@ -53,29 +53,33 @@ class UnitParserTest {
 
     @Test
     fun per() {
-        assertEquals(u("V") - u("s"), parseUnit("V/s", Interval(0, 0)).value)
-        assertEquals(u("m") - u("s"), parseUnit("m/s", Interval(0, 0)).value)
+        assertEquals(u("V") - u("s"), parseUnit("V/s").value)
+        assertEquals(u("m") - u("s"), parseUnit("m/s").value)
     }
 
     @Test
     fun exponentUnits() {
-        assertEquals(u("g") + u("g"), parseUnit("g²", Interval(0, 0)).value)
-        assertEquals(u("g") + u("g"), parseUnit("g2", Interval(0, 0)).value)
-        assertEquals(u("g") * 123, parseUnit("g¹²³", Interval(0, 0)).value)
-        assertEquals(u("g") * 123, parseUnit("g123", Interval(0, 0)).value)
+        assertEquals(u("g") + u("g"), parseUnit("g²").value)
+        assertEquals(u("g") + u("g"), parseUnit("g2").value)
+        assertEquals(u("g") * 99, parseUnit("g⁹⁹").value)
+        assertEquals(u("g") * 99, parseUnit("g99").value)
         
-        assertEquals(u("m") + u("m"), parseUnit("m²", Interval(0, 0)).value)
-        assertEquals(u("m") + u("m"), parseUnit("m2", Interval(0, 0)).value)
+        assertEquals(u("m") + u("m"), parseUnit("m²").value)
+        assertEquals(u("m") + u("m"), parseUnit("m2").value)
     }
 
     @Test
     fun negativeExponentUnits() {
-        assertEquals(-u("g"), parseUnit("g⁻¹", Interval(0, 0)).value)
-        assertEquals(-u("g"), parseUnit("g-1", Interval(0, 0)).value)
-        assertEquals(u("g") * -123, parseUnit("g⁻¹²³", Interval(0, 0)).value)
-        assertEquals(u("g") * -123, parseUnit("g-123", Interval(0, 0)).value)
+        assertEquals(-u("g"), parseUnit("g⁻¹").value)
+        assertEquals(-u("g"), parseUnit("g-1").value)
+        assertEquals(u("g") * -99, parseUnit("g⁻⁹⁹").value)
+        assertEquals(u("g") * -99, parseUnit("g-99").value)
 
-        assertEquals(-u("m"), parseUnit("m⁻¹", Interval(0, 0)).value)
-        assertEquals(-u("m"), parseUnit("m-1", Interval(0, 0)).value)
+        assertEquals(-u("m"), parseUnit("m⁻¹").value)
+        assertEquals(-u("m"), parseUnit("m-1").value)
     }
+
+    private fun parseUnit(input: String) =
+        parseUnit(input, Interval(0, 0)) // We don't care about the interval in this case
+
 }

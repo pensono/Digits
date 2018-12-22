@@ -207,6 +207,16 @@ class EvaluatorTest {
         errorTest(Interval(0,2), "+*4")
     }
 
+    @Test
+    fun largeExponentError() {
+        // Should be:
+        // errorTest(Interval(2,5), "4m6666")
+
+        // This for now
+        errorTest(Interval(1,6), "4gm6666")
+        errorTest(Interval(1,5), "4m6666")
+    }
+
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)

@@ -10,6 +10,8 @@ import com.ethshea.digits.isNumber
 import com.ethshea.digits.parseNumber
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.misc.Interval
+import kotlin.math.abs
+import kotlin.math.exp
 
 /**
  * @author Ethan
@@ -134,10 +136,10 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
 
     override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity> {
         val baseResult = ctx.base.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", ctx.base.sourceInterval))
-        val exponent = if (ctx.exponent.number == null) 1 else parseNumber(ctx.exponent.number.text)
+        val exponentMag = if (ctx.exponent.number == null) 1 else parseNumber(ctx.exponent.number.text)
         val sign = if (ctx.exponent.sign == null) 1 else -1
 
-        return baseResult.invoke { base -> base.pow(sign * exponent) }
+        return baseResult.invoke { base -> base.pow(sign * exponentMag) }
     }
 
     override fun visitFunction(ctx: DigitsParser.FunctionContext): ParseResult<Quantity>? {
@@ -157,14 +159,14 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>?>() {
         return ctx.expression().accept(this)
     }
 
-    override fun visitAssignUnit(ctx: DigitsParser.AssignUnitContext): ParseResult<Quantity>? {
+    override fun visitAffixUnit(ctx: DigitsParser.AffixUnitContext): ParseResult<Quantity>? {
         val valueResult = ctx.expression().accept(this)
-        val unitResult = parseUnit(ctx.unit().text, ctx.unit().sourceInterval)
+        val unitResult = parseUnit(ctx.unit.text, ctx.unit.sourceInterval)
 
         return if (valueResult == null) {
             null // Not sure if this is what I want to return here
         } else if (!valueResult.value.unit.dimensionallyEqual(NaturalUnit())) {
-            valueResult.error(ErrorMessage("Two units", ctx.unit().sourceInterval))
+            valueResult.error(ErrorMessage("Two units", ctx.unit.sourceInterval))
         } else {
             valueResult.combine(unitResult, ctx.sourceInterval) { value, unit -> Quantity(value.value, unit) }
         }
@@ -183,7 +185,12 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
         val beginning = input.substring(prefix.abbreviation.length).split("/")[0]
         if (doubleUnits.contains(prefix.abbreviation) && (beginning.isEmpty() || !beginning[0].isLetter())) { // Special case for mili which conflicts with meters
             val exponentStr = tokens.nextWhile(::isNumber)
-            val exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
+            var exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
+
+            if (abs(exponent) >= 100) {
+                errors += ErrorMessage("Exponent too large: $exponent", location)
+                exponent = 1
+            }
 
             unit = UnitSystem.unitAbbreviations[prefix.abbreviation]!! * exponent
         } else {
@@ -201,7 +208,12 @@ fun parseUnit(input: String, location: Interval) : ParseResult<NaturalUnit> {
         if (newUnit != null) {
             val baseUnit = if (invert) -newUnit else newUnit
             val exponentStr = tokens.nextWhile(::isNumber)
-            val exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
+            var exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
+
+            if (abs(exponent) >= 100) {
+                errors += ErrorMessage("Exponent too large: $exponent", location)
+                exponent = 1
+            }
 
             unit += baseUnit * exponent
         } else if (tokens.isNext("/")) {
