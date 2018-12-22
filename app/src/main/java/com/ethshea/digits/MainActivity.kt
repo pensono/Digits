@@ -209,19 +209,15 @@ class MainActivity : Activity() {
         // Find something that fits
         // This loop may potentially run quite a few times if the starting number is very long,
         // But it should be quick enough
-        val unitText = humanQuantity.humanUnitString()
-        val unitWidth = result_preview.paint.measureText(unitText)
-        val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft - unitWidth
-        var rawNumberText = humanQuantity.humanValueString()
-        while (result_preview.paint.measureText(rawNumberText) >= availableSpacePx && rawNumberText.length > 0) {
-            rawNumberText = humanQuantity.humanValueString(rawNumberText.length - 1)
+        var humanString = humanQuantity.humanString()
+        val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
+        while (result_preview.paint.measureText(humanString.string) >= availableSpacePx && humanString.string.length > 0) {
+            humanString = humanQuantity.humanString(humanString.string.length - 1)
         }
 
-        val sigfigsEndLocation = insignificantStart(rawNumberText, precision)
-        val colorEndLocation = if (rawNumberText.contains('…')) rawNumberText.indexOf('…') else rawNumberText.length
-        val coloredText = rawNumberText.replaceRange(colorEndLocation, colorEndLocation, "</font>" )
-                .replaceRange(sigfigsEndLocation, sigfigsEndLocation, "<font color='#$colorStr'>") +
-                unitText
+        val coloredText = humanString.string
+                .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
+                .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='#$colorStr'>")
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -246,30 +242,6 @@ class MainActivity : Activity() {
             }
 
             return caretPosition - 1 < text.length && !text[caretPosition - 1].isLetter()
-        }
-
-        /***
-         * @param rawText Must be produced by HumanQuantity
-         */
-        fun insignificantStart(rawText: String, precision: Precision): Int {
-            val startPos = rawText.length - rawText.trimStart('0', '.').length
-
-            val sigfigsEndLocation = when (precision) {
-                is Precision.Infinite -> rawText.length
-                is Precision.SigFigs -> {
-                    val lastPosition = if (rawText.contains('…')) rawText.indexOf('…') else rawText.length
-                    val decimalAdjustment =
-                            if (rawText.substring(startPos, Math.min(precision.amount + startPos, lastPosition))
-                                            .contains('.'))
-                                1
-                            else
-                                0
-
-                    min(precision.amount + startPos + decimalAdjustment, lastPosition)
-                }
-            }
-
-            return sigfigsEndLocation
         }
     }
 }

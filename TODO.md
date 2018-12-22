@@ -10,9 +10,9 @@ Pre-release:
 - square root
 - Clear all animation
 - Scientific notation button (*10^x)
-- acos() preview weirdness
 - Unit buttons are too big
 - Support multiple units of the same dimension (min/hr, ft/mile)
+- SigFigs for trig functions
 
 Post-release:
 - Report bug button
@@ -27,7 +27,6 @@ Post-release:
 - Calculation History
 - Undo button
 - Option: Always use scientific vs natural notation for the results
-- Refactor how insignificant highlighting works (maybe put it into the humanization)
 - Truncated result preview uses engineering notation
 - Setting for engineering vs scientific notation
 - Option to always round results to a certain decimal place or the number of sigfigs
