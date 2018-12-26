@@ -8,6 +8,7 @@
 
     <style name="AppTheme.CalculatorButton.Unit" parent="AppTheme.BaseCalculatorButton.Unit">
         <item name="android:minWidth">80dp</item>
+        <item name="android:minHeight">50dp</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Digit" parent="AppTheme.BaseCalculatorButton.Digit">

@@ -8,7 +8,6 @@ Pre-release:
 - square root
 - Clear all animation
 - Scientific notation button (*10^x)
-- Unit buttons are too big
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - SigFigs for trig functions
 - Unit corrections
