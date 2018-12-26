@@ -18,17 +18,17 @@ import android.widget.ScrollView
 import android.widget.TextView
 import com.ethshea.digits.evaluator.HumanQuantity
 import com.ethshea.digits.evaluator.evaluateExpression
+import com.ethshea.digits.units.AtomicHumanUnit
 import com.ethshea.digits.units.UnitSystem
 import com.ethshea.digits.units.humanize
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.coroutines.*
-import java.lang.Integer.min
 
 
 class MainActivity : Activity() {
     val TAG = "Digits_MainActivity"
     val history = mutableListOf<HistoryItem>()
+    var floating : View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +57,8 @@ class MainActivity : Activity() {
             }
         })
 
-        displayUnits(UnitSystem.unitAbbreviations.values.map { it.abbreviation }, unit_selector)
-        displayUnits(UnitSystem.prefixAbbreviations.values.map { it.abbreviation }, prefix_selector)
+        displayUnits(UnitSystem.unitAbbreviations.values, unit_selector)
+        displayUnits(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
 
         disciplines.forEach { discipline ->
@@ -117,10 +117,45 @@ class MainActivity : Activity() {
             return
         }
 
-        val layout = createSecondaryFor(button)
+        val layout = createFloatingSecondaryFor(button)
+        button.secondary.forEach { pair ->
+            val secondaryButton = layoutInflater.inflate(R.layout.button_calc_secondary, layout, false) as CalculatorButton
+            secondaryButton.text = pair.first
+            secondaryButton.primaryCommand = pair.second
+
+            layout.addView(secondaryButton)
+        }
         mainRootLayout.addView(layout)
 
         button.isPressed = false
+    }
+
+    private fun createFloatingSecondaryFor(button: CalculatorButton): ViewGroup {
+        val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
+
+        val buttonLoc = intArrayOf(0, 0)
+        button.getLocationInWindow(buttonLoc) // Not sure if this or getLocationInScreen is correct.
+
+        val rootLoc = intArrayOf(0, 0)
+        mainRootLayout.getLocationInWindow(rootLoc) // Not sure if this or getLocationInScreen is correct.
+
+        // Keep this here in case we want to tweak the offset amount
+        val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics)
+        val horizMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+
+        // https://stackoverflow.com/a/24035591/2496050
+        layout.post {
+            val xPos = (buttonLoc[0] + (button.width - layout.width) / 2 - rootLoc[0]).toFloat()
+
+            layout.x = Math.min(Math.max(horizMarginPx, xPos), resources.displayMetrics.widthPixels - horizMarginPx - layout.width)
+            layout.y = buttonLoc[1] - rootLoc[1] - layout.height - offsetPx
+
+            layout.visibility = View.VISIBLE
+        }
+        // Hide it until it has been laid out correctly.
+        // Must use invisible instead of gone because gone won't lay it out (and width and height won't be calculated)
+        layout.visibility = View.INVISIBLE
+
         button.setOnTouchListener { view, motionEvent ->
             val buttonRect = Rect()
             val xPos = motionEvent.rawX.toInt()
@@ -147,68 +182,58 @@ class MainActivity : Activity() {
                             secondaryButton.performClick()
                         }
                     }
-
-                    mainRootLayout.removeView(layout)
                 }
             }
             false
         }
-    }
 
-    private fun createSecondaryFor(button: CalculatorButton): ViewGroup {
-        val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
-
-        button.secondary.forEach { pair ->
-            val secondaryButton = layoutInflater.inflate(R.layout.button_calc_secondary, layout, false) as CalculatorButton
-            secondaryButton.text = pair.first
-            secondaryButton.primaryCommand = pair.second
-
-            layout.addView(secondaryButton)
+        if (floating != null) {
+            mainRootLayout.removeView(floating)
         }
-
-        val buttonLoc = intArrayOf(0, 0)
-        button.getLocationInWindow(buttonLoc) // Not sure if this or getLocationInScreen is correct.
-
-        val rootLoc = intArrayOf(0, 0)
-        mainRootLayout.getLocationInWindow(rootLoc) // Not sure if this or getLocationInScreen is correct.
-
-        // Keep this here in case we want to tweak the offset amount
-        val offsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics)
-        val horizMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
-
-        // https://stackoverflow.com/a/24035591/2496050
-        layout.post {
-            val xPos = (buttonLoc[0] + (button.width - layout.width) / 2 - rootLoc[0]).toFloat()
-
-            layout.x = Math.min(Math.max(horizMarginPx, xPos), resources.displayMetrics.widthPixels - horizMarginPx - layout.width)
-            layout.y = buttonLoc[1] - rootLoc[1] - layout.height - offsetPx
-
-            layout.visibility = View.VISIBLE
-        }
-        // Hide it until it has been laid out correctly.
-        // Must use invisible instead of gone because gone won't lay it out (and width and height won't be calculated)
-        layout.visibility = View.INVISIBLE
-
+        floating = layout
         return layout
     }
 
-    fun displayUnits(units : List<String>, container: ViewGroup) {
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val result = super.dispatchTouchEvent(ev)
+
+        if (ev?.action == MotionEvent.ACTION_UP && floating != null) {
+            mainRootLayout.removeView(floating)
+        }
+
+        return result
+    }
+
+    fun displayUnits(units : Collection<AtomicHumanUnit>, container: ViewGroup) {
         container.removeAllViews()
         for (unit in units) {
             val newButton = layoutInflater.inflate(R.layout.button_unit, null) as CalculatorButton
-            newButton.primaryCommand = if (unit == "1") "" else unit
-            newButton.text = unit
+            newButton.primaryCommand = if (unit.abbreviation == "1") "" else unit.abbreviation
+            newButton.text = unit.abbreviation
+            newButton.setOnLongClickListener {
+                val floating = createFloatingSecondaryFor(newButton)
+                val info = layoutInflater.inflate(R.layout.floating_info, floating, false) as TextView
+                val derivationString =
+                        if (unit.unitDerivation == null)
+                            ""
+                        else
+                            " (${unit.unitDerivation})"
+
+                info.text = unit.name + derivationString
+                floating.addView(info)
+                mainRootLayout.addView(floating)
+                true
+            }
             container.addView(newButton)
         }
     }
 
     private fun formatResultForDisplay(humanQuantity: HumanQuantity, colorResourceId: Int) : Spanned {
         val colorStr = ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
-        val precision = humanQuantity.value.precision
 
         // Find something that fits
-        // This loop may potentially run quite a few times if the starting number is very long,
-        // But it should be quick enough
+        // This loop may potentially run quite a few times if the starting number is very
+        // long, but it should be quick enough
         var humanString = humanQuantity.humanString()
         val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
         while (result_preview.paint.measureText(humanString.string) >= availableSpacePx && humanString.string.length > 0) {
@@ -230,7 +255,7 @@ class MainActivity : Activity() {
     private fun disciplineListener(discipline: Discipline): MenuItem.OnMenuItemClickListener =
         MenuItem.OnMenuItemClickListener {
             drawer_layout.closeDrawers()
-            displayUnits(discipline.units.map { it.abbreviation }, unit_selector)
+            displayUnits(discipline.units, unit_selector)
             true
         }
 

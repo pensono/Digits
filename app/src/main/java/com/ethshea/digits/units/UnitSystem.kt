@@ -32,53 +32,55 @@ object UnitSystem { // Preferred Units?
     val void = NaturalUnit(mapOf()) // Called this to avoid confusion with "unit", the intended name
 
     val units = listOf(
-            AtomicHumanUnit("m", "meters", length),
+            AtomicHumanUnit("m", "Meters", null, length),
 //            AtomicHumanUnit("ft", "feet", length, SciNumber("3.28084")),
 //            AtomicHumanUnit("mi", "miles", length, SciNumber("0.000621371")),
 //            AtomicHumanUnit("L", "liters", length, SciNumber(1000).reciprocal()),
 
-            AtomicHumanUnit("rad", "radian", angle),
-            AtomicHumanUnit("°", "degrees", angle, SciNumber(Math.PI / 180.0)),
-            AtomicHumanUnit("sr", "steradian", solid_angle),
+            AtomicHumanUnit("rad", "Radians", "m/m", angle),
+            AtomicHumanUnit("°", "Degrees", "m/m", angle, SciNumber(Math.PI / 180.0)),
+            AtomicHumanUnit("sr", "Steradian", "m²/m²", solid_angle),
 
 //             AtomicHumanUnit("acre", "acres", area, SciNumber("4046.86")),
 
-            AtomicHumanUnit("s", "seconds", time),
+            AtomicHumanUnit("s", "Seconds", null, time),
 //            AtomicHumanUnit("min", "minutes", time, SciNumber(60).reciprocal()),
 //            AtomicHumanUnit("hr", "hours", time, SciNumber(60 * 60).reciprocal()),
 
-            AtomicHumanUnit("Hz", "hertz", frequency),
-            AtomicHumanUnit("g", "grams", mass),
-            AtomicHumanUnit("N", "newtons", force),
-            AtomicHumanUnit("Pa", "pascals", pressure),
-            AtomicHumanUnit("mol", "moles", pressure),
+            AtomicHumanUnit("Hz", "Hertz", "s⁻¹", frequency),
+            AtomicHumanUnit("g", "Grams", null, mass),
+            AtomicHumanUnit("N", "Newtons", "kgm/s²", force),
+            AtomicHumanUnit("Pa", "Pascals", "N/m²", pressure),
+            AtomicHumanUnit("mol", "Moles", null, pressure),
 
-            AtomicHumanUnit("b", "bit", data),
+            AtomicHumanUnit("b", "Bits", null, data),
 
-            AtomicHumanUnit("V", "volts", emf),
-            AtomicHumanUnit("A", "amps", current),
-            AtomicHumanUnit("Ω", "ohms", impedance),
-            AtomicHumanUnit("S", "siemens", conductance),
-            AtomicHumanUnit("F", "farads", capacitance),
-            AtomicHumanUnit("W", "watts", power),
-            AtomicHumanUnit("T", "tesla", magnetic_flux_density),
-            AtomicHumanUnit("Wb", "weber", magnetic_flux),
-            AtomicHumanUnit("H", "henry", inductance),
-            AtomicHumanUnit("C", "coulomb", charge)
+            AtomicHumanUnit("V", "Volts", "W/A", emf),
+            AtomicHumanUnit("A", "Amps", null, current),
+            AtomicHumanUnit("Ω", "Ohms", "V/A", impedance),
+            AtomicHumanUnit("S", "Siemens", "Ω⁻¹", conductance),
+            AtomicHumanUnit("F", "Farads","C/V", capacitance),
+            AtomicHumanUnit("W", "Watts", "J/s", power),
+            AtomicHumanUnit("T", "Tesla", "Wb/m²", magnetic_flux_density),
+            AtomicHumanUnit("Wb", "Weber", "Vs", magnetic_flux),
+            AtomicHumanUnit("H", "Henry", "Wb/A", inductance),
+            AtomicHumanUnit("C", "Coulomb", "sA", charge)
     )
 
+    val prefixMagStart = -15
     val prefixes = listOf(
-            PrefixUnit("f", "femto", "1e-15"),
-            PrefixUnit("p", "pico", "1e-12"),
-            PrefixUnit("n", "nano", "1e-9"),
-            PrefixUnit("μ", "micro", "1e-6"),
-            PrefixUnit("m", "milli", "1e-3"),
-            PrefixUnit("k", "kilo", "1e3"),
-            PrefixUnit("M", "mega", "1e6"),
-            PrefixUnit("G", "giga", "1e9"),
-            PrefixUnit("T", "tera", "1e12"),
-            PrefixUnit("P", "peta", "1e15"),
-            PrefixUnit("E", "exa", "1e18")
+            PrefixUnit("f", "Femto", "1e-15"),
+            PrefixUnit("p", "Pico", "1e-12"),
+            PrefixUnit("n", "Nano", "1e-9"),
+            PrefixUnit("μ", "Micro", "1e-6"),
+            PrefixUnit("m", "Milli", "1e-3"),
+            PrefixUnit("", "One", "1e0"),
+            PrefixUnit("k", "Kilo", "1e3"),
+            PrefixUnit("M", "Mega", "1e6"),
+            PrefixUnit("G", "Giga", "1e9"),
+            PrefixUnit("T", "Tera", "1e12"),
+            PrefixUnit("P", "Peta", "1e15"),
+            PrefixUnit("E", "Exa", "1e18")
     )
 
     val unitAbbreviations = units.associateBy(AtomicHumanUnit::abbreviation)

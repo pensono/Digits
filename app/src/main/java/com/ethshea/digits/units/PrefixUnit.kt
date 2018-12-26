@@ -6,8 +6,7 @@ import com.ethshea.digits.SciNumber
 /**
  * @author Ethan
  */
-class PrefixUnit(abbreviation: String, name: String, factor: SciNumber) : AtomicHumanUnit(abbreviation, name, mapOf(), factor) {
-    constructor(abbreviation: String, name: String, factor: String) : this(abbreviation, name, SciNumber(factor, Precision.Infinite))
+class PrefixUnit(abbreviation: String, name: String, factor: String) : AtomicHumanUnit(abbreviation, name, factor, mapOf(), factor) {
     companion object {
         val One = PrefixUnit("", "one", "1")
     }

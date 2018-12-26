@@ -1,9 +1,7 @@
 Pre-release:
-- Unit corrections
 - Expressions such as "2π" or "eπ"
 - Change units by tapping on the answer preview
 - Spacing in the secondary buttons
-- Disciplines
 - Error message for tan(π/2)
 - support for sin^-1()
 - tangent
@@ -13,6 +11,7 @@ Pre-release:
 - Unit buttons are too big
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - SigFigs for trig functions
+- Unit corrections
 
 Post-release:
 - Report bug button

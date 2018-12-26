@@ -42,9 +42,6 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
     override fun toString(): String = "HumanUnit($components, $abbreviation)"
 }
 
-val prefixMagStart = -15
-val prefixes = listOf("f", "p", "n", "μ", "m", "", "k", "M", "G", "T") // TODO make this not exist by using UnitSystem instead
-
 val humanizationCache = mutableMapOf<Map<String, Int>, HumanUnit>()
 
 /**
@@ -62,10 +59,10 @@ fun humanize(quantity: Quantity) : HumanQuantity {
             quantity.normalizedValue.magnitude
 
     // Use the one to round up and avoid 0 digits in the front (like in .123m)
-    val prefixIndex = (prefixMagnitude - prefixMagStart - 1) / 3
-    val prefixExponent = (prefixIndex * 3) + prefixMagStart
+    val prefixIndex = (prefixMagnitude - UnitSystem.prefixMagStart - 1) / 3
+    val prefixExponent = (prefixIndex * 3) + UnitSystem.prefixMagStart
     val prefixFactor = SciNumber(10).pow(prefixExponent)
-    val prefixUnit = PrefixUnit(prefixes[prefixIndex], "prefix", factor = prefixFactor)
+    val prefixUnit = UnitSystem.prefixes[prefixIndex]
 
     val humanizedValue = quantity.value * quantity.unit.factor / prefixFactor
 
@@ -100,6 +97,6 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     }
 
     // This code should never really execute because there should be a base unit for each dimension (like meters or seconds)
-    val extraUnit = AtomicHumanUnit("Unk", "Unknown", quantity.unit.dimensions, quantity.unit.factor)
+    val extraUnit = AtomicHumanUnit("Unk", "Unknown", null, quantity.unit.dimensions, quantity.unit.factor)
     return HumanQuantity(humanizedValue, HumanUnit(mapOf(extraUnit to 1)))
 }

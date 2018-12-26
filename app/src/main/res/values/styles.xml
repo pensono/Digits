@@ -62,6 +62,16 @@
         <item name="android:background">@color/primary_dim</item>
     </style>
 
+    <style name="AppTheme.CalculatorButton.Floating">
+        <item name="android:minHeight">30dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:textColor">@color/icons</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+
     <style name="AppTheme.CalculatorButton.Secondary" parent="AppTheme.CalculatorButton">
         <item name="android:minHeight">40dp</item>
         <item name="android:paddingLeft">10dp</item>
