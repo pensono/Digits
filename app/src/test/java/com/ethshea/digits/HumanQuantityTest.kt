@@ -1,10 +1,11 @@
 package com.ethshea.digits
 
-import com.ethshea.digits.evaluator.HumanQuantity
-import com.ethshea.digits.evaluator.HumanQuantityString
+import com.ethshea.digits.evaluator.SciNumber
+import com.ethshea.digits.human.HumanQuantity
+import com.ethshea.digits.human.HumanQuantityString
 import com.ethshea.digits.evaluator.evaluateExpression
-import com.ethshea.digits.units.HumanUnit
-import com.ethshea.digits.units.humanize
+import com.ethshea.digits.human.HumanUnit
+import com.ethshea.digits.human.humanize
 import junit.framework.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test

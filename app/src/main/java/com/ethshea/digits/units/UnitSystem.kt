@@ -1,7 +1,7 @@
 package com.ethshea.digits.units
 
-import com.ethshea.digits.SciNumber
-import java.math.BigDecimal
+import com.ethshea.digits.evaluator.SciNumber
+import com.ethshea.digits.human.AtomicHumanUnit
 
 object UnitSystem { // Preferred Units?
     val length = mapOf("length" to 1)
@@ -59,7 +59,7 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("A", "Amps", null, current),
             AtomicHumanUnit("Ω", "Ohms", "V/A", impedance),
             AtomicHumanUnit("S", "Siemens", "Ω⁻¹", conductance),
-            AtomicHumanUnit("F", "Farads","C/V", capacitance),
+            AtomicHumanUnit("F", "Farads", "C/V", capacitance),
             AtomicHumanUnit("W", "Watts", "J/s", power),
             AtomicHumanUnit("T", "Tesla", "Wb/m²", magnetic_flux_density),
             AtomicHumanUnit("Wb", "Weber", "Vs", magnetic_flux),

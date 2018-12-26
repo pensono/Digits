@@ -1,6 +1,5 @@
 package com.ethshea.digits.evaluator
 
-import com.ethshea.digits.SciNumber
 import com.ethshea.digits.isNumber
 import com.ethshea.digits.parseNumber
 import com.ethshea.digits.parser.DigitsLexer

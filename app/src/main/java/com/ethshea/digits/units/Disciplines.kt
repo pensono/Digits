@@ -1,7 +1,7 @@
-package com.ethshea.digits
+package com.ethshea.digits.units
 
-import com.ethshea.digits.units.AtomicHumanUnit
-import com.ethshea.digits.units.UnitSystem
+import com.ethshea.digits.R
+import com.ethshea.digits.human.AtomicHumanUnit
 
 /**
  * @author Ethan

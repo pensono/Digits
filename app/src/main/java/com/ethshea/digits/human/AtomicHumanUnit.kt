@@ -1,7 +1,8 @@
-package com.ethshea.digits.units
+package com.ethshea.digits.human
 
-import com.ethshea.digits.Precision
-import com.ethshea.digits.SciNumber
+import com.ethshea.digits.evaluator.Precision
+import com.ethshea.digits.evaluator.SciNumber
+import com.ethshea.digits.units.NaturalUnit
 
 /**
  * @author Ethan

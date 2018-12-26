@@ -1,7 +1,7 @@
 package com.ethshea.digits.units
 
-import com.ethshea.digits.Precision
-import com.ethshea.digits.SciNumber
+import com.ethshea.digits.evaluator.Precision
+import com.ethshea.digits.evaluator.SciNumber
 import kotlin.math.absoluteValue
 
 

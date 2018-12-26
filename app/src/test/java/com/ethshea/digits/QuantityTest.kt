@@ -1,6 +1,7 @@
 package com.ethshea.digits
 
 import com.ethshea.digits.evaluator.Quantity
+import com.ethshea.digits.evaluator.SciNumber
 import com.ethshea.digits.units.NaturalUnit
 import org.junit.Assert.assertEquals
 import org.junit.Test

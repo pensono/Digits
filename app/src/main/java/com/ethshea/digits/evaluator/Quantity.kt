@@ -1,16 +1,13 @@
 package com.ethshea.digits.evaluator
 
 import com.ethshea.digits.units.NaturalUnit
-import com.ethshea.digits.SciNumber
-import com.ethshea.digits.units.HumanUnit
 import com.ethshea.digits.units.UnitSystem
-import java.lang.Integer.min
 
 /**
  * @author Ethan
  */
 
-class Quantity(val value:SciNumber, val unit: NaturalUnit = UnitSystem.void) {
+class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     val normalizedValue = value * unit.factor
 
     /**

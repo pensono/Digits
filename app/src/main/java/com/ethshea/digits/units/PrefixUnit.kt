@@ -1,7 +1,6 @@
 package com.ethshea.digits.units
 
-import com.ethshea.digits.Precision
-import com.ethshea.digits.SciNumber
+import com.ethshea.digits.human.AtomicHumanUnit
 
 /**
  * @author Ethan

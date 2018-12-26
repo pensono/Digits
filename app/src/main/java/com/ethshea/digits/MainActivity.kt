@@ -16,11 +16,11 @@ import android.view.*
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
 import android.widget.TextView
-import com.ethshea.digits.evaluator.HumanQuantity
+import com.ethshea.digits.human.HumanQuantity
 import com.ethshea.digits.evaluator.evaluateExpression
-import com.ethshea.digits.units.AtomicHumanUnit
-import com.ethshea.digits.units.UnitSystem
-import com.ethshea.digits.units.humanize
+import com.ethshea.digits.human.AtomicHumanUnit
+import com.ethshea.digits.human.humanize
+import com.ethshea.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 

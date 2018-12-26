@@ -1,4 +1,4 @@
-package com.ethshea.digits
+package com.ethshea.digits.evaluator
 
 import java.lang.Integer.*
 import java.math.BigDecimal

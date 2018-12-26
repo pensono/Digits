@@ -1,9 +1,11 @@
-package com.ethshea.digits.units
+package com.ethshea.digits.human
 
-import com.ethshea.digits.SciNumber
-import com.ethshea.digits.evaluator.HumanQuantity
+import com.ethshea.digits.evaluator.SciNumber
 import com.ethshea.digits.evaluator.Quantity
 import com.ethshea.digits.prettyExponent
+import com.ethshea.digits.units.NaturalUnit
+import com.ethshea.digits.units.PrefixUnit
+import com.ethshea.digits.units.UnitSystem
 import java.util.*
 import kotlin.math.absoluteValue
 

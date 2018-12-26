@@ -1,6 +1,7 @@
 package com.ethshea.digits
 
 import com.ethshea.digits.evaluator.Quantity
+import com.ethshea.digits.evaluator.SciNumber
 import com.ethshea.digits.evaluator.evaluateExpression
 import org.antlr.v4.runtime.misc.Interval
 import org.junit.Assert

@@ -1,5 +1,7 @@
 package com.ethshea.digits
 
+import com.ethshea.digits.evaluator.Precision
+import com.ethshea.digits.evaluator.SciNumber
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.Test
@@ -111,7 +113,7 @@ class SciNumberTest {
         assertEquals(sf(2), (SciNumber(".0011") + SciNumber(".0002")).precision)
         assertEquals(sf(1), (SciNumber(".0011") + SciNumber(".002")).precision)
 
-        assertEquals(sf(3), (SciNumber("123")+SciNumber(".456")).precision)
+        assertEquals(sf(3), (SciNumber("123") + SciNumber(".456")).precision)
     }
 
     @Test
@@ -155,12 +157,12 @@ class SciNumberTest {
 
     @Test
     fun arithmeticLeavesInsignificantDigits() {
-        assertEquals(123.456, (SciNumber("123")+SciNumber(".456")).toDouble())
+        assertEquals(123.456, (SciNumber("123") + SciNumber(".456")).toDouble())
     }
 
     @Test
     fun divisionNontruncating() {
-        assertEquals(.001, (SciNumber("1")/SciNumber("1000")).toDouble())
+        assertEquals(.001, (SciNumber("1") / SciNumber("1000")).toDouble())
     }
 
     // Test that other operations preserve precision
