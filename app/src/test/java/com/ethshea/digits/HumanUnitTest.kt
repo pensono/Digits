@@ -11,7 +11,7 @@ import org.junit.Test
 /**
  * @author Ethan
  */
-class HumanizationTest {
+class HumanUnitTest {
     @Test
     fun humanize() {
         assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf())), humanize(Quantity(SciNumber.One)))

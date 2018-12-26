@@ -47,7 +47,12 @@ class HumanQuantityTest {
         // Untested is small maxChars values < 4
     }
 
-
+    @Test
+    fun addsZeroes() {
+        assertEquals("0.500", HumanQuantity(SciNumber(".5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("5.00", HumanQuantity(SciNumber("5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("5.00m", HumanQuantity(SciNumber("5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString().string)
+    }
 
     @Test
     fun insignificantPosition() {

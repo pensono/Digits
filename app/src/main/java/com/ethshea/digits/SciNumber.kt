@@ -3,7 +3,6 @@ package com.ethshea.digits
 import java.lang.Integer.*
 import java.math.BigDecimal
 import java.math.MathContext
-import java.util.*
 
 sealed class Precision : Comparable<Precision> {
     abstract operator fun plus(value: Int) : Precision
@@ -173,5 +172,18 @@ class SciNumber {
     fun reciprocal() = SciNumber(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128), precision)
     fun toDouble(): Double = backing.toDouble()
     fun valueEqual(other: SciNumber): Boolean = backing.compareTo(other.backing) == 0
-    fun valueString(): String = backing.toPlainString()
+    fun valueString(): String {
+        val baseString = backing.toPlainString()
+        val sigFigs = baseString.trimStart('0','.')
+                .count { it.isDigit() }
+
+        return when (precision) {
+            is Precision.Infinite -> baseString
+            is Precision.SigFigs -> {
+                val missing = max(0, precision.amount - sigFigs)
+                val decimalStr = if (!baseString.contains('.') && missing > 0) "." else ""
+                baseString + decimalStr + "0".repeat(missing)
+            }
+        }
+    }
 }

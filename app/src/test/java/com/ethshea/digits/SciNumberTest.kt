@@ -137,6 +137,13 @@ class SciNumberTest {
 
         assertEquals(sf(2), (SciNumber("10.") * SciNumber("20.")).precision)
         assertEquals(sf(2), (SciNumber("80.") * SciNumber("40.")).precision)
+        assertEquals(sf(3), (SciNumber("10.0") * SciNumber("20.0")).precision)
+    }
+
+    @Test
+    fun precisionDivision() {
+        assertEquals(sf(3), (SciNumber("10.0") / SciNumber("20.0")).precision)
+        assertEquals(sf(3), (SciNumber("50.0") / SciNumber("10.0")).precision)
     }
 
     @Test
