@@ -4,13 +4,15 @@ Pre-release:
 - Spacing in the secondary buttons
 - Error message for tan(π/2)
 - support for sin^-1()
-- tangent
+- tangent button
 - square root
-- Clear all animation
 - Scientific notation button (*10^x)
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - SigFigs for trig functions
 - Unit corrections
+- Color customization
+- In-app purchase for pro mode
+- Clear all animation
 
 Post-release:
 - Report bug button

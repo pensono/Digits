@@ -1,9 +1,10 @@
 package com.ethshea.digits
 
-import com.ethshea.digits.evaluator.parseUnit
+import com.ethshea.digits.evaluator.ParseResult
+import com.ethshea.digits.evaluator.evaluateExpression
+import com.ethshea.digits.units.NaturalUnit
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
-import org.antlr.v4.runtime.misc.Interval
 import org.junit.Test
 
 /**
@@ -22,7 +23,7 @@ class UnitParserTest {
 
     @Test
     fun teslas() {
-        assertEquals(u("T"), parseUnit("T", Interval(0, 0)).value)
+        assertEquals(u("T"), parseUnit("T").value)
         assertEquals(u("T") + p("T"), parseUnit("TT").value)
     }
 
@@ -44,17 +45,18 @@ class UnitParserTest {
 
     @Test
     fun needsPrefix() {
-        assertTrue(parseUnit("k", Interval(0, 0)).errors.size == 1)
-        assertTrue(parseUnit("M", Interval(0, 0)).errors.size == 1)
-        assertTrue(parseUnit("μ", Interval(0, 0)).errors.size == 1)
-        assertTrue(parseUnit("G", Interval(0, 0)).errors.size == 1)
-        assertTrue(parseUnit("p", Interval(0, 0)).errors.size == 1)
+        assertTrue(parseUnit("k").errors.size == 1)
+        assertTrue(parseUnit("M").errors.size == 1)
+        assertTrue(parseUnit("μ").errors.size == 1)
+        assertTrue(parseUnit("G").errors.size == 1)
+        assertTrue(parseUnit("p").errors.size == 1)
     }
 
     @Test
     fun per() {
         assertEquals(u("V") - u("s"), parseUnit("V/s").value)
         assertEquals(u("m") - u("s"), parseUnit("m/s").value)
+        assertEquals(u("m") - u("s") - u("s"), parseUnit("m/s2").value)
     }
 
     @Test
@@ -71,15 +73,17 @@ class UnitParserTest {
     @Test
     fun negativeExponentUnits() {
         assertEquals(-u("g"), parseUnit("g⁻¹").value)
-        assertEquals(-u("g"), parseUnit("g-1").value)
         assertEquals(u("g") * -99, parseUnit("g⁻⁹⁹").value)
-        assertEquals(u("g") * -99, parseUnit("g-99").value)
 
         assertEquals(-u("m"), parseUnit("m⁻¹").value)
-        assertEquals(-u("m"), parseUnit("m-1").value)
+
+        // Old test, but I think this shouldn't parse at all anymore. It's more clearly g minus 1
+//        assertEquals(-u("g"), parseUnit("g-1").value)
+//        assertEquals(u("g") * -99, parseUnit("g-99").value)
+//        assertEquals(-u("m"), parseUnit("m-1").value)
     }
 
-    private fun parseUnit(input: String) =
-        parseUnit(input, Interval(0, 0)) // We don't care about the interval in this case
+    private fun parseUnit(input: String) : ParseResult<NaturalUnit> =
+            evaluateExpression("1$input").invoke { it.unit } // We don't care about the interval in this case
 
 }

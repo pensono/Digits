@@ -126,7 +126,9 @@ class EvaluatorTest {
     fun partialMultiplication() {
         correctionTest(Quantity(SciNumber("4")), "4*")
         correctionTest(Quantity(SciNumber("-4")), "-4*")
-        correctionTest(Quantity(SciNumber("4")), "4*-") // It would be nice to get -4 here, but that's alot of work
+
+        // -4, 4 or 0 works here in that order of preference
+        correctionTest(Quantity(SciNumber("0")), "4*-") // It would be nice to get -4 here, but that's alot of work
     }
 
     @Test
@@ -141,18 +143,32 @@ class EvaluatorTest {
     }
 
     @Test
+    fun functionSquared() {
+        evalTest(Quantity(SciNumber(Math.sin(.5) * Math.sin(.5))), "sin(.5)²")
+    }
+
+    @Test
     fun squaredWithUnit() {
         evalTest(Quantity(SciNumber("4"), u("m")), "2²m")
         evalTest(Quantity(SciNumber("4"), u("m") + u("m")), "2²m²")
+    }
+
+    @Test
+    fun unitSquared() {
+        evalTest(Quantity(SciNumber("2"), u("m") + u("m")), "2g²")
+        evalTest(Quantity(SciNumber("2"), u("m") + u("m")), "2g2")
         evalTest(Quantity(SciNumber("2"), u("m") + u("m")), "2m²")
+        evalTest(Quantity(SciNumber("2"), u("m") + u("m")), "2m2")
     }
 
     @Test
     fun constants() {
         evalTest(Quantity(SciNumber(Math.PI)), "π")
-        evalTest(Quantity(SciNumber(Math.PI)), "PI")
-        evalTest(Quantity(SciNumber(Math.PI)), "pi")
         evalTest(Quantity(SciNumber(Math.E)), "e")
+
+        // These cases are extra hard because of the pico and peta prefixes. Just ignore them for now.
+//        evalTest(Quantity(SciNumber(Math.PI)), "PI")
+//        evalTest(Quantity(SciNumber(Math.PI)), "pi")
     }
 
     @Test
@@ -172,8 +188,8 @@ class EvaluatorTest {
     @Test
     fun mismatchedUnits() {
         errorTest(Interval(4,5), "10m+2A")
-        errorTest(Interval(5,9), "10m+(2A+3A)")
-        errorTest(Interval(6,10), "(10m+(2A+3A))/4")
+        errorTest(Interval(4,10), "10m+(2A+3A)")
+        errorTest(Interval(5,11), "(10m+(2A+3A))/4")
     }
 
     @Test
@@ -184,11 +200,6 @@ class EvaluatorTest {
     @Test
     fun startWithSuperscript() {
         errorTest(Interval(0, 0), "²2")
-    }
-
-    @Test
-    fun incompleteParse() {
-        errorTest(Interval(2, 2), "4²2")
     }
 
     @Test
@@ -205,17 +216,13 @@ class EvaluatorTest {
 
     @Test
     fun weirdInputGivesError() {
-        errorTest(Interval(0,2), "+*4")
+        anyErrorTest("+*4")
     }
 
     @Test
     fun largeExponentError() {
-        // Should be:
-        // errorTest(Interval(2,5), "4m6666")
-
-        // This for now
-        errorTest(Interval(1,6), "4gm6666")
-        errorTest(Interval(1,5), "4m6666")
+        errorTest(Interval(3,6), "4gm6666")
+        errorTest(Interval(2,5), "4m6666")
     }
 
     private fun evalTest(expected: Quantity, input: String) {
@@ -230,8 +237,13 @@ class EvaluatorTest {
         Assert.assertTrue(result.errors.isNotEmpty())
     }
 
-    private fun errorTest(location: Interval, input: String) {
+    private fun errorTest(errorLocation: Interval, input: String) {
         val result = evaluateExpression(input)
-        Assert.assertTrue(result.errors.any { err -> err.location == location })
+        Assert.assertTrue(result.errors.any { err -> err.location == errorLocation })
+    }
+
+    private fun anyErrorTest(input: String) {
+        val result = evaluateExpression(input)
+        Assert.assertTrue(result.errors.isNotEmpty())
     }
 }

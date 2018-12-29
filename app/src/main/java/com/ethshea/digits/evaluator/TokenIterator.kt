@@ -10,11 +10,13 @@ import java.util.*
 class TokenIterator(tokens: String, private val location: Interval) {
     var position: Int = 0
         private set
+    var previousPosition: Int = 0
+        private  set
     private var tokens = tokens.replace("""\s*""".toRegex(), "")
     private var speculations = Stack<Int>()
 
-    val lastTokenLocation
-        get() = Interval(location.a + position - 1, location.a + position)
+    val previousLocation
+        get() = Interval(location.a + previousPosition, location.a + position)
 
     fun hasNext() = position < tokens.length
     val remaining get() = tokens.length - position
@@ -29,6 +31,7 @@ class TokenIterator(tokens: String, private val location: Interval) {
     }
 
     fun next() : Char {
+        previousPosition = position
         val result = tokens[position]
         position++
         return result
@@ -42,6 +45,7 @@ class TokenIterator(tokens: String, private val location: Interval) {
     }
 
     fun consume(input: String) {
+        previousPosition = position
         if (!isNext(input)) {
             throw RuntimeException("$input is not next in $tokens at $position")
         }
@@ -49,6 +53,7 @@ class TokenIterator(tokens: String, private val location: Interval) {
     }
 
     fun nextWhile(predicate: (Char) -> Boolean) : String {
+        previousPosition = position
         for (i in position until tokens.length) {
             if (!predicate(tokens[i])) {
                 val result = tokens.substring(position, i)
@@ -68,14 +73,8 @@ class TokenIterator(tokens: String, private val location: Interval) {
      * is returned.
      */
     fun nextLargest(possible:Collection<String>) : String? {
-        return possible.sortedBy { -it.length }.firstOrNull(this::isNext)
-    }
+        val next = possible.sortedBy { -it.length }.firstOrNull(this::isNext)
 
-    /**
-     * Like {@link #nextLargest} but it also consumes the token
-     */
-    fun takeNextLargest(possible:Collection<String>) : String? {
-        val next = nextLargest(possible)
         // Bet this part can be written more cleverly
         if (next != null) consume(next)
         return next
@@ -93,16 +92,17 @@ class TokenIterator(tokens: String, private val location: Interval) {
         return  possible[token]
     }
 
+    fun peekRest() : String {
+        return tokens.substring(position)
+    }
+
     /**
-     * Like {@link #nextLargest} but it also consumes the token
+     * Consumes the rest of the tokens
      */
-    fun <T> takeNextLargest(possible:Map<String, T>) : T? {
-        val next = nextLargest(possible.keys)
-        // Bet this part can be written more cleverly
-        if (next != null) {
-            consume(next)
-            return possible[next]
-        }
-        return next
+    fun rest(): String {
+        previousPosition = position
+        val token = tokens.substring(position)
+        position = tokens.length
+        return token
     }
 }

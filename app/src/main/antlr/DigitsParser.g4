@@ -3,25 +3,24 @@ parser grammar DigitsParser;
 options { tokenVocab=DigitsLexer; }
 
 expression
-    : MINUS expression # UnaryMinus
-    | '+'? value # Literal
-    | Letter+ # Constant
-    | expression unit=unitLiteral # AffixUnit
-    | LPAREN expression RPAREN # ParenthesizedExpression
-    | functionName LPAREN argument=expression RPAREN # Function
+    : MINUS argument=expression # UnaryMinus
     | lhs=expression operation=(TIMES | DIVIDE) rhs=expression # ProductExpression
     | lhs=expression operation=(PLUS | MINUS) rhs=expression # SumExpression
-    | base=expression exponent=exponentValue # Exponent // Not totally happy with this rule, but eh it works
+    | base=expression CARET sign=MINUS? number=Digit+ # Exponent
+    | '+'? terms+=term+ # ValueExpression
+    ;
+
+// Terms can be juxtaposed, as in 2eπ
+term
+    : Letter+ # Alphabetic
+    | LPAREN expression RPAREN # ParenthesizedExpression
+    | value # NumericLiteral
+    | SUPERSCRIPT_MINUS? Superscript+ # TermExponent
     ;
 
 value
     : Digit+ (DOT Digit*)?
     | DOT Digit+
-    ;
-
-exponentValue
-    : CARET sign=MINUS? number=Digit+
-    | sign=SUPERSCRIPT_MINUS? number=Superscript+
     ;
 
 unitLiteral
