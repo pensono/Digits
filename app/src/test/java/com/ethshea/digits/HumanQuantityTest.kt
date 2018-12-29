@@ -31,7 +31,6 @@ class HumanQuantityTest {
         assertEquals("123mm", humanize(evaluateExpression(".123m").value).humanString().string)
     }
 
-
     @Test
     fun limitedHumanString() {
         assertEquals("1.2…E-1", HumanQuantity(SciNumber(".1234567"), HumanUnit(mapOf())).humanString(7).string)
@@ -49,10 +48,30 @@ class HumanQuantityTest {
     }
 
     @Test
+    fun negativeLimitedHumanString() {
+        assertEquals("-1.2…E-1", HumanQuantity(SciNumber("-.1234567"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-0.12345", HumanQuantity(SciNumber("-.12345"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-0.12345", HumanQuantity(SciNumber("-.12345"), HumanUnit(mapOf())).humanString(11).string)
+        assertEquals("-1.2…E-4", HumanQuantity(SciNumber("-.00012345"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-1.2345…E-4", HumanQuantity(SciNumber("-.000123456"), HumanUnit(mapOf())).humanString(11).string)
+
+        assertEquals("-12345", HumanQuantity(SciNumber("-12345"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-12345", HumanQuantity(SciNumber("-12345"), HumanUnit(mapOf())).humanString(11).string)
+
+        assertEquals("-1.234…E8", HumanQuantity(SciNumber("-123456789"), HumanUnit(mapOf())).humanString(9).string)
+
+        // Untested is small maxChars values < 4
+    }
+
+    @Test
     fun addsZeroes() {
         assertEquals("0.500", HumanQuantity(SciNumber(".5", sf(3)), HumanUnit(mapOf())).humanString().string)
         assertEquals("5.00", HumanQuantity(SciNumber("5", sf(3)), HumanUnit(mapOf())).humanString().string)
         assertEquals("5.00m", HumanQuantity(SciNumber("5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString().string)
+
+        assertEquals("-0.500", HumanQuantity(SciNumber("-.5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("-5.00", HumanQuantity(SciNumber("-5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("-5.00m", HumanQuantity(SciNumber("-5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString().string)
     }
 
     @Test
@@ -64,15 +83,26 @@ class HumanQuantityTest {
         testInsigfigStart(5, "0.002", 1)
         testInsigfigStart(5, "0.0020", 1)
         testInsigfigStart(5, "0.0022", 1)
+
+        testInsigfigStart(2, "-99.99", 1)
+        testInsigfigStart(3, "-99.99", 2) // Before the period
+        testInsigfigStart(4, "-0.2", 1)  // With a leading 0
+        testInsigfigStart(4, "-0.22", 1)
+        testInsigfigStart(6, "-0.002", 1)
+        testInsigfigStart(6, "-0.0020", 1)
+        testInsigfigStart(6, "-0.0022", 1)
     }
 
 
     @Test
     fun insignificantWithEllipsis() {
         testHumanString(HumanQuantityString("1.2345…E0", 6, 6), "1.23456789", 10, 9)
-
         testHumanString(HumanQuantityString("1.3333…E0", 3, 6), "1.33333333", 2, 9)
         testHumanString(HumanQuantityString("1.3333…E0", 6, 6), "1.33333333", 5, 9)
+
+        testHumanString(HumanQuantityString("-1.2345…E0", 7, 7), "-1.23456789", 10, 10)
+        testHumanString(HumanQuantityString("-1.3333…E0", 4, 7), "-1.33333333", 2, 10)
+        testHumanString(HumanQuantityString("-1.3333…E0", 7, 7), "-1.33333333", 5, 10)
     }
 
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int) {

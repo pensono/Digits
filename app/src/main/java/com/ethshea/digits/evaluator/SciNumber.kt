@@ -174,7 +174,7 @@ class SciNumber {
     fun valueEqual(other: SciNumber): Boolean = backing.compareTo(other.backing) == 0
     fun valueString(): String {
         val baseString = backing.toPlainString()
-        val sigFigs = baseString.trimStart('0','.')
+        val sigFigs = baseString.trimStart('0', '.', '-')
                 .count { it.isDigit() }
 
         return when (precision) {

@@ -46,7 +46,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
      * @param valueString a string containing only digits and one decimal
      */
     private fun sigfigEndPos(valueString: String, precision: Precision): Int {
-        val sigfigStartPos = valueString.length - valueString.trimStart('0', '.').length
+        val sigfigStartPos = valueString.length - valueString.trimStart('0', '.', '-').length
 
         val insigfigStartPos = when (precision) {
             is Precision.Infinite -> valueString.length

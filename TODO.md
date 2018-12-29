@@ -35,3 +35,4 @@ Post-release:
 - Make the unit exponent too large error only highlight the number which is too large instead of the entire unit
 - Abbreviation alias (for degree, abbreviated deg)
 - Gi/Mi/Ki prefixes
+- Properly round when a number is shortened
