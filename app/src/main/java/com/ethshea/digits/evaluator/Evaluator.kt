@@ -206,21 +206,25 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                     }
                 }
                 is DigitsParser.ParenthesizedExpressionContext -> {
-                    val innerValue = term.accept(this)
-                    if (functionName == null) {
-                        value = value.combine(innerValue, ctx.sourceInterval) { v, t -> v * t }
-                        nextExponentBase = innerValue.value
+                    val innerValue = term.expression()?.accept(this)
+                    if (innerValue == null) {
+                        value = value.error(ErrorMessage("Empty parens", term.sourceInterval))
                     } else {
-                        val function = functions[functionName]
-
-                        if (function == null) {
+                        if (functionName == null) {
                             value = value.combine(innerValue, ctx.sourceInterval) { v, t -> v * t }
-                                    .error(ErrorMessage("Unknown function/constant", functionInterval!!))
                             nextExponentBase = innerValue.value
                         } else {
-                            val result = function(innerValue.value)
-                            value = value.combine(innerValue, ctx.sourceInterval) { v, t -> v * result }
-                            nextExponentBase = result
+                            val function = functions[functionName]
+
+                            if (function == null) {
+                                value = value.combine(innerValue, ctx.sourceInterval) { v, t -> v * t }
+                                        .error(ErrorMessage("Unknown function/constant", functionInterval!!))
+                                nextExponentBase = innerValue.value
+                            } else {
+                                val result = function(innerValue.value)
+                                value = value.combine(innerValue, ctx.sourceInterval) { v, t -> v * result }
+                                nextExponentBase = result
+                            }
                         }
                     }
                 }
@@ -229,9 +233,4 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
 
         return value
     }
-
-    override fun visitParenthesizedExpression(ctx: DigitsParser.ParenthesizedExpressionContext): ParseResult<Quantity>? {
-        return ctx.expression().accept(this)
-    }
-
 }

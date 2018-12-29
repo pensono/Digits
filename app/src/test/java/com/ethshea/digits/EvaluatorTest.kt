@@ -186,6 +186,12 @@ class EvaluatorTest {
     }
 
     @Test
+    fun functionWithNoArgErrors() {
+        errorTest(Interval(3, 4), "sin()")
+        errorTest(Interval(4, 5), "4sin()")
+    }
+
+    @Test
     fun mismatchedUnits() {
         errorTest(Interval(4,5), "10m+2A")
         errorTest(Interval(4,10), "10m+(2A+3A)")
