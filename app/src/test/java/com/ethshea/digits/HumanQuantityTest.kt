@@ -33,32 +33,32 @@ class HumanQuantityTest {
 
     @Test
     fun limitedHumanString() {
-        assertEquals("1.2…E-1", HumanQuantity(SciNumber(".1234567"), HumanUnit(mapOf())).humanString(7).string)
+        assertEquals("1.2…ᴇ-1", HumanQuantity(SciNumber(".1234567"), HumanUnit(mapOf())).humanString(7).string)
         assertEquals("0.12345", HumanQuantity(SciNumber(".12345"), HumanUnit(mapOf())).humanString(7).string)
         assertEquals("0.12345", HumanQuantity(SciNumber(".12345"), HumanUnit(mapOf())).humanString(10).string)
-        assertEquals("1.2…E-4", HumanQuantity(SciNumber(".00012345"), HumanUnit(mapOf())).humanString(7).string)
-        assertEquals("1.2345…E-4", HumanQuantity(SciNumber(".000123456"), HumanUnit(mapOf())).humanString(10).string)
+        assertEquals("1.2…ᴇ-4", HumanQuantity(SciNumber(".00012345"), HumanUnit(mapOf())).humanString(7).string)
+        assertEquals("1.2345…ᴇ-4", HumanQuantity(SciNumber(".000123456"), HumanUnit(mapOf())).humanString(10).string)
 
         assertEquals("12345", HumanQuantity(SciNumber("12345"), HumanUnit(mapOf())).humanString(7).string)
         assertEquals("12345", HumanQuantity(SciNumber("12345"), HumanUnit(mapOf())).humanString(10).string)
 
-        assertEquals("1.234…E8", HumanQuantity(SciNumber("123456789"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("1.234…ᴇ8", HumanQuantity(SciNumber("123456789"), HumanUnit(mapOf())).humanString(8).string)
 
         // Untested is small maxChars values < 4
     }
 
     @Test
     fun negativeLimitedHumanString() {
-        assertEquals("-1.2…E-1", HumanQuantity(SciNumber("-.1234567"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-1.2…ᴇ-1", HumanQuantity(SciNumber("-.1234567"), HumanUnit(mapOf())).humanString(8).string)
         assertEquals("-0.12345", HumanQuantity(SciNumber("-.12345"), HumanUnit(mapOf())).humanString(8).string)
         assertEquals("-0.12345", HumanQuantity(SciNumber("-.12345"), HumanUnit(mapOf())).humanString(11).string)
-        assertEquals("-1.2…E-4", HumanQuantity(SciNumber("-.00012345"), HumanUnit(mapOf())).humanString(8).string)
-        assertEquals("-1.2345…E-4", HumanQuantity(SciNumber("-.000123456"), HumanUnit(mapOf())).humanString(11).string)
+        assertEquals("-1.2…ᴇ-4", HumanQuantity(SciNumber("-.00012345"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-1.2345…ᴇ-4", HumanQuantity(SciNumber("-.000123456"), HumanUnit(mapOf())).humanString(11).string)
 
         assertEquals("-12345", HumanQuantity(SciNumber("-12345"), HumanUnit(mapOf())).humanString(8).string)
         assertEquals("-12345", HumanQuantity(SciNumber("-12345"), HumanUnit(mapOf())).humanString(11).string)
 
-        assertEquals("-1.234…E8", HumanQuantity(SciNumber("-123456789"), HumanUnit(mapOf())).humanString(9).string)
+        assertEquals("-1.234…ᴇ8", HumanQuantity(SciNumber("-123456789"), HumanUnit(mapOf())).humanString(9).string)
 
         // Untested is small maxChars values < 4
     }
@@ -96,13 +96,16 @@ class HumanQuantityTest {
 
     @Test
     fun insignificantWithEllipsis() {
-        testHumanString(HumanQuantityString("1.2345…E0", 6, 6), "1.23456789", 10, 9)
-        testHumanString(HumanQuantityString("1.3333…E0", 3, 6), "1.33333333", 2, 9)
-        testHumanString(HumanQuantityString("1.3333…E0", 6, 6), "1.33333333", 5, 9)
+        testHumanString(HumanQuantityString("1.2345…ᴇ3", 6, 6), "1234.56789", 10, 9)
+        testHumanString(HumanQuantityString("1.3333…ᴇ3", 3, 6), "1333.33333", 2, 9)
+        testHumanString(HumanQuantityString("1.3333…ᴇ3", 6, 6), "1333.33333", 5, 9)
 
-        testHumanString(HumanQuantityString("-1.2345…E0", 7, 7), "-1.23456789", 10, 10)
-        testHumanString(HumanQuantityString("-1.3333…E0", 4, 7), "-1.33333333", 2, 10)
-        testHumanString(HumanQuantityString("-1.3333…E0", 7, 7), "-1.33333333", 5, 10)
+        testHumanString(HumanQuantityString("-1.2345…ᴇ3", 7, 7), "-1234.56789", 10, 10)
+        testHumanString(HumanQuantityString("-1.3333…ᴇ3", 4, 7), "-1333.33333", 2, 10)
+        testHumanString(HumanQuantityString("-1.3333…ᴇ3", 7, 7), "-1333.33333", 5, 10)
+
+        // No E for *10^0
+        testHumanString(HumanQuantityString("1.333333…", 6, 8), "1.333333333", 5, 9)
     }
 
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int) {
