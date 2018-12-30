@@ -1,8 +1,6 @@
 Pre-release:
 - Change units by tapping on the answer preview
 - Spacing in the secondary buttons
-- square root
-- Scientific notation
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - Color customization
 - In-app purchase for pro mode

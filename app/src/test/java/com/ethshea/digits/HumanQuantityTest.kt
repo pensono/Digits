@@ -1,6 +1,7 @@
 package com.ethshea.digits
 
 import com.ethshea.digits.evaluator.SciNumber
+import com.ethshea.digits.evaluator.SciNumber.Real
 import com.ethshea.digits.human.HumanQuantity
 import com.ethshea.digits.human.HumanQuantityString
 import com.ethshea.digits.evaluator.evaluateExpression
@@ -18,6 +19,7 @@ class HumanQuantityTest {
     fun useDecimalNotation() {
         assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString().string)
         assertEquals("56000", humanize(evaluateExpression("56k").value).humanString().string)
+        assertEquals("1.…ᴇ20", humanize(evaluateExpression("1.0ᴇ20").value).humanString(6).string)
     }
 
     @Test

@@ -44,7 +44,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
 
             val insigfigStartPos = sigfigEndPos(sizedString, value.precision)
             val combinedString = sizedString + eNotation + unitString
-            HumanQuantityString(combinedString.substring(0, maxChars), insigfigStartPos, sizedString.length)
+            HumanQuantityString(combinedString.substring(0, min(combinedString.length, maxChars)), insigfigStartPos, sizedString.length)
         }
     }
 

@@ -24,6 +24,30 @@ class EvaluatorTest {
     }
 
     @Test
+    fun scientificNotation() {
+        evalTest(Quantity(SciNumber.Real("100000", sf(1))), "1ᴇ5")
+        evalTest(Quantity(SciNumber.Real("123000", sf(3))), "1.23ᴇ5")
+        evalTest(Quantity(SciNumber.Real("100000", sf(3))), "1.00ᴇ5")
+        evalTest(Quantity(SciNumber.Real("500000000000", sf(1))), "5ᴇ11") // Double digit exponent
+
+        evalTest(Quantity(SciNumber.Real("-100000", sf(1))), "-1ᴇ5")
+        evalTest(Quantity(SciNumber.Real("-123000", sf(3))), "-1.23ᴇ5")
+        evalTest(Quantity(SciNumber.Real("-100000", sf(3))), "-1.00ᴇ5")
+        evalTest(Quantity(SciNumber.Real("-500000000000", sf(1))), "-5ᴇ11") // Double digit exponent
+
+        // Not actually scientific notation, but it's unambiguous so we'll accept it without complaint
+        evalTest(Quantity(SciNumber.Real("10000000", sf(1))), "100ᴇ5")
+        evalTest(Quantity(SciNumber.Real("1230000", sf(3))), "12.3ᴇ5")
+        evalTest(Quantity(SciNumber.Real("1000000", sf(3))), "10.0ᴇ5")
+    }
+
+    @Test
+    fun scientificNotationWithoutMantissaFails() {
+        errorTest(Interval(0,1), "ᴇ5")
+        errorTest(Interval(0,2), "ᴇ-5")
+    }
+
+    @Test
     fun literalsWithUnits() {
         evalTest(Quantity(SciNumber.Real("123"), u("m")), "123m")
         evalTest(Quantity(SciNumber.Real("123"), u("m")), "123 m")
@@ -55,6 +79,7 @@ class EvaluatorTest {
     fun exponentiation() {
         evalTest(Quantity(SciNumber.Real("8")), "2^3")
         evalTest(Quantity(SciNumber.Real("8")), "2³")
+        evalTest(Quantity(SciNumber.Real("1024")), "2^10")
     }
 
     @Test
@@ -192,6 +217,11 @@ class EvaluatorTest {
     }
 
     @Test
+    fun unknownFunctionErrors() {
+        errorTest(Interval(3,17), "2π+notAFunction(4)") // It would be cool if the error just highlighted the function name
+    }
+
+    @Test
     fun mismatchedUnits() {
         errorTest(Interval(4,5), "10m+2A")
         errorTest(Interval(4,10), "10m+(2A+3A)")
@@ -257,8 +287,8 @@ class EvaluatorTest {
 
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
-        Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
         Assert.assertTrue(result.errors.isEmpty())
+        Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
     }
 
     private fun correctionTest(expected: Quantity, input: String) {

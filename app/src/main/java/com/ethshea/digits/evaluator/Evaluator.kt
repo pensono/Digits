@@ -125,7 +125,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
 
     override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity> {
         val baseResult = ctx.base?.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", ctx.base.sourceInterval))
-        val exponentMag = if (ctx.number == null) 1 else parseNumber(ctx.number.text)
+        val exponentMag = if (ctx.Digit().isEmpty()) 1 else parseNumber(ctx.Digit().joinToString("") { it.text })
         val sign = if (ctx.sign == null) 1 else -1
 
         return baseResult.invoke { base -> base.pow(sign * exponentMag) }
@@ -240,6 +240,15 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                                 nextExponentBase = result.value
                             }
                         }
+                    }
+                }
+                is DigitsParser.ScientificNotationContext -> {
+                    if (nextExponentBase == null) {
+                        value = value.error(ErrorMessage("Missing mantissa", term.sourceInterval))
+                    } else {
+                        val sign = if (term.sign == null) 1 else -1
+                        val exponent = if (term.Digit().isEmpty()) 0 else parseNumber(term.Digit().joinToString("") { it.text }) * sign
+                        value = value.invoke { it * Quantity(SciNumber.Real(10).pow(exponent)) }
                     }
                 }
             }

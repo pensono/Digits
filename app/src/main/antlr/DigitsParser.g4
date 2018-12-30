@@ -6,13 +6,14 @@ expression
     : MINUS argument=expression # UnaryMinus
     | lhs=expression operation=(TIMES | DIVIDE) rhs=expression # ProductExpression
     | lhs=expression operation=(PLUS | MINUS) rhs=expression # SumExpression
-    | base=expression CARET sign=MINUS? number=Digit+ # Exponent
+    | base=expression CARET sign=MINUS? Digit+ # Exponent
     | '+'? terms+=term+ # ValueExpression
     ;
 
 // Terms can be juxtaposed, as in 2eπ
 term
     : Letter+ # Alphabetic
+    | SCI_E sign=MINUS? Digit+ # ScientificNotation
     | LPAREN inner=expression RPAREN # ParenthesizedExpression
     | value # NumericLiteral
     | SUPERSCRIPT_MINUS? Superscript+ # TermExponent
