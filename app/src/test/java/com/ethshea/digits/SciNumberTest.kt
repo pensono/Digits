@@ -165,6 +165,17 @@ class SciNumberTest {
         assertEquals(.001, (SciNumber("1") / SciNumber("1000")).toDouble())
     }
 
+    @Test
+    fun trigSigfigs() {
+        // Doesn't account for condition numbers
+        assertEquals(Precision.Infinite, SciNumber(5).sin().precision)
+        assertEquals(sf(2), SciNumber(".5", sf(2)).sin().precision)
+        assertEquals(Precision.Infinite, SciNumber(5).cos().precision)
+        assertEquals(sf(2), SciNumber(".5", sf(2)).cos().precision)
+        assertEquals(Precision.Infinite, SciNumber(5).tan().precision)
+        assertEquals(sf(2), SciNumber(".5", sf(2)).tan().precision)
+    }
+
     // Test that other operations preserve precision
     @Test
     fun powPrecision() {

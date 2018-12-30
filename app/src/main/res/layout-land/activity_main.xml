@@ -118,8 +118,8 @@
                     <com.ethshea.digits.CalculatorButton app:primary=")" app:secondary="};]" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
                     <com.ethshea.digits.CalculatorButton app:primary="e" android:text="e" style="@style/AppTheme.CalculatorButton.Advanced" />
                     <com.ethshea.digits.CalculatorButton app:primary="π" app:secondary="φ;τ" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
-                    <com.ethshea.digits.CalculatorButton app:primary="sin(|)" app:secondary="asin:asin(|);sinh:sinh(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
-                    <com.ethshea.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos:acos(|);cosh:cosh(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
+                    <com.ethshea.digits.CalculatorButton app:primary="sin(|)" app:secondary="asin:asin(|);sinh:sinh(|);csc:csc(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
+                    <com.ethshea.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos:acos(|);cosh:cosh(|);sec:sec(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
                 </GridLayout>
             </LinearLayout>
         </LinearLayout>

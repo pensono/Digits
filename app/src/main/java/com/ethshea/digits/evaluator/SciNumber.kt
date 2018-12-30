@@ -3,6 +3,7 @@ package com.ethshea.digits.evaluator
 import java.lang.Integer.*
 import java.math.BigDecimal
 import java.math.MathContext
+import kotlin.math.abs
 
 sealed class Precision : Comparable<Precision> {
     abstract operator fun plus(value: Int) : Precision
@@ -53,14 +54,14 @@ class SciNumber {
      * until the decimal if less than 1
      */
     val magnitude: Int
-        get() = magnitudeOf(backing)
+        get() = magnitudeOf(backing.toDouble())
 
-    private fun magnitudeOf(number: BigDecimal): Int {
-        return if (number.compareTo(BigDecimal.ZERO) == 0)
+    private fun magnitudeOf(number: Double): Int {
+        return if (number == 0.0)
             1
         else
         // Double is not super accurate, but should be good enough
-            Math.floor(Math.log10(number.abs().toDouble())).toInt() + 1
+            Math.floor(Math.log10(abs(number))).toInt() + 1
     }
 
     val lsd  : Int?
@@ -126,7 +127,7 @@ class SciNumber {
         val result = op(backing, other.backing)
 
         val newLsd = minLsd(lsd, other.lsd)
-        val newMag = magnitudeOf(result)
+        val newMag = magnitudeOf(result.toDouble())
 
         return if (newLsd == null) {
             SciNumber(result, Precision.Infinite)
@@ -153,6 +154,8 @@ class SciNumber {
     fun pow(n: Int) = SciNumber(backing.pow(n, MathContext.DECIMAL128), precision) // Context needed here?
     fun abs() = SciNumber(backing.abs())
 
+    // Condition numbers:
+    // https://www.cl.cam.ac.uk/~jrh13/papers/transcendentals.pdf
     fun sin() = doubleFunction(Math::sin)
     fun cos() = doubleFunction(Math::cos)
     fun tan() = doubleFunction(Math::tan)
@@ -162,8 +165,16 @@ class SciNumber {
     fun asin() = doubleFunction(Math::asin)
     fun acos() = doubleFunction(Math::acos)
     fun atan() = doubleFunction(Math::atan)
+    fun csc() = doubleFunction(Math::asin)
+    fun sec() = doubleFunction(Math::acos)
+    fun cot() = doubleFunction(Math::atan)
 
-    private fun doubleFunction(op : (Double) -> Double) = SciNumber(BigDecimal(op(backing.toDouble()), MathContext.DECIMAL128), precision)
+    private fun doubleFunction(op : (Double) -> Double) : SciNumber {
+        val doubleValue = backing.toDouble()
+        val value = BigDecimal(op(doubleValue), MathContext.DECIMAL128)
+
+        return SciNumber(value, precision)
+    }
 
     override fun equals(other: Any?): Boolean = other is SciNumber && this.backing == other.backing && this.precision == other.precision
     override fun hashCode(): Int = backing.hashCode()

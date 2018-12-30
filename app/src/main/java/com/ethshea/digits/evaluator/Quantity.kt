@@ -50,6 +50,9 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     fun asin() = Quantity(value.asin(), unit)
     fun acos() = Quantity(value.acos(), unit)
     fun atan() = Quantity(value.atan(), unit)
+    fun sec() = Quantity(value.sec(), unit)
+    fun csc() = Quantity(value.csc(), unit)
+    fun cot() = Quantity(value.cot(), unit)
 
     override fun equals(other: Any?): Boolean =
         other is Quantity

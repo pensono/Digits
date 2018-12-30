@@ -79,7 +79,11 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
 
             "asin" to Quantity::asin,
             "acos" to Quantity::acos,
-            "atan" to Quantity::atan
+            "atan" to Quantity::atan,
+
+            "sec" to Quantity::sec,
+            "csc" to Quantity::csc,
+            "cot" to Quantity::cot
     )
 
     override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity> {

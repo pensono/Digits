@@ -5,7 +5,6 @@ Pre-release:
 - square root
 - Scientific notation button (*10^x, ᴇ)
 - Support multiple units of the same dimension (min/hr, ft/mile)
-- SigFigs for trig functions
 - Color customization
 - In-app purchase for pro mode
 - Clear all animation

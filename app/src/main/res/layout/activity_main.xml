@@ -79,8 +79,8 @@
                 android:layout_height="wrap_content"
                 android:columnCount="5">
 
-                <com.ethshea.digits.CalculatorButton app:primary="sin(|)" app:secondary="asin:asin(|);sinh:sinh(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
-                <com.ethshea.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos:acos(|);cosh:cosh(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="sin(|)" app:secondary="asin:asin(|);sinh:sinh(|);csc:csc(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
+                <com.ethshea.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos:acos(|);cosh:cosh(|);sec:sec(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
                 <com.ethshea.digits.CalculatorButton app:primary="log₁₀(|)" app:secondary="log₂:log₂(|);ln:ln(|)"  android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
                 <com.ethshea.digits.CalculatorButton app:primary="⁻¹" android:text="¹/ₓ" app:secondary="⁻⁰;⁻¹;⁻²;⁻³;⁻⁴;⁻⁵;⁻⁶;⁻⁷;⁻⁸;⁻⁹" style="@style/AppTheme.CalculatorButton.Advanced" />
                 <com.ethshea.digits.CalculatorButton app:primary="²" app:secondary="⁰;¹;²;³;⁴;⁵;⁶;⁷;⁸;⁹" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
