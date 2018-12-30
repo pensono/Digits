@@ -33,45 +33,45 @@ class HumanQuantityTest {
 
     @Test
     fun limitedHumanString() {
-        assertEquals("1.2…ᴇ-1", HumanQuantity(SciNumber(".1234567"), HumanUnit(mapOf())).humanString(7).string)
-        assertEquals("0.12345", HumanQuantity(SciNumber(".12345"), HumanUnit(mapOf())).humanString(7).string)
-        assertEquals("0.12345", HumanQuantity(SciNumber(".12345"), HumanUnit(mapOf())).humanString(10).string)
-        assertEquals("1.2…ᴇ-4", HumanQuantity(SciNumber(".00012345"), HumanUnit(mapOf())).humanString(7).string)
-        assertEquals("1.2345…ᴇ-4", HumanQuantity(SciNumber(".000123456"), HumanUnit(mapOf())).humanString(10).string)
+        assertEquals("1.2…ᴇ-1", HumanQuantity(SciNumber.Real(".1234567"), HumanUnit(mapOf())).humanString(7).string)
+        assertEquals("0.12345", HumanQuantity(SciNumber.Real(".12345"), HumanUnit(mapOf())).humanString(7).string)
+        assertEquals("0.12345", HumanQuantity(SciNumber.Real(".12345"), HumanUnit(mapOf())).humanString(10).string)
+        assertEquals("1.2…ᴇ-4", HumanQuantity(SciNumber.Real(".00012345"), HumanUnit(mapOf())).humanString(7).string)
+        assertEquals("1.2345…ᴇ-4", HumanQuantity(SciNumber.Real(".000123456"), HumanUnit(mapOf())).humanString(10).string)
 
-        assertEquals("12345", HumanQuantity(SciNumber("12345"), HumanUnit(mapOf())).humanString(7).string)
-        assertEquals("12345", HumanQuantity(SciNumber("12345"), HumanUnit(mapOf())).humanString(10).string)
+        assertEquals("12345", HumanQuantity(SciNumber.Real("12345"), HumanUnit(mapOf())).humanString(7).string)
+        assertEquals("12345", HumanQuantity(SciNumber.Real("12345"), HumanUnit(mapOf())).humanString(10).string)
 
-        assertEquals("1.234…ᴇ8", HumanQuantity(SciNumber("123456789"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("1.234…ᴇ8", HumanQuantity(SciNumber.Real("123456789"), HumanUnit(mapOf())).humanString(8).string)
 
         // Untested is small maxChars values < 4
     }
 
     @Test
     fun negativeLimitedHumanString() {
-        assertEquals("-1.2…ᴇ-1", HumanQuantity(SciNumber("-.1234567"), HumanUnit(mapOf())).humanString(8).string)
-        assertEquals("-0.12345", HumanQuantity(SciNumber("-.12345"), HumanUnit(mapOf())).humanString(8).string)
-        assertEquals("-0.12345", HumanQuantity(SciNumber("-.12345"), HumanUnit(mapOf())).humanString(11).string)
-        assertEquals("-1.2…ᴇ-4", HumanQuantity(SciNumber("-.00012345"), HumanUnit(mapOf())).humanString(8).string)
-        assertEquals("-1.2345…ᴇ-4", HumanQuantity(SciNumber("-.000123456"), HumanUnit(mapOf())).humanString(11).string)
+        assertEquals("-1.2…ᴇ-1", HumanQuantity(SciNumber.Real("-.1234567"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-0.12345", HumanQuantity(SciNumber.Real("-.12345"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-0.12345", HumanQuantity(SciNumber.Real("-.12345"), HumanUnit(mapOf())).humanString(11).string)
+        assertEquals("-1.2…ᴇ-4", HumanQuantity(SciNumber.Real("-.00012345"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-1.2345…ᴇ-4", HumanQuantity(SciNumber.Real("-.000123456"), HumanUnit(mapOf())).humanString(11).string)
 
-        assertEquals("-12345", HumanQuantity(SciNumber("-12345"), HumanUnit(mapOf())).humanString(8).string)
-        assertEquals("-12345", HumanQuantity(SciNumber("-12345"), HumanUnit(mapOf())).humanString(11).string)
+        assertEquals("-12345", HumanQuantity(SciNumber.Real("-12345"), HumanUnit(mapOf())).humanString(8).string)
+        assertEquals("-12345", HumanQuantity(SciNumber.Real("-12345"), HumanUnit(mapOf())).humanString(11).string)
 
-        assertEquals("-1.234…ᴇ8", HumanQuantity(SciNumber("-123456789"), HumanUnit(mapOf())).humanString(9).string)
+        assertEquals("-1.234…ᴇ8", HumanQuantity(SciNumber.Real("-123456789"), HumanUnit(mapOf())).humanString(9).string)
 
         // Untested is small maxChars values < 4
     }
 
     @Test
     fun addsZeroes() {
-        assertEquals("0.500", HumanQuantity(SciNumber(".5", sf(3)), HumanUnit(mapOf())).humanString().string)
-        assertEquals("5.00", HumanQuantity(SciNumber("5", sf(3)), HumanUnit(mapOf())).humanString().string)
-        assertEquals("5.00m", HumanQuantity(SciNumber("5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString().string)
+        assertEquals("0.500", HumanQuantity(SciNumber.Real(".5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("5.00", HumanQuantity(SciNumber.Real("5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("5.00m", HumanQuantity(SciNumber.Real("5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString().string)
 
-        assertEquals("-0.500", HumanQuantity(SciNumber("-.5", sf(3)), HumanUnit(mapOf())).humanString().string)
-        assertEquals("-5.00", HumanQuantity(SciNumber("-5", sf(3)), HumanUnit(mapOf())).humanString().string)
-        assertEquals("-5.00m", HumanQuantity(SciNumber("-5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString().string)
+        assertEquals("-0.500", HumanQuantity(SciNumber.Real("-.5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("-5.00", HumanQuantity(SciNumber.Real("-5", sf(3)), HumanUnit(mapOf())).humanString().string)
+        assertEquals("-5.00m", HumanQuantity(SciNumber.Real("-5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString().string)
     }
 
     @Test
@@ -114,10 +114,10 @@ class HumanQuantityTest {
     }
 
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int) {
-        Assert.assertEquals(expectedPos, HumanQuantity(SciNumber(value, sf(sigFigs)), HumanUnit(mapOf())).humanString().insigfigStart)
+        Assert.assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString().insigfigStart)
     }
 
     private fun testHumanString(expected: HumanQuantityString, value: String, sigFigs: Int, maxChars: Int) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(maxChars))
+        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(maxChars))
     }
 }

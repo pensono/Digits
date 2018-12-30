@@ -10,7 +10,6 @@ Pre-release:
 - Clear all animation
 
 Post-release:
-- Error message for tan(π/2)
 - Unit corrections
 - Small space between every three digits in the output (should be a setting)
 - Engineering vs scientific mode (also a setting, or an option in the main screen)
@@ -35,3 +34,4 @@ Post-release:
 - Gi/Mi/Ki prefixes
 - Properly round when a number is shortened
 - support for sin^-1()
+- Refactor magnitude so that 3 is 0 and .1 is -1

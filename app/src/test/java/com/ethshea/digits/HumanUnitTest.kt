@@ -41,9 +41,9 @@ class HumanUnitTest {
 
     @Test
     fun zero() {
-        assertEquals(HumanQuantity(SciNumber("0"), HumanUnit(mapOf())), humanize(Quantity(SciNumber("0"))))
-        assertEquals(HumanQuantity(SciNumber("0"), HumanUnit(mapOf(u("V") to 1))), humanize(Quantity(SciNumber("0"), u("V"))))
-        assertEquals(HumanQuantity(SciNumber("0"), HumanUnit(mapOf(u("V") to 1), p("m"))), humanize(Quantity(SciNumber("0"), p("m") + u("V"))))
+        assertEquals(HumanQuantity(SciNumber.Real("0"), HumanUnit(mapOf())), humanize(Quantity(SciNumber.Real("0"))))
+        assertEquals(HumanQuantity(SciNumber.Real("0"), HumanUnit(mapOf(u("V") to 1))), humanize(Quantity(SciNumber.Real("0"), u("V"))))
+        assertEquals(HumanQuantity(SciNumber.Real("0"), HumanUnit(mapOf(u("V") to 1), p("m"))), humanize(Quantity(SciNumber.Real("0"), p("m") + u("V"))))
     }
 
     @Test
@@ -71,7 +71,7 @@ class HumanUnitTest {
 
     @Test
     fun keepsPrecision() {
-        assertEquals(sf(4), humanize(Quantity(SciNumber("99.99"))).value.precision)
-        assertEquals(sf(4), humanize(Quantity(SciNumber("99.99"), u("m"))).value.precision)
+        assertEquals(sf(4), humanize(Quantity(SciNumber.Real("99.99"))).value.precision)
+        assertEquals(sf(4), humanize(Quantity(SciNumber.Real("99.99"), u("m"))).value.precision)
     }
 }

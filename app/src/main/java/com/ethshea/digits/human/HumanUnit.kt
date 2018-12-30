@@ -63,7 +63,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     // Use the one to round up and avoid 0 digits in the front (like in .123m)
     val prefixIndex = (prefixMagnitude - UnitSystem.prefixMagStart - 1) / 3
     val prefixExponent = (prefixIndex * 3) + UnitSystem.prefixMagStart
-    val prefixFactor = SciNumber(10).pow(prefixExponent)
+    val prefixFactor = SciNumber.Real(10).pow(prefixExponent)
     val prefixUnit = UnitSystem.prefixes[prefixIndex]
 
     val humanizedValue = quantity.value * quantity.unit.factor / prefixFactor

@@ -132,7 +132,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
         val parseablePrefixes = UnitSystem.prefixAbbreviations.filterValues { it.abbreviation != "" }
         val doubleUnits = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
         val unitQuantities = UnitSystem.unitAbbreviations.mapValues { Quantity(SciNumber.One, it.value)}
-        val constantQuantities = constants.mapValues { Quantity(SciNumber(it.value)) }
+        val constantQuantities = constants.mapValues { Quantity(SciNumber.Real(it.value)) }
         val alphabeticQuantities = constantQuantities + unitQuantities
 
         var nextExponentBase : Quantity? = null
@@ -193,7 +193,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                 }
                 is DigitsParser.NumericLiteralContext -> {
                     if (nextExponentBase == null) {
-                        val literal = Quantity(SciNumber(term.text))
+                        val literal = Quantity(SciNumber.Real(term.text))
                         value = value.invoke { v -> v * literal }
                         nextExponentBase = literal
                     } else {

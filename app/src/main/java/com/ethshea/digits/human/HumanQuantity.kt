@@ -38,7 +38,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
         } else {
             val magnitude = value.magnitude - 1
             val eNotation = if (magnitude == 0) "…" else "…ᴇ$magnitude"
-            val normalizedValue = value / SciNumber(10).pow(magnitude)
+            val normalizedValue = value / SciNumber.Real(10).pow(magnitude)
             val normalizedString = normalizedValue.valueString()
             val sizedString = normalizedString.substring(0, max(0, min(normalizedString.length, maxValueChars - eNotation.length)))
 

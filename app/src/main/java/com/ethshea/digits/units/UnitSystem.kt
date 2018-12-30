@@ -33,19 +33,19 @@ object UnitSystem { // Preferred Units?
 
     val units = listOf(
             AtomicHumanUnit("m", "Meters", null, length),
-//            AtomicHumanUnit("ft", "feet", length, SciNumber("3.28084")),
-//            AtomicHumanUnit("mi", "miles", length, SciNumber("0.000621371")),
-//            AtomicHumanUnit("L", "liters", length, SciNumber(1000).reciprocal()),
+//            AtomicHumanUnit("ft", "feet", length, Real("3.28084")),
+//            AtomicHumanUnit("mi", "miles", length, Real("0.000621371")),
+//            AtomicHumanUnit("L", "liters", length, Real(1000).reciprocal()),
 
             AtomicHumanUnit("rad", "Radians", "m/m", angle),
-            AtomicHumanUnit("°", "Degrees", "m/m", angle, SciNumber(Math.PI / 180.0)),
+            AtomicHumanUnit("°", "Degrees", "m/m", angle, SciNumber.Real(Math.PI / 180.0)),
             AtomicHumanUnit("sr", "Steradian", "m²/m²", solid_angle),
 
-//             AtomicHumanUnit("acre", "acres", area, SciNumber("4046.86")),
+//             AtomicHumanUnit("acre", "acres", area, Real("4046.86")),
 
             AtomicHumanUnit("s", "Seconds", null, time),
-//            AtomicHumanUnit("min", "minutes", time, SciNumber(60).reciprocal()),
-//            AtomicHumanUnit("hr", "hours", time, SciNumber(60 * 60).reciprocal()),
+//            AtomicHumanUnit("min", "minutes", time, Real(60).reciprocal()),
+//            AtomicHumanUnit("hr", "hours", time, Real(60 * 60).reciprocal()),
 
             AtomicHumanUnit("Hz", "Hertz", "s⁻¹", frequency),
             AtomicHumanUnit("g", "Grams", null, mass),
