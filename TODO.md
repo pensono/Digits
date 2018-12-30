@@ -1,23 +1,22 @@
 Pre-release:
-- Expressions such as "2π" or "eπ"
 - Change units by tapping on the answer preview
 - Spacing in the secondary buttons
 - Error message for tan(π/2)
-- support for sin^-1()
 - tangent button
 - square root
-- Scientific notation button (*10^x)
+- Scientific notation button (*10^x, ᴇ)
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - SigFigs for trig functions
-- Unit corrections
 - Color customization
 - In-app purchase for pro mode
 - Clear all animation
 
 Post-release:
+- Unit corrections
+- Small space between every three digits in the output (should be a setting)
+- Engineering vs scientific mode (also a setting, or an option in the main screen)
 - Report bug button
 - Suggest feature button
-- Small space between every three digits in the output
 - Animate secondary button appearing
 - Better job of showing sigfigs in input
 - Sigfigs for transindental numbers (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
@@ -25,7 +24,7 @@ Post-release:
 - Nonintegral powers
 - Unparenthesized functions
 - Calculation History
-- Undo button
+- Undo button (undo in history?)
 - Option: Always use scientific vs natural notation for the results
 - Truncated result preview uses engineering notation
 - Setting for engineering vs scientific notation
@@ -36,3 +35,4 @@ Post-release:
 - Abbreviation alias (for degree, abbreviated deg)
 - Gi/Mi/Ki prefixes
 - Properly round when a number is shortened
+- support for sin^-1()

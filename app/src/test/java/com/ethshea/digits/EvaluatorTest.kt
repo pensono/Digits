@@ -221,6 +221,11 @@ class EvaluatorTest {
     }
 
     @Test
+    fun justPrefixErrors() {
+        errorTest(Interval(0,0), "k")
+    }
+
+    @Test
     fun weirdInputGivesError() {
         anyErrorTest("+*4")
     }

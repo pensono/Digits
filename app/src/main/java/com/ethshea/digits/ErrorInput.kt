@@ -7,6 +7,7 @@ import android.widget.EditText
 import com.ethshea.digits.evaluator.ErrorMessage
 import android.graphics.Paint
 import android.graphics.Rect
+import java.lang.Math.min
 
 
 /**
@@ -51,7 +52,7 @@ class ErrorInput: EditText {
 
         for (error in errors) {
             val start = paint.measureText(text, 0, error.location.a)
-            val end = paint.measureText(text, 0, error.location.b + 1)
+            val end = paint.measureText(text, 0, min(error.location.b + 1, text.length))
             canvas.drawLine(left + start, underlineY, left + end, underlineY, underlinePaint)
         }
 

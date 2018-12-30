@@ -16,7 +16,7 @@ class TokenIterator(tokens: String, private val location: Interval) {
     private var speculations = Stack<Int>()
 
     val previousLocation
-        get() = Interval(location.a + previousPosition, location.a + position)
+        get() = Interval(location.a + previousPosition, location.a + position - 1) // b is inclusively indexed
 
     fun hasNext() = position < tokens.length
     val remaining get() = tokens.length - position
