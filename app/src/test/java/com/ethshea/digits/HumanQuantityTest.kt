@@ -108,6 +108,11 @@ class HumanQuantityTest {
         testHumanString(HumanQuantityString("1.333333…", 6, 8), "1.333333333", 5, 9)
     }
 
+    @Test
+    fun zeroCharacters() {
+        testHumanString(HumanQuantityString("", 0, 0), "-1234.56789", 10, 0)
+    }
+
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int) {
         Assert.assertEquals(expectedPos, HumanQuantity(SciNumber(value, sf(sigFigs)), HumanUnit(mapOf())).humanString().insigfigStart)
     }

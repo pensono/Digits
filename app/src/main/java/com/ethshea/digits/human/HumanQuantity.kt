@@ -2,6 +2,7 @@ package com.ethshea.digits.human
 
 import com.ethshea.digits.evaluator.Precision
 import com.ethshea.digits.evaluator.SciNumber
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -18,6 +19,10 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
      * @param maxChars must be non-negative
      */
     fun humanString(maxChars: Int) : HumanQuantityString {
+        if (maxChars == 0) {
+            return HumanQuantityString("", 0, 0)
+        }
+
         val unitString =
                 if (unit.abbreviation.length > maxChars)
                     ""
@@ -35,10 +40,11 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
             val eNotation = if (magnitude == 0) "…" else "…ᴇ$magnitude"
             val normalizedValue = value / SciNumber(10).pow(magnitude)
             val normalizedString = normalizedValue.valueString()
-            val sizedString = normalizedString.substring(0, min(normalizedString.length, maxValueChars - eNotation.length))
+            val sizedString = normalizedString.substring(0, max(0, min(normalizedString.length, maxValueChars - eNotation.length)))
 
             val insigfigStartPos = sigfigEndPos(sizedString, value.precision)
-            HumanQuantityString(sizedString + eNotation + unitString, insigfigStartPos, sizedString.length)
+            val combinedString = sizedString + eNotation + unitString
+            HumanQuantityString(combinedString.substring(0, maxChars), insigfigStartPos, sizedString.length)
         }
     }
 

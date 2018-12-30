@@ -40,20 +40,7 @@ class MainActivity : Activity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                try {
-                    val parseResult = evaluateExpression(input.text.toString())
-
-                    val humanizedQuantity = humanize(parseResult.value)
-                    val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
-
-                    result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
-                    input.errors = parseResult.errors
-                } catch (e: TimeoutCancellationException) {
-                    result_preview.text = "Timeout"
-                } catch (e: Exception) {
-                    result_preview.text = "Error"
-                    Log.e(TAG, "Calculation error", e)
-                }
+                updatePreview()
             }
         })
 
@@ -69,6 +56,23 @@ class MainActivity : Activity() {
         }
 
         input.showSoftInputOnFocus = false
+
+        result_preview.post { updatePreview() }
+    }
+
+    private fun updatePreview() {
+        try {
+            val parseResult = evaluateExpression(input.text.toString())
+
+            val humanizedQuantity = humanize(parseResult.value)
+            val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
+
+            result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
+            input.errors = parseResult.errors
+        } catch (e: Exception) {
+            result_preview.text = "Error"
+            Log.e(TAG, "Calculation error", e)
+        }
     }
 
     private fun centerScroll(container: View) {

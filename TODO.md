@@ -1,7 +1,6 @@
 Pre-release:
 - Change units by tapping on the answer preview
 - Spacing in the secondary buttons
-- Error message for tan(π/2)
 - tangent button
 - square root
 - Scientific notation button (*10^x, ᴇ)
@@ -12,6 +11,7 @@ Pre-release:
 - Clear all animation
 
 Post-release:
+- Error message for tan(π/2)
 - Unit corrections
 - Small space between every three digits in the output (should be a setting)
 - Engineering vs scientific mode (also a setting, or an option in the main screen)
