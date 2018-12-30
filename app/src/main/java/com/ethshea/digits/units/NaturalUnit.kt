@@ -6,6 +6,7 @@ import kotlin.math.absoluteValue
 
 
 /**
+ * @param factor must be greater than zero
  * @author Ethan
  */
 open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open val factor: SciNumber.Real) {
@@ -25,6 +26,14 @@ open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open v
 
     operator fun unaryMinus() =
             NaturalUnit(dimensions.mapValues { e -> -e.value }, factor.reciprocal())
+
+    fun half() =
+            NaturalUnit(dimensions.mapValues { entry -> entry.value / 2 }, factor.sqrt() as SciNumber.Real)
+
+    /***
+     * @return true iff all unit exponents are even
+     */
+    fun isEven() = dimensions.all { it.value % 2 == 0 }
 
     override fun equals(other: Any?) =
             other is NaturalUnit && representationEqual(other)

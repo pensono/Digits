@@ -55,6 +55,7 @@ sealed class SciNumber {
     abstract operator fun unaryMinus() : SciNumber
 
     abstract fun pow(n: Int): SciNumber
+    abstract fun sqrt() : SciNumber
 
     abstract fun sin() : SciNumber
     abstract fun cos() : SciNumber
@@ -195,6 +196,11 @@ sealed class SciNumber {
         override operator fun unaryMinus() = Real(-backing, precision)
         operator fun compareTo(other: Real) = backing.compareTo(other.backing)
         override fun pow(n: Int) = Real(backing.pow(n, MathContext.DECIMAL128), precision) // Context needed here?
+        override fun sqrt() =
+                if (backing >= BigDecimal.ZERO)
+                    Real(BigDecimal.valueOf(Math.sqrt(backing.toDouble())), precision)
+                else
+                    Nan // Until imaginary numbers are implemented
         fun abs() = Real(backing.abs())
 
         // Condition numbers:
@@ -255,6 +261,7 @@ sealed class SciNumber {
         override operator fun unaryMinus() = this
 
         override fun pow(n: Int): SciNumber = this
+        override fun sqrt(): SciNumber = this
 
         override fun sin() = this
         override fun cos() = this

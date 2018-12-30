@@ -69,22 +69,32 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
     )
 
     private val functions = mapOf(
-            "sin" to Quantity::sin,
-            "cos" to Quantity::cos,
-            "tan" to Quantity::tan,
+            "sin" to wrapQuantityOperation(Quantity::sin),
+            "cos" to wrapQuantityOperation(Quantity::cos),
+            "tan" to wrapQuantityOperation(Quantity::tan),
 
-            "sinh" to Quantity::sinh,
-            "cosh" to Quantity::cosh,
-            "tanh" to Quantity::tanh,
+            "sinh" to wrapQuantityOperation(Quantity::sinh),
+            "cosh" to wrapQuantityOperation(Quantity::cosh),
+            "tanh" to wrapQuantityOperation(Quantity::tanh),
 
-            "asin" to Quantity::asin,
-            "acos" to Quantity::acos,
-            "atan" to Quantity::atan,
+            "asin" to wrapQuantityOperation(Quantity::asin),
+            "acos" to wrapQuantityOperation(Quantity::acos),
+            "atan" to wrapQuantityOperation(Quantity::atan),
 
-            "sec" to Quantity::sec,
-            "csc" to Quantity::csc,
-            "cot" to Quantity::cot
+            "sec" to wrapQuantityOperation(Quantity::sec),
+            "csc" to wrapQuantityOperation(Quantity::csc),
+            "cot" to wrapQuantityOperation(Quantity::cot),
+
+            "√" to { quantity, interval ->
+                if (quantity.unit.isEven())
+                    ParseResult(quantity.sqrt(), interval)
+                else
+                    ParseResult(quantity.sqrt(), interval, ErrorMessage("Unit is not even", interval))
+            }
     )
+
+    fun wrapQuantityOperation(operation: (Quantity) -> Quantity) : (Quantity, Interval) -> ParseResult<Quantity> =
+            { quantity, interval ->  ParseResult(operation(quantity), interval) }
 
     override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity> {
         val argument = ctx.argument?.accept(this) ?: ParseResult(Quantity.Zero, ctx.sourceInterval, "Inferred lhs in unary -")
@@ -210,7 +220,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                     }
                 }
                 is DigitsParser.ParenthesizedExpressionContext -> {
-                    val innerValue = term.expression()?.accept(this)
+                    val innerValue = term.inner?.accept(this)
                     if (innerValue == null) {
                         value = value.error(ErrorMessage("Empty parens", term.sourceInterval))
                     } else {
@@ -225,9 +235,9 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                                         .error(ErrorMessage("Unknown function/constant", functionInterval!!))
                                 nextExponentBase = innerValue.value
                             } else {
-                                val result = function(innerValue.value)
-                                value = value.combine(innerValue, ctx.sourceInterval) { v, t -> v * result }
-                                nextExponentBase = result
+                                val result = function(innerValue.value, term.inner.sourceInterval)
+                                value = value.combine(result, ctx.sourceInterval) { v, t -> v * t }
+                                nextExponentBase = result.value
                             }
                         }
                     }

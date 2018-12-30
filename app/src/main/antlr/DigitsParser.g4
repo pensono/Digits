@@ -13,7 +13,7 @@ expression
 // Terms can be juxtaposed, as in 2eπ
 term
     : Letter+ # Alphabetic
-    | LPAREN expression RPAREN # ParenthesizedExpression
+    | LPAREN inner=expression RPAREN # ParenthesizedExpression
     | value # NumericLiteral
     | SUPERSCRIPT_MINUS? Superscript+ # TermExponent
     ;

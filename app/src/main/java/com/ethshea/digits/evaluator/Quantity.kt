@@ -40,6 +40,8 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
         return Quantity(value.pow(exponent), unit.times(exponent))
     }
 
+    fun sqrt() = Quantity(value.sqrt(), unit.half())
+
     // Really not sure what to do with units on this one
     fun sin() = Quantity(value.sin(), unit)
     fun cos() = Quantity(value.cos(), unit)

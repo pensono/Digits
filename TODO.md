@@ -34,3 +34,5 @@ Post-release:
 - Properly round when a number is shortened
 - support for sin^-1()
 - Refactor magnitude so that 3 is 0 and .1 is -1
+- Support for imaginary numbers
+- Support for rational unit exponents

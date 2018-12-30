@@ -236,6 +236,25 @@ class EvaluatorTest {
         errorTest(Interval(2,5), "4m6666")
     }
 
+    @Test
+    fun squareRoot() {
+        evalTest(Quantity(SciNumber.Real("0")), "√(0)")
+        evalTest(Quantity(SciNumber.Real("2")), "√(4)")
+        evalTest(Quantity(SciNumber.Nan), "√(-4)") // Should eventually be 2i
+
+        evalTest(Quantity(SciNumber.Real("0")), "√(0m2)")
+        evalTest(Quantity(SciNumber.Real("2")), "√(4m2)")
+        evalTest(Quantity(SciNumber.Nan), "√(-4m2)") // Should eventually be 2im
+    }
+
+    @Test
+    fun squareRootUnEvenUnitsFails() {
+        // Unit is not even. This should fail until rational unit exponents are implemented
+        errorTest(Interval(2,3), "√(0m)")
+        errorTest(Interval(2,3), "√(4m)")
+        errorTest(Interval(2,4), "√(-4m)")
+    }
+
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
