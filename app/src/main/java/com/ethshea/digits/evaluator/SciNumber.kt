@@ -37,6 +37,7 @@ sealed class Precision : Comparable<Precision> {
  * @author Ethan
  */
 sealed class SciNumber {
+
     /***
      * The number of significant figures, or infinite precision
      */

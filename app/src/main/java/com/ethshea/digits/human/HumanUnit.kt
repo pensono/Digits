@@ -30,14 +30,14 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
 
     fun withPrefix(prefix: PrefixUnit) = HumanUnit(components, prefix)
 
-    private fun incorperateUnit(other: AtomicHumanUnit, exponent: Int): HumanUnit {
+    fun incorperateUnit(other: AtomicHumanUnit, exponent: Int): HumanUnit {
         val newMap = HashMap(components)
         newMap[other] = newMap.getOrDefault(other, 0) + exponent
-        return HumanUnit(newMap)
+        return HumanUnit(newMap, prefix)
     }
 
     override fun equals(other: Any?) =
-            other is HumanUnit && other.components == components
+            other is HumanUnit && other.components == components && other.prefix == prefix
 
     override fun hashCode(): Int = components.hashCode()
 
@@ -102,3 +102,10 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     val extraUnit = AtomicHumanUnit("Unk", "Unknown", null, quantity.unit.dimensions, quantity.unit.factor)
     return HumanQuantity(humanizedValue, HumanUnit(mapOf(extraUnit to 1)))
 }
+
+/**
+ *
+ * @param quantity must be dimensionally equal to unit
+ */
+fun convert(quantity: Quantity, unit: HumanUnit) : HumanQuantity =
+    HumanQuantity(quantity.value * (quantity.unit.factor / unit.prefix.factor), unit)

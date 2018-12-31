@@ -74,7 +74,7 @@ object UnitSystem { // Preferred Units?
             PrefixUnit("n", "Nano", "1e-9"),
             PrefixUnit("μ", "Micro", "1e-6"),
             PrefixUnit("m", "Milli", "1e-3"),
-            PrefixUnit("", "One", "1e0"),
+            PrefixUnit.One,
             PrefixUnit("k", "Kilo", "1e3"),
             PrefixUnit("M", "Mega", "1e6"),
             PrefixUnit("G", "Giga", "1e9"),

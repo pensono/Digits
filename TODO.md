@@ -1,5 +1,5 @@
 Pre-release:
-- Change units by tapping on the answer preview
+- Allow the unit to be changed to something like mm
 - Spacing in the secondary buttons
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - Color customization

@@ -72,6 +72,8 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
         }
         return insigfigStartPos
     }
+
+    override fun equals(other: Any?): Boolean = other is HumanQuantity && other.unit == unit && other.value.valueEqual(value)
 }
 
 data class HumanQuantityString(val string: String, val insigfigStart: Int, val insigfigEnd: Int)

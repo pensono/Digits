@@ -17,11 +17,8 @@ import android.widget.HorizontalScrollView
 import android.widget.ScrollView
 import android.widget.TextView
 import com.ethshea.digits.evaluator.SciNumber
-import com.ethshea.digits.human.HumanQuantity
 import com.ethshea.digits.evaluator.evaluateExpression
-import com.ethshea.digits.human.AtomicHumanUnit
-import com.ethshea.digits.human.HumanUnit
-import com.ethshea.digits.human.humanize
+import com.ethshea.digits.human.*
 import com.ethshea.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -59,12 +56,13 @@ class MainActivity : Activity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 try {
-                    val parseResult = evaluateExpression(input.text.toString())
-                    val unit = parseResult.value.unit
+                    val unit = parseHumanUnit(unit_input.text.toString()) ?: return
 
                     if (unit.dimensionallyEqual(humanizedQuantity.unit)) {
-                        editingUnit = false
+                        preferredUnits[unit.dimensions] = unit
                         unit_input.text.clear()
+                        editingUnit = false
+                        updatePreview()
                     }
                 } catch (e: Exception) {
                     result_preview.text = "Error"
@@ -221,7 +219,8 @@ class MainActivity : Activity() {
             try {
                 val parseResult = evaluateExpression(input.text.toString())
 
-                humanizedQuantity = humanize(parseResult.value)
+                val preferredUnit = preferredUnits[parseResult.value.unit.dimensions]
+                humanizedQuantity = if (preferredUnit == null) humanize(parseResult.value) else convert(parseResult.value, preferredUnit)
                 val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
 
                 result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
