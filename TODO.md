@@ -34,3 +34,5 @@ Post-release:
 - Refactor magnitude so that 3 is 0 and .1 is -1
 - Support for imaginary numbers
 - Support for rational unit exponents
+- Persist preferred unit settings
+- Persist settings

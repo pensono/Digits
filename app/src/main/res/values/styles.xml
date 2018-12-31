@@ -14,12 +14,11 @@
     <style name="AppTheme.Display" parent="android:Widget.Material.EditText">
         <item name="android:gravity">end|bottom</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:paddingEnd">10dp</item>
     </style>
 
     <style name="AppTheme.Display.Preview" parent="AppTheme.Display">
         <item name="android:textColor">@color/secondary_text</item>
-        <item name="android:paddingStart">10dp</item>
+        <item name="android:textSize">36dp</item>
     </style>
 
     <style name="AppTheme.BaseCalculatorButton" parent="android:Widget.Material.Button.Borderless">
@@ -85,10 +84,9 @@
         <item name="android:elevation">4dp</item>
     </style>
 
-    <style name="AppTheme.MenuButton">
-        <item name="android:src">@drawable/ic_menu_black_24dp</item>
+    <style name="AppTheme.ActionButton">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:contentDescription">@string/open_side_menu</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">12dp</item>
     </style>
 </resources>

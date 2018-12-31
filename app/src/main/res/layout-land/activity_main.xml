@@ -36,18 +36,41 @@
                     style="@style/AppTheme.Display"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:inputType="text|textNoSuggestions"
-                    android:textSize="60dp" />
+                    android:textSize="36dp" />
 
-                <TextView
-                    android:id="@+id/result_preview"
-                    style="@style/AppTheme.Display.Preview"
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="30dp" />
+                    android:layout_height="wrap_content">
+                    <ImageButton
+                        style="@style/AppTheme.ActionButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_swap_vertical_bold_grey600_24dp"
+                        android:onClick="toggleUnitConversion"/>
+                    <TextView
+                        android:id="@+id/result_preview"
+                        style="@style/AppTheme.Display.Preview"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="8dp"
+                        android:onClick="toggleUnitConversion"/>
+
+                    <EditText
+                        android:id="@+id/unit_input"
+                        style="@style/AppTheme.Display.Preview"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="48dp"
+                        android:paddingEnd="8dp"
+                        android:cursorVisible="true"
+                        android:inputType="text|textNoSuggestions" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -126,12 +149,18 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageButton android:onClick="openSideMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            style="@style/AppTheme.MenuButton"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                style="@style/AppTheme.ActionButton"
+                android:src="@drawable/ic_more_vert_black_grey600_24dp"
+                android:onClick="openSideMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
     </RelativeLayout>
 
         <!-- Container for contents of drawer - use NavigationView to make configuration easier -->

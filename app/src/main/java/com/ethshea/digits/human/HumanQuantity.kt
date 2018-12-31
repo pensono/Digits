@@ -12,8 +12,10 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
         val valueString = value.valueString()
         val insigfigStartPos = sigfigEndPos(valueString, value.precision)
 
-        return HumanQuantityString(valueString + unit.abbreviation, insigfigStartPos, valueString.length)
+        return HumanQuantityString(valueString + unitString(), insigfigStartPos, valueString.length)
     }
+
+    fun unitString() : String = unit.abbreviation
 
     /**
      * @param maxChars must be non-negative
@@ -24,10 +26,10 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
         }
 
         val unitString =
-                if (unit.abbreviation.length > maxChars)
+                if (unitString().length > maxChars)
                     ""
                 else
-                    unit.abbreviation
+                    unitString()
         val maxValueChars = maxChars - unitString.length
 
         val regularString = value.valueString()

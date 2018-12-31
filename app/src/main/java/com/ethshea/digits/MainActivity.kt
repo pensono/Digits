@@ -16,19 +16,27 @@ import android.view.*
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
 import android.widget.TextView
+import com.ethshea.digits.evaluator.SciNumber
 import com.ethshea.digits.human.HumanQuantity
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.human.AtomicHumanUnit
+import com.ethshea.digits.human.HumanUnit
 import com.ethshea.digits.human.humanize
 import com.ethshea.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 
 
 class MainActivity : Activity() {
     val TAG = "Digits_MainActivity"
     val history = mutableListOf<HistoryItem>()
+    val preferredUnits = mutableMapOf<Map<String, Int>, HumanUnit>()
+
     var floating : View? = null
+    var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
+    var editingUnit = false
+
+    val editingInput
+        get() = if (editingUnit) unit_input else input
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +48,33 @@ class MainActivity : Activity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                editingUnit = false
                 updatePreview()
             }
         })
 
-        displayUnits(UnitSystem.unitAbbreviations.values, unit_selector)
-        displayUnits(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
+        unit_input.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                try {
+                    val parseResult = evaluateExpression(input.text.toString())
+                    val unit = parseResult.value.unit
+
+                    if (unit.dimensionallyEqual(humanizedQuantity.unit)) {
+                        editingUnit = false
+                        unit_input.text.clear()
+                    }
+                } catch (e: Exception) {
+                    result_preview.text = "Error"
+                    Log.e(TAG, "Unit parsing error", e)
+                }
+            }
+        })
+
+        populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
+        populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
 
         disciplines.forEach { discipline ->
@@ -56,33 +85,9 @@ class MainActivity : Activity() {
         }
 
         input.showSoftInputOnFocus = false
+        unit_input.showSoftInputOnFocus = false
 
         result_preview.post { updatePreview() }
-    }
-
-    private fun updatePreview() {
-        try {
-            val parseResult = evaluateExpression(input.text.toString())
-
-            val humanizedQuantity = humanize(parseResult.value)
-            val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
-
-            result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
-            input.errors = parseResult.errors
-        } catch (e: Exception) {
-            result_preview.text = "Error"
-            Log.e(TAG, "Calculation error", e)
-        }
-    }
-
-    private fun centerScroll(container: View) {
-        if (container is HorizontalScrollView) {
-            val location = (prefix_selector.width - container.width) / 2
-            container.scrollTo(location, 0)
-        } else if (container is ScrollView) { // No subclass relation between these, sad.
-            val location = (prefix_selector.height - container.height) / 2
-            container.scrollTo(0, location)
-        }
     }
 
     fun openSideMenu(view: View) {
@@ -91,29 +96,34 @@ class MainActivity : Activity() {
 
     fun calculatorButtonClick(button: View) {
         val buttonCommand = (button as CalculatorButton).primaryCommand
-        if (buttonCommand == "DEL") {
-            if (input.selectionStart == input.selectionEnd && input.selectionStart != 0) {
-                input.text.replace(input.selectionStart-1, input.selectionStart, "")
-            } else {
-                input.text.replace(input.selectionStart, input.selectionEnd, "")
-            }
-        } else if (buttonCommand == "ENT") {
+        if (buttonCommand == "ENT") {
             history += HistoryItem(input.text.toString(), result_preview.text.toString())
-            input.text.replace(0, input.text.length, result_preview.text)
+            input.text.replace(0, editingInput.text.length, humanizedQuantity.humanString().string)
+        } else if (buttonCommand == "DEL") {
+            if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
+                editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
+            } else {
+                editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, "")
+            }
         } else {
             val insertText = buttonCommand.replace("|", "")
-            input.text.replace(input.selectionStart, input.selectionEnd, insertText)
+            editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, insertText)
             if (buttonCommand.contains('|')) {
                 val offset = buttonCommand.indexOf('|')
-                input.setSelection(input.selectionStart + offset - insertText.length)
+                editingInput.setSelection(editingInput.selectionStart + offset - insertText.length)
             }
         }
+    }
+
+    fun toggleUnitConversion(view: View) {
+        editingUnit = !editingUnit
+        updatePreview()
     }
 
     // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
         if (button.primaryCommand == "DEL") {
-            input.text.clear()
+            editingInput.text.clear()
             return
         }
 
@@ -198,6 +208,31 @@ class MainActivity : Activity() {
         return layout
     }
 
+    private fun updatePreview() {
+        if (editingUnit) {
+            unit_input.visibility = View.VISIBLE
+            unit_input.requestFocus()
+
+            val hexColor = hexStringForColor(R.color.detail_text)
+            val previewText = "<font color='$hexColor'>Convert </font>${humanizedQuantity.unitString()}<font color='$hexColor'> to:</font>"
+            result_preview.setText(htmlToSpannable(previewText), TextView.BufferType.SPANNABLE)
+        } else {
+            unit_input.visibility = View.GONE
+            try {
+                val parseResult = evaluateExpression(input.text.toString())
+
+                humanizedQuantity = humanize(parseResult.value)
+                val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
+
+                result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
+                input.errors = parseResult.errors
+            } catch (e: Exception) {
+                result_preview.text = "Error"
+                Log.e(TAG, "Calculation error", e)
+            }
+        }
+    }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val result = super.dispatchTouchEvent(ev)
 
@@ -208,7 +243,7 @@ class MainActivity : Activity() {
         return result
     }
 
-    fun displayUnits(units : Collection<AtomicHumanUnit>, container: ViewGroup) {
+    fun populateUnitSelector(units : Collection<AtomicHumanUnit>, container: ViewGroup) {
         container.removeAllViews()
         for (unit in units) {
             val newButton = layoutInflater.inflate(R.layout.button_unit, null) as CalculatorButton
@@ -232,8 +267,18 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun centerScroll(container: View) {
+        if (container is HorizontalScrollView) {
+            val location = (prefix_selector.width - container.width) / 2
+            container.scrollTo(location, 0)
+        } else if (container is ScrollView) { // No subclass relation between these, sad.
+            val location = (prefix_selector.height - container.height) / 2
+            container.scrollTo(0, location)
+        }
+    }
+
     private fun formatResultForDisplay(humanQuantity: HumanQuantity, colorResourceId: Int) : Spanned {
-        val colorStr = ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
+        val colorStr = hexStringForColor(colorResourceId)
 
         // Find something that fits
         // This loop may potentially run quite a few times if the starting number is very
@@ -246,20 +291,27 @@ class MainActivity : Activity() {
 
         val coloredText = humanString.string
                 .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
-                .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='#$colorStr'>")
+                .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='$colorStr'>")
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
+        return htmlToSpannable(coloredText)
+    }
+
+    private fun htmlToSpannable(coloredText: String): Spanned {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(coloredText,  Html.FROM_HTML_MODE_LEGACY)
+            Html.fromHtml(coloredText, Html.FROM_HTML_MODE_LEGACY)
         } else {
             Html.fromHtml(coloredText)
         }
     }
 
+    private fun hexStringForColor(colorResourceId: Int) =
+            '#' + ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
+
     private fun disciplineListener(discipline: Discipline): MenuItem.OnMenuItemClickListener =
         MenuItem.OnMenuItemClickListener {
             drawer_layout.closeDrawers()
-            displayUnits(discipline.units, unit_selector)
+            populateUnitSelector(discipline.units, unit_selector)
             true
         }
 
