@@ -36,3 +36,4 @@ Post-release:
 - Support for rational unit exponents
 - Persist preferred unit settings
 - Persist settings
+- Short and long scale names for the unit prefixes

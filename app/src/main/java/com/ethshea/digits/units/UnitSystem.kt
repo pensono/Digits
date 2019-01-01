@@ -61,26 +61,31 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("S", "Siemens", "Ω⁻¹", conductance),
             AtomicHumanUnit("F", "Farads", "C/V", capacitance),
             AtomicHumanUnit("W", "Watts", "J/s", power),
-            AtomicHumanUnit("T", "Tesla", "Wb/m²", magnetic_flux_density),
-            AtomicHumanUnit("Wb", "Weber", "Vs", magnetic_flux),
-            AtomicHumanUnit("H", "Henry", "Wb/A", inductance),
-            AtomicHumanUnit("C", "Coulomb", "sA", charge)
+            AtomicHumanUnit("T", "Teslas", "Wb/m²", magnetic_flux_density),
+            AtomicHumanUnit("Wb", "Webers", "Vs", magnetic_flux),
+            AtomicHumanUnit("H", "Henries", "Wb/A", inductance),
+            AtomicHumanUnit("C", "Coulombs", "sA", charge)
     )
 
-    val prefixMagStart = -15
+    val prefixMagStart = -24
     val prefixes = listOf(
-            PrefixUnit("f", "Femto", "1e-15"),
-            PrefixUnit("p", "Pico", "1e-12"),
-            PrefixUnit("n", "Nano", "1e-9"),
-            PrefixUnit("μ", "Micro", "1e-6"),
-            PrefixUnit("m", "Milli", "1e-3"),
+            PrefixUnit("y", "Yocto", "1e-24", "Septillionth"),
+            PrefixUnit("z", "Zepto", "1e-21", "Sextillionth"),
+            PrefixUnit("a", "Atto", "1e-18", "Quintillionth"),
+            PrefixUnit("f", "Femto", "1e-15", "Quadrillionth"),
+            PrefixUnit("p", "Pico", "1e-12", "Billionth"),
+            PrefixUnit("n", "Nano", "1e-9", "Trillionth"),
+            PrefixUnit("μ", "Micro", "1e-6", "Millionth"),
+            PrefixUnit("m", "Milli", "1e-3", "Thousandth"),
             PrefixUnit.One,
-            PrefixUnit("k", "Kilo", "1e3"),
-            PrefixUnit("M", "Mega", "1e6"),
-            PrefixUnit("G", "Giga", "1e9"),
-            PrefixUnit("T", "Tera", "1e12"),
-            PrefixUnit("P", "Peta", "1e15"),
-            PrefixUnit("E", "Exa", "1e18")
+            PrefixUnit("k", "Kilo", "1e3", "Thousand"),
+            PrefixUnit("M", "Mega", "1e6", "Million"),
+            PrefixUnit("G", "Giga", "1e9", "Billion"),
+            PrefixUnit("T", "Tera", "1e12", "Trillion"),
+            PrefixUnit("P", "Peta", "1e15", "Quadrillion"),
+            PrefixUnit("E", "Exa", "1e18", "Quintillion"),
+            PrefixUnit("Z", "Zetta", "1e21", "Sextillion"),
+            PrefixUnit("Y", "Yotta", "1e24", "Septillion")
     )
 
     val unitAbbreviations = units.associateBy(AtomicHumanUnit::abbreviation)
