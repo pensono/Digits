@@ -275,6 +275,11 @@ class EvaluatorTest {
         evalTest(Quantity(SciNumber.Real("0")), "√(0m2)")
         evalTest(Quantity(SciNumber.Real("2")), "√(4m2)")
         evalTest(Quantity(SciNumber.Nan), "√(-4m2)") // Should eventually be 2im
+
+        // Alternate name
+        evalTest(Quantity(SciNumber.Real("0")), "sqrt(0)")
+        evalTest(Quantity(SciNumber.Real("2")), "sqrt(4)")
+        evalTest(Quantity(SciNumber.Nan), "sqrt(-4)") // Should eventually be 2i
     }
 
     @Test

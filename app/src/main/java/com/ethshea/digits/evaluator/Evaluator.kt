@@ -85,13 +85,15 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
             "csc" to wrapQuantityOperation(Quantity::csc),
             "cot" to wrapQuantityOperation(Quantity::cot),
 
-            "√" to { quantity, interval ->
-                if (quantity.unit.isEven())
-                    ParseResult(quantity.sqrt(), interval)
-                else
-                    ParseResult(quantity.sqrt(), interval, ErrorMessage("Unit is not even", interval))
-            }
+            "√" to ::sqrt,
+            "sqrt" to ::sqrt
     )
+
+    private fun sqrt(quantity: Quantity, interval: Interval) =
+        if (quantity.unit.isEven())
+            ParseResult(quantity.sqrt(), interval)
+        else
+            ParseResult(quantity.sqrt(), interval, ErrorMessage("Unit is not even", interval))
 
     fun wrapQuantityOperation(operation: (Quantity) -> Quantity) : (Quantity, Interval) -> ParseResult<Quantity> =
             { quantity, interval ->  ParseResult(operation(quantity), interval) }
