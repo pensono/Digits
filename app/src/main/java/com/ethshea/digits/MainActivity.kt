@@ -5,7 +5,6 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.view.GravityCompat
 import android.text.Editable
 import android.text.Html
 import android.text.Spanned
@@ -13,14 +12,13 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
-import android.widget.HorizontalScrollView
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
 import com.ethshea.digits.evaluator.SciNumber
 import com.ethshea.digits.evaluator.evaluateExpression
 import com.ethshea.digits.human.*
 import com.ethshea.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.button_area.*
 
 
 class MainActivity : Activity() {
@@ -75,21 +73,18 @@ class MainActivity : Activity() {
         populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
 
-        disciplines.forEach { discipline ->
-            val item = nav_view.menu.add(R.id.discipline_menu_group, Menu.NONE, Menu.NONE, discipline.nameResource)
-            item.setOnMenuItemClickListener(disciplineListener(discipline))
-            if (discipline.iconResource != 0)
-                item.setIcon(discipline.iconResource)
+        discipline_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
+        discipline_dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                populateUnitSelector(disciplines[pos].units, unit_selector)
+            }
         }
 
         input.showSoftInputOnFocus = false
         unit_input.showSoftInputOnFocus = false
 
         result_preview.post { updatePreview() }
-    }
-
-    fun openSideMenu(view: View) {
-        drawer_layout.openDrawer(GravityCompat.START)
     }
 
     fun calculatorButtonClick(button: View) {
@@ -116,6 +111,12 @@ class MainActivity : Activity() {
     fun toggleUnitConversion(view: View) {
         editingUnit = !editingUnit
         updatePreview()
+    }
+
+    fun openPopupMenu(view: View) {
+        val popup = PopupMenu(this, view, Gravity.NO_GRAVITY)
+        popup.inflate(R.menu.popup_menu)
+        popup.show()
     }
 
     // It would be pretty schweet if this was in the CalculatorButton class itself
@@ -306,13 +307,6 @@ class MainActivity : Activity() {
 
     private fun hexStringForColor(colorResourceId: Int) =
             '#' + ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
-
-    private fun disciplineListener(discipline: Discipline): MenuItem.OnMenuItemClickListener =
-        MenuItem.OnMenuItemClickListener {
-            drawer_layout.closeDrawers()
-            populateUnitSelector(discipline.units, unit_selector)
-            true
-        }
 
     companion object {
         // Kinda weird for this to be public, but it makes it testable

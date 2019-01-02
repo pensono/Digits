@@ -5,6 +5,7 @@ Pre-release:
 - Color customization
 - In-app purchase for pro mode
 - Clear all animation
+- Engineering/Scientific mode
 
 Post-release:
 - Unit corrections

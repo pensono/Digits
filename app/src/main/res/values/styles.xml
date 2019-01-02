@@ -89,4 +89,13 @@
         <item name="android:contentDescription">@string/open_side_menu</item>
         <item name="android:padding">12dp</item>
     </style>
+
+    <style name="AppTheme.InlineSetting" parent="android:Widget.Material.Button.Borderless">
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
 </resources>

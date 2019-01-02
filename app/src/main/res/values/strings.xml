@@ -17,4 +17,5 @@
     <string name="customize">Customize theme</string>
     <string name="settings">Settings</string>
     <string name="open_side_menu">Open side menu</string>
+    <string name="discipline_basic">Basic</string>
 </resources>
