@@ -6,7 +6,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '27.0.3'
     defaultConfig {
-        applicationId "com.ethshea.digits"
+        applicationId "com.monotonic.digits"
         minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
