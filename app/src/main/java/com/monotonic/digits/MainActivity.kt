@@ -13,6 +13,8 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
+import com.android.billingclient.api.*
+import com.android.billingclient.api.BillingClient.BillingResponse
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
@@ -21,7 +23,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
 
 
-class MainActivity : Activity() {
+class MainActivity : Activity(), PurchasesUpdatedListener {
+    val PRO_SKU = "com.monotonic.digits.pro"
     val TAG = "Digits_MainActivity"
     val history = mutableListOf<HistoryItem>()
     val preferredUnits = mutableMapOf<Map<String, Int>, HumanUnit>()
@@ -29,6 +32,9 @@ class MainActivity : Activity() {
     var floating : View? = null
     var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
     var editingUnit = false
+    var hasPro = false
+
+    private lateinit var billingClient: BillingClient
 
     val editingInput
         get() = if (editingUnit) unit_input else input
@@ -85,6 +91,58 @@ class MainActivity : Activity() {
         unit_input.showSoftInputOnFocus = false
 
         result_preview.post { updatePreview() }
+
+        billingClient = BillingClient.newBuilder(this).setListener(this).build()
+        connectToBillingService()
+    }
+
+    fun connectToBillingService() {
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(@BillingResponse billingResponseCode: Int) {
+                if (billingResponseCode == BillingResponse.OK) {
+                    refreshPurchases()
+                    Log.i(TAG, "Connected to billing service")
+                }
+            }
+
+            override fun onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+                connectToBillingService()
+            }
+        })
+    }
+
+    private fun refreshPurchases() {
+        val purchasesResult: Purchase.PurchasesResult =
+                billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+        if (purchasesResult.purchasesList != null && purchasesResult.purchasesList.any { it.sku == PRO_SKU })
+            hasPro = true
+    }
+
+    private fun doProPurchase() {
+        val flowParams = BillingFlowParams.newBuilder()
+                .setSku(PRO_SKU)
+                .setType(BillingClient.SkuType.INAPP)
+                .build()
+        val responseCode = billingClient.launchBillingFlow(this, flowParams)
+    }
+
+    override fun onPurchasesUpdated(@BillingResponse responseCode: Int, purchases: List<Purchase>?) {
+        if (responseCode == BillingResponse.OK && purchases != null) {
+            refreshPurchases()
+        } else if (responseCode == BillingResponse.USER_CANCELED) {
+            // Handle an error caused by a user cancelling the purchase flow.
+        } else {
+            // Handle any other error codes.
+            Log.e(TAG, "Billing error: $responseCode")
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        refreshPurchases()
     }
 
     fun calculatorButtonClick(button: View) {
@@ -115,6 +173,15 @@ class MainActivity : Activity() {
 
     fun openPopupMenu(view: View) {
         val popup = PopupMenu(this, view, Gravity.NO_GRAVITY)
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_get_pro -> {
+                    doProPurchase()
+                    true
+                }
+                else -> false
+            }
+        }
         popup.inflate(R.menu.popup_menu)
         popup.show()
     }

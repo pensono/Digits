@@ -6,6 +6,7 @@ Pre-release:
 - In-app purchase for pro mode
 - Clear all animation
 - Engineering/Scientific mode
+- Spaces to group digits
 
 Post-release:
 - Unit corrections
@@ -38,3 +39,4 @@ Post-release:
 - Persist preferred unit settings
 - Persist settings
 - Short and long scale names for the unit prefixes
+- Factor MainActivity into different parts (billing, input, display, ...)
