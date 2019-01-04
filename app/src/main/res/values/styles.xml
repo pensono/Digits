@@ -11,7 +11,7 @@
         <item name="android:elevation">2dp</item>
     </style>
 
-    <style name="AppTheme.Display" parent="android:Widget.Material.EditText">
+    <style name="AppTheme.BaseDisplay" parent="android:Widget.Material.EditText">
         <item name="android:gravity">end|bottom</item>
         <item name="android:background">@android:color/transparent</item>
     </style>

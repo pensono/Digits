@@ -18,6 +18,7 @@ import com.android.billingclient.api.BillingClient.BillingResponse
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
+import com.monotonic.digits.theme.createThemePickerDialog
 import com.monotonic.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
@@ -177,6 +178,11 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             when (item.itemId) {
                 R.id.menu_get_pro -> {
                     doProPurchase()
+                    true
+                }
+                R.id.menu_customize -> {
+                    val dialog = createThemePickerDialog(this)
+                    dialog.show()
                     true
                 }
                 else -> false

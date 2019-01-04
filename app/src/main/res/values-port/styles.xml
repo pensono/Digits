@@ -6,6 +6,10 @@
         <item name="android:minHeight">65dp</item>
     </style>
 
+    <style name="AppTheme.Display" parent="AppTheme.BaseDisplay">
+        <item name="android:textSize">72dp</item>
+    </style>
+
     <style name="AppTheme.CalculatorButton.Unit" parent="AppTheme.BaseCalculatorButton.Unit">
         <item name="android:minWidth">55dp</item>
         <item name="android:minHeight">55dp</item>

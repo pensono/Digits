@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Structure based on https://stackoverflow.com/questions/25751707/nested-arrays-in-android-xml-->
+
+    <color name="text_light">#fafafa</color>
+    <color name="background_light">#212121</color>
+    <array name="themes">
+        <item>@array/theme_default_light</item>
+        <item>@array/theme_grey</item>
+        <item>@array/theme_default_light1</item>
+        <item>@array/theme_default_light2</item>
+        <item>@array/theme_default_light3</item>
+    </array>
+
+    <array name="theme_default_light">
+        <item>#212121</item>
+        <item>#26a69a</item>
+        <item>#FFC107</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="theme_grey">
+        <item>#212121</item>
+        <item>#607D8B</item>
+        <item>#9E9E9E</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="theme_default_light1">
+        <item>#212121</item>
+        <item>#26a69a</item>
+        <item>#FFC107</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="theme_default_light2">
+        <item>#212121</item>
+        <item>#26a69a</item>
+        <item>#FFC107</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="theme_default_light3">
+        <item>#212121</item>
+        <item>#26a69a</item>
+        <item>#FFC107</item>
+        <item>text_light</item>
+    </array>
+
+</resources>
