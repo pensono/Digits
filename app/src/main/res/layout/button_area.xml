@@ -8,9 +8,9 @@
 
     <!-- saveEnabled lets us switch between HorizontalScrollView and ScrollView -->
     <HorizontalScrollView
+        style="@style/AppTheme.UnitSelector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
         android:saveEnabled="false"
         android:id="@+id/prefix_selector_container">
         <LinearLayout
@@ -22,9 +22,9 @@
     </HorizontalScrollView>
 
     <HorizontalScrollView
+        style="@style/AppTheme.UnitSelector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

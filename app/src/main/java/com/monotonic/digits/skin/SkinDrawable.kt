@@ -1,4 +1,4 @@
-package com.monotonic.digits.theme
+package com.monotonic.digits.skin
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -8,15 +8,15 @@ import android.graphics.drawable.Drawable
 /**
  * @author Ethan
  */
-internal class ThemeDrawable(val theme: CustomTheme) : Drawable() {
+internal class SkinDrawable(val theme: Skin) : Drawable() {
     private val fillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val primaryPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val accentPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     init {
-        fillPaint.color = theme.fillColor
-        primaryPaint.color = theme.primaryColor
-        accentPaint.color = theme.accentColor
+        fillPaint.color = theme.fill
+        primaryPaint.color = theme.primary
+        accentPaint.color = theme.accent
     }
 
     val bigCircleSize = 80.0f / 96.0f

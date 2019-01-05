@@ -1,16 +1,15 @@
 package com.monotonic.digits
 
 import android.content.res.Resources
-import android.os.Build
-import com.monotonic.digits.theme.CustomTheme
+import com.monotonic.digits.skin.Skin
 
 
 /**
  * @author Ethan
  */
 // Might be a good idea to replace this class with this: https://github.com/jaredrummler/Cyanea
-class ThemedResources(original: Resources, defaultTheme: CustomTheme) : Resources(original.assets, original.displayMetrics, original.configuration) {
-    var customTheme : CustomTheme = defaultTheme
+class ThemedResources(original: Resources, defaultTheme: Skin) : Resources(original.assets, original.displayMetrics, original.configuration) {
+    var skin : Skin = defaultTheme
 
     @Throws(Resources.NotFoundException::class)
     override fun getColor(id: Int): Int {
@@ -20,9 +19,9 @@ class ThemedResources(original: Resources, defaultTheme: CustomTheme) : Resource
     @Throws(Resources.NotFoundException::class)
     override fun getColor(id: Int, theme: Resources.Theme?): Int {
         return when (getResourceEntryName(id)) {
-            "primary" -> customTheme.primaryColor
-            "accent" -> customTheme.primaryColor
-            "fill" -> customTheme.fillColor
+            "primary" -> skin.primary
+            "accent" -> skin.primary
+            "fill" -> skin.fill
             else -> super.getColor(id, theme)
         }
     }

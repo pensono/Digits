@@ -5,46 +5,58 @@
     <color name="text_light">#fafafa</color>
     <color name="background_light">#212121</color>
     <array name="themes">
-        <item>@array/theme_default_light</item>
+        <item>@array/skin_default_light</item>
         <item>@array/theme_grey</item>
         <item>@array/theme_default_light1</item>
         <item>@array/theme_default_light2</item>
         <item>@array/theme_default_light3</item>
     </array>
 
-    <array name="theme_default_light">
+    <array name="skin_default_light">
         <item>#212121</item>
         <item>#26a69a</item>
+        <item>#00897B</item>
+        <item>#00796B</item>
+        <item>#B2DFDB</item>
         <item>#FFC107</item>
         <item>text_light</item>
     </array>
 
     <array name="theme_grey">
-        <item>#212121</item>
+        <item>#263238</item>
         <item>#607D8B</item>
-        <item>#9E9E9E</item>
+        <item>#546E7A</item>
+        <item>#455A64</item>
+        <item>#455A64</item>
+        <item>#BBDEFB</item>
         <item>text_light</item>
     </array>
 
     <array name="theme_default_light1">
         <item>#212121</item>
         <item>#26a69a</item>
+        <item>#00897B</item>
+        <item>#00796B</item>
+        <item>#B2DFDB</item>
         <item>#FFC107</item>
         <item>text_light</item>
     </array>
-
     <array name="theme_default_light2">
         <item>#212121</item>
         <item>#26a69a</item>
+        <item>#00897B</item>
+        <item>#00796B</item>
+        <item>#B2DFDB</item>
         <item>#FFC107</item>
         <item>text_light</item>
     </array>
-
     <array name="theme_default_light3">
         <item>#212121</item>
         <item>#26a69a</item>
+        <item>#00897B</item>
+        <item>#00796B</item>
+        <item>#B2DFDB</item>
         <item>#FFC107</item>
         <item>text_light</item>
     </array>
-
 </resources>

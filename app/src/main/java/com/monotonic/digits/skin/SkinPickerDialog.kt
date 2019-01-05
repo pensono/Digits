@@ -1,4 +1,4 @@
-package com.monotonic.digits.theme
+package com.monotonic.digits.skin
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -11,7 +11,7 @@ import com.monotonic.digits.R
 /**
  * @author Ethan
  */
-fun createThemePickerDialog(context: Context, action: (CustomTheme) -> Unit) : Dialog {
+fun createSkinPickerDialog(context: Context, action: (Skin) -> Unit) : Dialog {
     val builder = AlertDialog.Builder(context)
     builder.setNegativeButton("Cancel") { d, _ -> d.cancel() }
 
@@ -29,19 +29,12 @@ fun createThemePickerDialog(context: Context, action: (CustomTheme) -> Unit) : D
             continue
         }
 
-        val item = context.resources.obtainTypedArray(resId)
-        val fill = item.getColor(0,0)
-        val primary = item.getColor(1, 0)
-        val accent = item.getColor(2, 0)
-        // This line is sad. replace with an enum or something rather than a boolean
-        val light = if (item.getBoolean(3, true)) ThemeType.LIGHT else ThemeType.DARK
-        val theme = CustomTheme(fill, primary, accent, light)
-        item.recycle()
+        val skin = skinFromResource(context, resId)
 
-        val button = layoutInflater.inflate(R.layout.theme_picker_button, container, false)
-        button.background = ThemeDrawable(theme)
+        val button = layoutInflater.inflate(R.layout.skin_picker_button, container, false)
+        button.background = SkinDrawable(skin)
         button.setOnClickListener { _ ->
-            action(theme)
+            action(skin)
             dialog.cancel()
         }
         container.addView(button)
