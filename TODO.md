@@ -2,6 +2,7 @@ Pre-release:
 - Allow the unit to be changed to something like mm
 - Spacing in the secondary buttons
 - Support multiple units of the same dimension (min/hr, ft/mile)
+- Setting to prefer US or Metric units
 - Color customization
 - In-app purchase for pro mode
 - Clear all animation

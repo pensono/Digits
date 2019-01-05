@@ -1,6 +1,7 @@
 package com.monotonic.digits
 
 import android.app.Activity
+import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +19,8 @@ import com.android.billingclient.api.BillingClient.BillingResponse
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
+import com.monotonic.digits.theme.CustomTheme
+import com.monotonic.digits.theme.ThemeType
 import com.monotonic.digits.theme.createThemePickerDialog
 import com.monotonic.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -39,6 +42,12 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
 
     val editingInput
         get() = if (editingUnit) unit_input else input
+
+    // TODO move these colors to a file or something
+    private val defaultTheme = CustomTheme(0x212121, 0x26a69a, 0xFFC107, ThemeType.LIGHT)
+    private val resources : ThemedResources by lazy {
+        ThemedResources(super.getResources(), defaultTheme)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -181,7 +190,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
                     true
                 }
                 R.id.menu_customize -> {
-                    val dialog = createThemePickerDialog(this)
+                    val dialog = createThemePickerDialog(this, this::applyTheme)
                     dialog.show()
                     true
                 }
@@ -381,14 +390,10 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     private fun hexStringForColor(colorResourceId: Int) =
             '#' + ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
 
-    companion object {
-        // Kinda weird for this to be public, but it makes it testable
-        fun shouldShowPrefixes(text: String, caretPosition: Int) : Boolean {
-            if (caretPosition == 0) {
-                return true
-            }
+    override fun getResources(): Resources = resources
 
-            return caretPosition - 1 < text.length && !text[caretPosition - 1].isLetter()
-        }
+    private fun applyTheme(theme: CustomTheme) {
+        resources.customTheme = theme
+        mainRootLayout.invalidate()
     }
 }

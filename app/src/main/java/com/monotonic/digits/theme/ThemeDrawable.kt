@@ -8,15 +8,15 @@ import android.graphics.drawable.Drawable
 /**
  * @author Ethan
  */
-internal class ThemeDrawable(val fill: Int, val primary: Int, val accent: Int, val light: Boolean) : Drawable() {
+internal class ThemeDrawable(val theme: CustomTheme) : Drawable() {
     private val fillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val primaryPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val accentPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     init {
-        fillPaint.color = fill
-        primaryPaint.color = primary
-        accentPaint.color = accent
+        fillPaint.color = theme.fillColor
+        primaryPaint.color = theme.primaryColor
+        accentPaint.color = theme.accentColor
     }
 
     val bigCircleSize = 80.0f / 96.0f

@@ -10,7 +10,7 @@
     <color name="detail_text">#bdbdbd</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
-    <color name="calc_button_background">#212121</color>
+    <color name="fill">#212121</color>
     <color name="background_ripple">#303030</color>
     <color name="background">#fafafa</color>
 </resources>
