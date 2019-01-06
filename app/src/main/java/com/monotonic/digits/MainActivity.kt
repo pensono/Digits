@@ -82,10 +82,15 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         })
 
         discipline_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
+        discipline_dropdown.setSelection(getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.pref_discipline), 0))
         discipline_dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 populateUnitSelector(disciplines[pos].units, unit_selector)
+                with (getPreferences(Context.MODE_PRIVATE).edit()) {
+                    putInt(getString(R.string.pref_discipline), pos)
+                    apply()
+                }
             }
         }
 
