@@ -122,6 +122,16 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("input", input.text.toString())
+    }
+
+    public override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        input.text.replace(0, input.text.length, savedInstanceState.getString("input"))
+    }
+
     fun connectToBillingService() {
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(@BillingResponse billingResponseCode: Int) {
