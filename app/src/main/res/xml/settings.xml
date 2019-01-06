@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Preference category">
+        <SwitchPreference
+            android:key="space_grouping"
+            android:title="Group digits with a space"
+            android:defaultValue="true"/>
+
+        <ListPreference
+            android:key="unit_system_preference"
+            android:title="Preferred unit system"
+            android:entries="@array/unitSystems"
+            android:entryValues="@array/unitSystems_values"
+            android:summary="%s"/>
+    </PreferenceCategory>
+</PreferenceScreen>

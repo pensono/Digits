@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.preference.PreferenceManager
 import android.text.Editable
 import android.text.Html
 import android.text.Spanned
@@ -24,6 +25,7 @@ import com.monotonic.digits.skin.*
 import com.monotonic.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
+import android.content.Intent
 
 
 class MainActivity : Activity(), PurchasesUpdatedListener {
@@ -47,6 +49,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false)
 
         setContentView(R.layout.activity_main)
 
@@ -204,6 +208,11 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
                         applySkin(it)
                     }
                     dialog.show()
+                    true
+                }
+                R.id.menu_settings -> {
+                    val a = Intent(this, SettingsActivity::class.java)
+                    startActivity(a)
                     true
                 }
                 else -> false

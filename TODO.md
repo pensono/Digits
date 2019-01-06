@@ -36,6 +36,5 @@ Post-release:
 - Support for imaginary numbers
 - Support for rational unit exponents
 - Persist preferred unit settings
-- Persist settings
 - Short and long scale names for the unit prefixes
 - Factor MainActivity into different parts (billing, input, display, ...)

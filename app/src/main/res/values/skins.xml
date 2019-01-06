@@ -7,7 +7,7 @@
     <array name="themes">
         <item>@array/skin_default_light</item>
         <item>@array/skin_blue_grey</item>
-        <item>@array/skin_leather</item>
+        <!--<item>@array/skin_leather</item>-->
         <item>@array/skin_brown</item>
         <item>@array/skin_purple</item>
         <item>@array/skin_red</item>
