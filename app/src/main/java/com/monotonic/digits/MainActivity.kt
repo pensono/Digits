@@ -97,8 +97,9 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         billingClient = BillingClient.newBuilder(this).setListener(this).build()
         connectToBillingService()
 
-        val skinId = getPreferences(Context.MODE_PRIVATE)
-                .getInt(getString(R.string.pref_skin), R.array.skin_default_light)
+        val skinName = getPreferences(Context.MODE_PRIVATE)
+                .getString(getString(R.string.pref_skin), resources.getResourceName(R.array.skin_default_light))
+        val skinId = resources.getIdentifier(skinName, "id", packageName)
         applySkin(skinFromResource(this, skinId))
 
         populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
@@ -192,7 +193,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
                 R.id.menu_customize -> {
                     val dialog = createSkinPickerDialog(this) {
                         with (getPreferences(Context.MODE_PRIVATE).edit()) {
-                            putInt(getString(R.string.pref_skin), it.id)
+                            putString(getString(R.string.pref_skin), resources.getResourceName(it.id))
                             apply()
                         }
                         applySkin(it)

@@ -20,6 +20,6 @@
     <string name="discipline_basic">Basic</string>
     <string name="get_pro">Get pro</string>
     <string name="feedback">Feedback</string>
-    <string name="theme_dialog_title">Choose Theme</string>
+    <string name="skin_dialog_title">Choose Skin</string>
     <string name="pref_skin">pref_skin</string>
 </resources>

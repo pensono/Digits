@@ -15,9 +15,9 @@ fun createSkinPickerDialog(context: Context, action: (Skin) -> Unit) : Dialog {
     val builder = AlertDialog.Builder(context)
     builder.setNegativeButton("Cancel") { d, _ -> d.cancel() }
 
-    builder.setTitle(R.string.theme_dialog_title)
+    builder.setTitle(R.string.skin_dialog_title)
     val layoutInflater = context.getSystemService(LayoutInflater::class.java)
-    val main_view = layoutInflater.inflate(R.layout.dialog_theme_picker, null, false) as ViewGroup
+    val main_view = layoutInflater.inflate(R.layout.dialog_skin_picker, null, false) as ViewGroup
     val container = main_view.findViewById<ViewGroup>(R.id.theme_picker_container)
     builder.setView(main_view)
     val dialog = builder.create()

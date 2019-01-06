@@ -15,22 +15,22 @@ internal class SkinDrawable(val theme: Skin) : Drawable() {
 
     init {
         fillPaint.color = theme.fill
-        primaryPaint.color = theme.primary
-        accentPaint.color = theme.accent
+        primaryPaint.color = theme.primaryDark
+        accentPaint.color = theme.primary
     }
 
     val bigCircleSize = 80.0f / 96.0f
     val smallCircleSize = 40.0f / 96.0f
-    val smallCircleOffset = 8.0f / 96.0f
+    val smallCircleOffset = 0.0f / 96.0f
 
     override fun draw(canvas: Canvas) {
         val intBounds = bounds
         val drawBounds = RectF(intBounds)
 
-        canvas.drawCircle(drawBounds.width() / 2, bigCircleSize * drawBounds.height() / 2, bigCircleSize * drawBounds.height() / 2, primaryPaint)
+        canvas.drawCircle(drawBounds.width() / 2, bigCircleSize * drawBounds.width() / 2, bigCircleSize * drawBounds.width() / 2, primaryPaint)
 
-        val smallBounds = RectF(drawBounds.left, drawBounds.bottom - drawBounds.height() * (smallCircleSize + smallCircleOffset),
-                drawBounds.left + drawBounds.width() * smallCircleSize, drawBounds.bottom - drawBounds.height() * smallCircleOffset)
+        val smallBounds = RectF(drawBounds.left, drawBounds.bottom - drawBounds.width() * (smallCircleSize + smallCircleOffset),
+                drawBounds.left + drawBounds.width() * smallCircleSize, drawBounds.bottom - drawBounds.width() * smallCircleOffset)
         canvas.drawOval(smallBounds, fillPaint)
         smallBounds.offsetTo(drawBounds.right - drawBounds.width() * smallCircleSize, smallBounds.top)
         canvas.drawOval(smallBounds, accentPaint)

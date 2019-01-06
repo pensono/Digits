@@ -2,5 +2,5 @@
 <Button
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="96dp"
-    android:layout_height="96dp"
+    android:layout_height="92dp"
     android:layout_margin="8dp"/>

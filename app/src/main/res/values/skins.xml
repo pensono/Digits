@@ -7,9 +7,17 @@
     <array name="themes">
         <item>@array/skin_default_light</item>
         <item>@array/skin_blue_grey</item>
+        <item>@array/skin_leather</item>
+        <item>@array/skin_brown</item>
         <item>@array/skin_purple</item>
-        <item>@array/theme_default_light2</item>
-        <item>@array/theme_default_light3</item>
+        <item>@array/skin_red</item>
+        <item>@array/skin_green</item>
+        <item>@array/skin_orange</item>
+        <item>@array/skin_light_blue</item>
+        <item>@array/skin_all_blue</item>
+        <item>@array/skin_dark_blue</item>
+        <item>@array/skin_pink</item>
+        <item>@array/skin_all_pink</item>
     </array>
 
     <array name="skin_default_light">
@@ -33,30 +41,112 @@
     </array>
 
     <array name="skin_purple">
-        <item>#212121</item>
+        <item>#6A1B9A</item>
         <item>#9C27B0</item>
         <item>#8E24AA</item>
         <item>#7B1FA2</item>
         <item>#BA68C8</item>
-        <item>#66BB6A</item>
+        <item>#A5D6A7</item>
         <item>text_light</item>
     </array>
-    <array name="theme_default_light2">
-        <item>#212121</item>
-        <item>#26a69a</item>
-        <item>#00897B</item>
-        <item>#00796B</item>
-        <item>#B2DFDB</item>
+
+    <array name="skin_red">
+        <item>#263238</item>
+        <item>#f44336</item>
+        <item>#d32f2f</item>
+        <item>#c62828</item>
+        <item>#e57373</item>
         <item>#FFC107</item>
         <item>text_light</item>
     </array>
-    <array name="theme_default_light3">
+
+    <array name="skin_green">
+        <item>#263238</item>
+        <item>#8BC34A</item>
+        <item>#7CB342</item>
+        <item>#689F38</item>
+        <item>#AED581</item>
+        <item>#B3E5FC</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_orange">
+        <item>#263238</item>
+        <item>#FB8C00</item>
+        <item>#F57C00</item>
+        <item>#EF6C00</item>
+        <item>#FFB74D</item>
+        <item>#9FA8DA</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_light_blue">
+        <item>#263238</item>
+        <item>#03A9F4</item>
+        <item>#039BE5</item>
+        <item>#0288D1</item>
+        <item>#64B5F6</item>
+        <item>#80CBC4</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_dark_blue">
         <item>#212121</item>
-        <item>#26a69a</item>
-        <item>#00897B</item>
-        <item>#00796B</item>
-        <item>#B2DFDB</item>
-        <item>#FFC107</item>
+        <item>#3949AB</item>
+        <item>#283593</item>
+        <item>#1A237E</item>
+        <item>#5C6BC0</item>
+        <item>#A5D6A7</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_all_blue">
+        <item>#1A237E</item>
+        <item>#5C6BC0</item>
+        <item>#3949AB</item>
+        <item>#303F9F</item>
+        <item>#5C6BC0</item>
+        <item>#4DB6AC</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_pink">
+        <item>#212121</item>
+        <item>#EC407A</item>
+        <item>#E91E63</item>
+        <item>#D81B60</item>
+        <item>#F48FB1</item>
+        <item>#3949AB</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_all_pink">
+        <item>#AD1457</item>
+        <item>#EC407A</item>
+        <item>#E91E63</item>
+        <item>#D81B60</item>
+        <item>#F48FB1</item>
+        <item>#3949AB</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_leather">
+        <item>#3E2723</item>
+        <item>#795548</item>
+        <item>#6D4C41</item>
+        <item>#4E342E</item>
+        <item>#8D6E63</item>
+        <item>#90A4AE</item>
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_brown">
+        <item>#212121</item>
+        <item>#795548</item>
+        <item>#6D4C41</item>
+        <item>#3E2723</item>
+        <item>#8D6E63</item>
+        <item>#90A4AE</item>
         <item>text_light</item>
     </array>
 </resources>
