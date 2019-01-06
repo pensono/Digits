@@ -6,6 +6,11 @@
             android:title="Group digits in result with a space"
             android:defaultValue="true"/>
 
+        <SwitchPreference
+            android:key="sigfig_highlight"
+            android:title="Highlight significant digits in result"
+            android:defaultValue="true"/>
+
         <ListPreference
             android:key="unit_system_preference"
             android:title="Preferred unit system"

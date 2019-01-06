@@ -5,8 +5,6 @@ Pre-release:
 - In-app purchase for pro mode
 - Clear all animation
 - Engineering/Scientific mode
-- Spaces to group digits
-- Setting to disable insigfig highlighting
 
 Post-release:
 - Unit corrections

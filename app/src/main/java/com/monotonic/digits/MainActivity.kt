@@ -51,6 +51,9 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             return if (spaceSeparate) SeperatorType.SPACE else SeperatorType.NONE
         }
 
+    private val sigfigHighlight : Boolean
+        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", true)
+
     // TODO move these default colors to a file or something
     private lateinit var skin : Skin
 
@@ -416,9 +419,12 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             humanString = humanQuantity.humanString(resultSeparator, humanString.string.length - 1)
         }
 
-        val coloredText = humanString.string
+        val coloredText =
+            if (sigfigHighlight)
+                humanString.string
                 .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
                 .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='$colorStr'>")
+            else humanString.string
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
         return htmlToSpannable(coloredText)
