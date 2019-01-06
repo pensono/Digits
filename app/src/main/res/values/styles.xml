@@ -1,4 +1,5 @@
 <resources>
+    <dimen name="corner_radius">4dp</dimen>
 
     <!-- Base application theme. -->
     <!-- Non appcompat theme: android:Skin.Material.Light.NoActionBar -->

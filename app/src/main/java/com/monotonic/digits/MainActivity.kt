@@ -3,6 +3,7 @@ package com.monotonic.digits
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
@@ -19,9 +20,7 @@ import com.android.billingclient.api.BillingClient.BillingResponse
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
-import com.monotonic.digits.skin.Skin
-import com.monotonic.digits.skin.createSkinPickerDialog
-import com.monotonic.digits.skin.skinFromResource
+import com.monotonic.digits.skin.*
 import com.monotonic.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
@@ -234,6 +233,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
 
     private fun createFloatingSecondaryFor(button: CalculatorButton): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.layout_calc_secondary, mainRootLayout, false) as ViewGroup
+        skinSecondaryBackground(layout.background as GradientDrawable, skin)
 
         val buttonLoc = intArrayOf(0, 0)
         button.getLocationInWindow(buttonLoc) // Not sure if this or getLocationInScreen is correct.
@@ -293,6 +293,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             mainRootLayout.removeView(floating)
         }
         floating = layout
+
+        applySkinIn(layout)
         return layout
     }
 
@@ -354,7 +356,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             }
             container.addView(newButton)
         }
-        updateSkinIn(container)
+        applySkinIn(container)
     }
 
     private fun centerScroll(container: View) {
@@ -400,10 +402,10 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
 
     private fun applySkin(skin: Skin) {
         this.skin = skin
-        updateSkinIn(mainRootLayout)
+        applySkinIn(mainRootLayout)
     }
 
-    private fun updateSkinIn(viewGroup: ViewGroup) {
+    private fun applySkinIn(viewGroup: ViewGroup) {
         val colorMap = mapOf(
             "primary" to skin.primary,
             "primary_dim" to skin.primaryDim,
@@ -414,20 +416,5 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         )
 
         updateSkinIn(mainRootLayout, colorMap)
-    }
-
-    private fun updateSkinIn(viewGroup: ViewGroup, colorMap: Map<String, Int>) {
-        for (i in 0 until viewGroup.childCount) {
-            val child = viewGroup.getChildAt(i)
-
-            val newColor = colorMap[child.tag]
-            if (newColor != null) {
-                child.setBackgroundColor(newColor)
-            } // Otherwise ignore
-
-            if (child is ViewGroup) {
-                updateSkinIn(child, colorMap)
-            }
-        }
     }
 }
