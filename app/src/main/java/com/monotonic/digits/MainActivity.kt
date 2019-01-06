@@ -26,28 +26,29 @@ import com.monotonic.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
 import android.content.Intent
+import android.content.SharedPreferences
 
 
 class MainActivity : Activity(), PurchasesUpdatedListener {
-    val PRO_SKU = "com.monotonic.digits.pro"
     val TAG = "Digits_MainActivity"
-    val history = mutableListOf<HistoryItem>()
-    val preferredUnits = mutableMapOf<Map<String, Int>, HumanUnit>()
+    private val history = mutableListOf<HistoryItem>()
+    private val preferredUnits = mutableMapOf<Map<String, Int>, HumanUnit>()
 
-    var floating : View? = null
-    var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
-    var editingUnit = false
-    var hasPro = false
+    private var floating : View? = null
+    private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
+    private var editingUnit = false
 
+    val PRO_SKU = "com.monotonic.digits.pro"
     private lateinit var billingClient: BillingClient
+    private var hasPro = false
 
-    val editingInput
+    private val editingInput
         get() = if (editingUnit) unit_input else input
 
-    val resultSeperator : SeperatorType
+    private val resultSeparator : SeperatorType
         get() {
-            val spaceSeperate = getPreferences(Context.MODE_PRIVATE).getBoolean("space_grouping", true)
-            return if (spaceSeperate) SeperatorType.SPACE else SeperatorType.NONE
+            val spaceSeparate = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("space_grouping", true)
+            return if (spaceSeparate) SeperatorType.SPACE else SeperatorType.NONE
         }
 
     // TODO move these default colors to a file or something
@@ -122,14 +123,17 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("input", input.text.toString())
+    override fun onPause() {
+        super.onPause()
+        with (getPreferences(Context.MODE_PRIVATE).edit()) {
+            putString("input_value", input.text.toString())
+            apply()
+        }
     }
 
-    public override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        input.text.replace(0, input.text.length, savedInstanceState.getString("input"))
+    override fun onPostResume() {
+        super.onPostResume()
+        input.text.replace(0, input.text.length, getPreferences(Context.MODE_PRIVATE).getString("input_value", ""))
     }
 
     fun connectToBillingService() {
@@ -185,7 +189,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         val buttonCommand = (button as CalculatorButton).primaryCommand
         if (buttonCommand == "ENT") {
             history += HistoryItem(input.text.toString(), result_preview.text.toString())
-            input.text.replace(0, editingInput.text.length, humanizedQuantity.humanString(resultSeperator).string)
+            input.text.replace(0, editingInput.text.length, humanizedQuantity.humanString(resultSeparator).string)
         } else if (buttonCommand == "DEL") {
             if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
                 editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
@@ -406,10 +410,10 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         // Find something that fits
         // This loop may potentially run quite a few times if the starting number is very
         // long, but it should be quick enough
-        var humanString = humanQuantity.humanString(resultSeperator)
+        var humanString = humanQuantity.humanString(resultSeparator)
         val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
         while (result_preview.paint.measureText(humanString.string) >= availableSpacePx && humanString.string.length > 0) {
-            humanString = humanQuantity.humanString(resultSeperator, humanString.string.length - 1)
+            humanString = humanQuantity.humanString(resultSeparator, humanString.string.length - 1)
         }
 
         val coloredText = humanString.string

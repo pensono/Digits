@@ -281,6 +281,7 @@ sealed class SciNumber {
                     val intStr = preciseStr.substring(0, decimalLocation)
                     val fracStr = preciseStr.substring(decimalLocation)
 
+                    // Double reversing is not efficient to run, but efficient to code
                     val seperatedIntStr = insertGroupingSeparator(intStr.reversed(), seperatorType).reversed()
                     val seperatedFracStr = insertGroupingSeparator(fracStr, seperatorType)
 
@@ -302,7 +303,7 @@ sealed class SciNumber {
         }
 
         /***
-         * Inserts grouping seperator from index 0:
+         * Inserts grouping separator from index 0:
          * 000,000,00
          */
         private fun insertGroupingSeparator(input: String, seperatorType: SeperatorType) : String =
