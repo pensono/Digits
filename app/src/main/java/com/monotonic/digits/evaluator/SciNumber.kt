@@ -237,6 +237,8 @@ sealed class SciNumber {
         fun reciprocal() = Real(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128), precision)
         override fun toDouble(): Double = backing.toDouble()
         override fun valueEqual(other: SciNumber): Boolean = other is SciNumber.Real && backing.compareTo(other.backing) == 0
+
+        // TODO move this into humanization
         override fun valueString(seperatorType: SeperatorType): SigfigString {
             // We can't use java's number formatting facilities, because there's no way to
             // insert grouping separators in the fractional component of the string
@@ -291,7 +293,7 @@ sealed class SciNumber {
                         is Precision.SigFigs -> {
                             val decimalSigfig = if (precision.amount > intStr.length) 1 else 0
                             val initialOffset = ((-intStr.length % 3) + 3) % 3
-                            val intSeparatorCount = min((precision.amount - 1 + initialOffset) / 3, intStr.length / 3)
+                            val intSeparatorCount = min((precision.amount - 1 + initialOffset) / 3, (intStr.length - 1) / 3)
                             val fracSeparatorCount = max((precision.amount - intStr.length) / 3, 0)
                             val separatorSize = (intSeparatorCount + fracSeparatorCount) * seperatorType.seperator.length
 

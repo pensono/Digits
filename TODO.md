@@ -21,15 +21,13 @@ Post-release:
 - Calculation History
 - Undo button (undo in history?)
 - Option: Always use scientific vs natural notation for the results
-- Truncated result preview uses engineering notation
-- Setting for engineering vs scientific notation
+- Properly round when a number is shortened
 - Option to always round results to a certain decimal place or the number of sigfigs
 - Support for affine units (temperature)
 - Support for area units (like the acre)
 - Make the unit exponent too large error only highlight the number which is too large instead of the entire unit
 - Abbreviation alias (for degree, abbreviated deg)
 - Gi/Mi/Ki prefixes
-- Properly round when a number is shortened
 - support for sin^-1()
 - Refactor magnitude so that 3 is 0 and .1 is -1
 - Support for imaginary numbers

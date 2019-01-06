@@ -134,6 +134,7 @@ class HumanQuantityTest {
         testInsigfigStart(1, "9999.99", 1, SeperatorType.SPACE)
         testInsigfigStart(3, "9999.99", 2, SeperatorType.SPACE)
         testInsigfigStart(5, "9999.99", 4, SeperatorType.SPACE)
+        testInsigfigStart(5, "777.9", 4, SeperatorType.SPACE)
         testInsigfigStart(1, "999777.99", 1, SeperatorType.SPACE)
         testInsigfigStart(3, "999777.99", 3, SeperatorType.SPACE)
         testInsigfigStart(11, "9999.9999", 8, SeperatorType.SPACE)
