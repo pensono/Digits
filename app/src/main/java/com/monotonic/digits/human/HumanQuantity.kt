@@ -8,8 +8,8 @@ import kotlin.math.min
 
 data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
     // TODO eventually make this accept a value for engineering or scientific mode
-    fun humanString() : HumanQuantityString {
-        val valueString = value.valueString()
+    fun humanString(seperatorType: SeperatorType) : HumanQuantityString {
+        val valueString = value.valueString(seperatorType)
         val insigfigStartPos = sigfigEndPos(valueString, value.precision)
 
         return HumanQuantityString(valueString + unitString(), insigfigStartPos, valueString.length)
@@ -20,7 +20,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
     /**
      * @param maxChars must be non-negative
      */
-    fun humanString(maxChars: Int) : HumanQuantityString {
+    fun humanString(seperatorType: SeperatorType, maxChars: Int) : HumanQuantityString {
         if (maxChars == 0) {
             return HumanQuantityString("", 0, 0)
         }
@@ -32,7 +32,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
                     unitString()
         val maxValueChars = maxChars - unitString.length
 
-        val regularString = value.valueString()
+        val regularString = value.valueString(seperatorType)
 
         return if (regularString.length <= maxValueChars) {
             val insigfigStartPos = sigfigEndPos(regularString, value.precision)
@@ -41,8 +41,9 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
             val magnitude = value.magnitude - 1
             val eNotation = if (magnitude == 0) "…" else "…ᴇ$magnitude"
             val normalizedValue = value / SciNumber.Real(10).pow(magnitude)
-            val normalizedString = normalizedValue.valueString()
+            val normalizedString = normalizedValue.valueString(seperatorType)
             val sizedString = normalizedString.substring(0, max(0, min(normalizedString.length, maxValueChars - eNotation.length)))
+                    .trimEnd { !(it.isDigit() || it == '.') } // Remove trailing non-numeric characters like separators
 
             val insigfigStartPos = sigfigEndPos(sizedString, value.precision)
             val combinedString = sizedString + eNotation + unitString
@@ -74,6 +75,10 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
     }
 
     override fun equals(other: Any?): Boolean = other is HumanQuantity && other.unit == unit && other.value.valueEqual(value)
+}
+
+enum class SeperatorType(val seperator: String) {
+    NONE(""), SPACE(" ")
 }
 
 data class HumanQuantityString(val string: String, val insigfigStart: Int, val insigfigEnd: Int)

@@ -1,5 +1,6 @@
 package com.monotonic.digits.evaluator
 
+import com.monotonic.digits.human.SeperatorType
 import java.lang.Integer.*
 import java.math.BigDecimal
 import java.math.MathContext
@@ -71,7 +72,7 @@ sealed class SciNumber {
     abstract fun sec() : SciNumber
     abstract fun cot() : SciNumber
 
-    abstract fun valueString() : String
+    abstract fun valueString(seperatorType: SeperatorType) : String
     abstract fun valueEqual(other: SciNumber) : Boolean
     abstract fun toDouble() : Double
 
@@ -235,20 +236,47 @@ sealed class SciNumber {
         fun reciprocal() = Real(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128), precision)
         override fun toDouble(): Double = backing.toDouble()
         override fun valueEqual(other: SciNumber): Boolean = other is SciNumber.Real && backing.compareTo(other.backing) == 0
-        override fun valueString(): String {
-            val baseString = backing.toPlainString()
-            val sigFigs = baseString.trimStart('0', '.', '-')
-                    .count { it.isDigit() }
+        override fun valueString(seperatorType: SeperatorType): String {
+            // We can't use java's number formatting facilities, because there's no way to
+            // insert grouping separators in the fractional component of the string
 
-            return when (precision) {
-                is Precision.Infinite -> baseString
-                is Precision.SigFigs -> {
-                    val missing = max(0, precision.amount - sigFigs)
-                    val decimalStr = if (!baseString.contains('.') && missing > 0) "." else ""
-                    baseString + decimalStr + "0".repeat(missing)
+            val baseStr = backing.unscaledValue().abs().toString()
+            val signStr = if (backing.signum() < 0) "-" else ""
+            val decimalLocation = baseStr.length - backing.scale()
+
+            val preciseStr = when (precision) {
+                is Precision.Infinite -> baseStr
+                is Precision.SigFigs -> baseStr + "0".repeat(max(0, precision.amount - baseStr.length))
+            }
+
+            return when {
+                decimalLocation >= preciseStr.length -> {
+                    val paddedStr = preciseStr + "0".repeat(decimalLocation - preciseStr.length)
+                    signStr + insertGroupingSeparator(paddedStr.reversed(), seperatorType).reversed()
+                }
+                decimalLocation <= 0 -> {
+                    val paddedStr = "0".repeat(-decimalLocation) + preciseStr
+                    signStr + "0." + insertGroupingSeparator(paddedStr, seperatorType)
+                }
+                else -> {
+                    val intStr = preciseStr.substring(0, decimalLocation)
+                    val fracStr = preciseStr.substring(decimalLocation)
+
+                    val seperatedIntStr = insertGroupingSeparator(intStr.reversed(), seperatorType).reversed()
+                    val seperatedFracStr = insertGroupingSeparator(fracStr, seperatorType)
+
+                    "$signStr$seperatedIntStr.$seperatedFracStr"
                 }
             }
         }
+
+        /***
+         * Inserts grouping seperator from index 0:
+         * 000,000,00
+         */
+        private fun insertGroupingSeparator(input: String, seperatorType: SeperatorType) : String =
+                // Chop into bits and join together
+            (0 .. input.length / 3).joinToString(seperatorType.seperator) { input.substring(it * 3, min(it * 3 + 3, input.length)) }
     }
 
     object Nan : SciNumber() {
@@ -277,7 +305,7 @@ sealed class SciNumber {
         override fun sec() = this
         override fun cot() = this
 
-        override fun valueString(): String = "NaN"
+        override fun valueString(seperatorType: SeperatorType): String = "NaN"
         override fun valueEqual(other: SciNumber): Boolean = other === Nan
         override fun toDouble(): Double = Double.NaN
     }

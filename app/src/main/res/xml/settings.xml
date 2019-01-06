@@ -3,7 +3,7 @@
     <PreferenceCategory android:title="Preference category">
         <SwitchPreference
             android:key="space_grouping"
-            android:title="Group digits with a space"
+            android:title="Group digits in result with a space"
             android:defaultValue="true"/>
 
         <ListPreference
@@ -11,6 +11,7 @@
             android:title="Preferred unit system"
             android:entries="@array/unitSystems"
             android:entryValues="@array/unitSystems_values"
+            android:defaultValue="0"
             android:summary="%s"/>
     </PreferenceCategory>
 </PreferenceScreen>
