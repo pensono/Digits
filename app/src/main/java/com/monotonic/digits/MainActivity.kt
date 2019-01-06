@@ -1,6 +1,7 @@
 package com.monotonic.digits
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -48,8 +49,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        skin = skinFromResource(this, R.array.skin_default_light)
-
         setContentView(R.layout.activity_main)
 
         input.addTextChangedListener(object : TextWatcher {
@@ -83,10 +82,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             }
         })
 
-        populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
-        populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
-        prefix_selector_container.post { centerScroll(prefix_selector_container) }
-
         discipline_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
         discipline_dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -102,6 +97,14 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
 
         billingClient = BillingClient.newBuilder(this).setListener(this).build()
         connectToBillingService()
+
+        val skinId = getPreferences(Context.MODE_PRIVATE)
+                .getInt(getString(R.string.pref_skin), R.array.skin_default_light)
+        applySkin(skinFromResource(this, skinId))
+
+        populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
+        populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
+        prefix_selector_container.post { centerScroll(prefix_selector_container) }
     }
 
     fun connectToBillingService() {
@@ -188,7 +191,13 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
                     true
                 }
                 R.id.menu_customize -> {
-                    val dialog = createSkinPickerDialog(this, this::applySkin)
+                    val dialog = createSkinPickerDialog(this) {
+                        with (getPreferences(Context.MODE_PRIVATE).edit()) {
+                            putInt(getString(R.string.pref_skin), it.id)
+                            apply()
+                        }
+                        applySkin(it)
+                    }
                     dialog.show()
                     true
                 }
@@ -345,6 +354,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             }
             container.addView(newButton)
         }
+        updateSkinIn(container)
     }
 
     private fun centerScroll(container: View) {
@@ -388,9 +398,12 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     private fun hexStringForColor(colorResourceId: Int) =
             '#' + ResourcesCompat.getColor(resources, colorResourceId, null).toString(16)
 
-    private fun applySkin(theme: Skin) {
-        skin = theme
+    private fun applySkin(skin: Skin) {
+        this.skin = skin
+        updateSkinIn(mainRootLayout)
+    }
 
+    private fun updateSkinIn(viewGroup: ViewGroup) {
         val colorMap = mapOf(
             "primary" to skin.primary,
             "primary_dim" to skin.primaryDim,

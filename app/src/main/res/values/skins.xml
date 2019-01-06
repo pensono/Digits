@@ -6,8 +6,8 @@
     <color name="background_light">#212121</color>
     <array name="themes">
         <item>@array/skin_default_light</item>
-        <item>@array/theme_grey</item>
-        <item>@array/theme_default_light1</item>
+        <item>@array/skin_blue_grey</item>
+        <item>@array/skin_purple</item>
         <item>@array/theme_default_light2</item>
         <item>@array/theme_default_light3</item>
     </array>
@@ -22,7 +22,7 @@
         <item>text_light</item>
     </array>
 
-    <array name="theme_grey">
+    <array name="skin_blue_grey">
         <item>#263238</item>
         <item>#607D8B</item>
         <item>#546E7A</item>
@@ -32,13 +32,13 @@
         <item>text_light</item>
     </array>
 
-    <array name="theme_default_light1">
+    <array name="skin_purple">
         <item>#212121</item>
-        <item>#26a69a</item>
-        <item>#00897B</item>
-        <item>#00796B</item>
-        <item>#B2DFDB</item>
-        <item>#FFC107</item>
+        <item>#9C27B0</item>
+        <item>#7B1FA2</item>
+        <item>#8E24AA</item>
+        <item>#BA68C8</item>
+        <item>#66BB6A</item>
         <item>text_light</item>
     </array>
     <array name="theme_default_light2">

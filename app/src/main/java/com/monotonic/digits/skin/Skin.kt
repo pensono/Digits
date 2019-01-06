@@ -6,7 +6,8 @@ import android.support.annotation.ColorInt
 /**
  * @author Ethan
  */
-data class Skin(@ColorInt val fill: Int,
+data class Skin(val id: Int,
+                @ColorInt val fill: Int,
                 @ColorInt val primary: Int,
                 @ColorInt val primaryDim: Int,
                 @ColorInt val primaryDark: Int,
@@ -30,7 +31,7 @@ fun skinFromResource(context: Context, resId: Int): Skin {
 
     // This line is sad. replace with an enum or something rather than a boolean
     val light = if (item.getBoolean(6, true)) SkinType.LIGHT else SkinType.DARK
-    val skin = Skin(fill, primary, primaryDim, primaryDark, primaryLight, accent, light)
+    val skin = Skin(resId, fill, primary, primaryDim, primaryDark, primaryLight, accent, light)
     item.recycle()
 
     return skin
