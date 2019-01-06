@@ -109,6 +109,8 @@ class HumanQuantityTest {
 
     @Test
     fun insignificantPosition() {
+        testInsigfigStart(1, "9900", 1, SeperatorType.NONE)
+        testInsigfigStart(2, "9900", 2, SeperatorType.NONE)
         testInsigfigStart(1, "99.99", 1, SeperatorType.NONE)
         testInsigfigStart(2, "99.99", 2, SeperatorType.NONE) // Before the period
         testInsigfigStart(3, "0.2", 1, SeperatorType.NONE)  // With a leading 0
@@ -126,31 +128,60 @@ class HumanQuantityTest {
         testInsigfigStart(6, "-0.0022", 1, SeperatorType.NONE)
     }
 
+    @Test
+    fun insignificantPositionSpace() {
+        testInsigfigStart(1, "99.99", 1, SeperatorType.SPACE)
+        testInsigfigStart(1, "9999.99", 1, SeperatorType.SPACE)
+        testInsigfigStart(3, "9999.99", 2, SeperatorType.SPACE)
+        testInsigfigStart(5, "9999.99", 4, SeperatorType.SPACE)
+        testInsigfigStart(1, "999777.99", 1, SeperatorType.SPACE)
+        testInsigfigStart(3, "999777.99", 3, SeperatorType.SPACE)
+        testInsigfigStart(11, "9999.9999", 8, SeperatorType.SPACE)
+
+        testInsigfigStart(2, "-99.99", 1, SeperatorType.SPACE)
+        testInsigfigStart(2, "-9999.99", 1, SeperatorType.SPACE)
+        testInsigfigStart(4, "-9999.99", 2, SeperatorType.SPACE)
+        testInsigfigStart(6, "-9999.99", 4, SeperatorType.SPACE)
+        testInsigfigStart(12, "-9999.9999", 8, SeperatorType.SPACE)
+
+        testInsigfigStart(4, "0.9999", 2, SeperatorType.SPACE)
+        testInsigfigStart(7, "0.99999", 4, SeperatorType.SPACE)
+        testInsigfigStart(5, "0.009999", 1, SeperatorType.SPACE)
+        testInsigfigStart(8, "0.009999", 3, SeperatorType.SPACE)
+        testInsigfigStart(6, "-0.009999", 1, SeperatorType.SPACE)
+
+        testInsigfigStart(3, "9999", 2, SeperatorType.SPACE)
+        testInsigfigStart(5, "9999", 4, SeperatorType.SPACE)
+        testInsigfigStart(1, "999900", 1, SeperatorType.SPACE)
+        testInsigfigStart(3, "999900", 3, SeperatorType.SPACE)
+        testInsigfigStart( 4, "-999900", 3, SeperatorType.SPACE)
+    }
+
 
     @Test
     fun insignificantWithEllipsis() {
-        testHumanString(HumanQuantityString("1.2345…ᴇ3", 6, 6), "1234.56789", 10, 9, SeperatorType.NONE)
-        testHumanString(HumanQuantityString("1.3333…ᴇ3", 3, 6), "1333.33333", 2, 9, SeperatorType.NONE)
-        testHumanString(HumanQuantityString("1.3333…ᴇ3", 6, 6), "1333.33333", 5, 9, SeperatorType.NONE)
+        testHumanString(SigfigString("1.2345…ᴇ3", 6, 6), "1234.56789", 10, 9, SeperatorType.NONE)
+        testHumanString(SigfigString("1.3333…ᴇ3", 3, 6), "1333.33333", 2, 9, SeperatorType.NONE)
+        testHumanString(SigfigString("1.3333…ᴇ3", 6, 6), "1333.33333", 5, 9, SeperatorType.NONE)
 
-        testHumanString(HumanQuantityString("-1.2345…ᴇ3", 7, 7), "-1234.56789", 10, 10, SeperatorType.NONE)
-        testHumanString(HumanQuantityString("-1.3333…ᴇ3", 4, 7), "-1333.33333", 2, 10, SeperatorType.NONE)
-        testHumanString(HumanQuantityString("-1.3333…ᴇ3", 7, 7), "-1333.33333", 5, 10, SeperatorType.NONE)
+        testHumanString(SigfigString("-1.2345…ᴇ3", 7, 7), "-1234.56789", 10, 10, SeperatorType.NONE)
+        testHumanString(SigfigString("-1.3333…ᴇ3", 4, 7), "-1333.33333", 2, 10, SeperatorType.NONE)
+        testHumanString(SigfigString("-1.3333…ᴇ3", 7, 7), "-1333.33333", 5, 10, SeperatorType.NONE)
 
         // No E for *10^0
-        testHumanString(HumanQuantityString("1.333333…", 6, 8), "1.333333333", 5, 9, SeperatorType.NONE)
+        testHumanString(SigfigString("1.333333…", 6, 8), "1.333333333", 5, 9, SeperatorType.NONE)
     }
 
     @Test
     fun zeroCharacters() {
-        testHumanString(HumanQuantityString("", 0, 0), "-1234.56789", 10, 0, SeperatorType.NONE)
+        testHumanString(SigfigString("", 0, 0), "-1234.56789", 10, 0, SeperatorType.NONE)
     }
 
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int, seperatorType: SeperatorType) {
         Assert.assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType).insigfigStart)
     }
 
-    private fun testHumanString(expected: HumanQuantityString, value: String, sigFigs: Int, maxChars: Int, seperatorType: SeperatorType) {
+    private fun testHumanString(expected: SigfigString, value: String, sigFigs: Int, maxChars: Int, seperatorType: SeperatorType) {
         Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType, maxChars))
     }
 }
