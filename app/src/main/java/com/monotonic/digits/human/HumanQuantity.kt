@@ -78,7 +78,8 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
 }
 
 enum class SeperatorType(val seperator: String) {
-    NONE(""), SPACE(" ")
+    NONE(""),
+    SPACE("\u2009") // Thin space, according to Wikipedia it should be used as a thousand's separator https://en.wikipedia.org/wiki/Whitespace_character
 }
 
 data class HumanQuantityString(val string: String, val insigfigStart: Int, val insigfigEnd: Int)

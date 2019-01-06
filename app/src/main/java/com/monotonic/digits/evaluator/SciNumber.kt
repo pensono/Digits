@@ -276,7 +276,9 @@ sealed class SciNumber {
          */
         private fun insertGroupingSeparator(input: String, seperatorType: SeperatorType) : String =
                 // Chop into bits and join together
-            (0 .. input.length / 3).joinToString(seperatorType.seperator) { input.substring(it * 3, min(it * 3 + 3, input.length)) }
+            (0 .. input.length / 3).map { input.substring(it * 3, min(it * 3 + 3, input.length)) }
+                    .filter { it.isNotEmpty() } // Removes last one if it's empty
+                    .joinToString(seperatorType.seperator)
     }
 
     object Nan : SciNumber() {

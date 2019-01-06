@@ -6,6 +6,7 @@ Pre-release:
 - Clear all animation
 - Engineering/Scientific mode
 - Spaces to group digits
+- Setting to disable insigfig highlighting
 
 Post-release:
 - Unit corrections
