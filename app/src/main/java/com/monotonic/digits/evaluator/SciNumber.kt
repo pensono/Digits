@@ -294,7 +294,7 @@ sealed class SciNumber {
                             val decimalSigfig = if (precision.amount > intStr.length) 1 else 0
                             val initialOffset = ((-intStr.length % 3) + 3) % 3
                             val intSeparatorCount = min((precision.amount - 1 + initialOffset) / 3, (intStr.length - 1) / 3)
-                            val fracSeparatorCount = max((precision.amount - intStr.length) / 3, 0)
+                            val fracSeparatorCount = max((precision.amount - intStr.length - 1) / 3, 0)
                             val separatorSize = (intSeparatorCount + fracSeparatorCount) * seperatorType.seperator.length
 
                             SigfigString(resultStr, signStr.length + decimalSigfig + precision.amount + separatorSize)
