@@ -26,7 +26,6 @@ import com.monotonic.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
 import android.content.Intent
-import android.content.SharedPreferences
 
 
 class MainActivity : Activity(), PurchasesUpdatedListener {
@@ -49,6 +48,12 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         get() {
             val spaceSeparate = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("space_grouping", true)
             return if (spaceSeparate) SeperatorType.SPACE else SeperatorType.NONE
+        }
+
+    private val numberFormat : NumberFormat
+        get() {
+            val useEngineering = getPreferences(Context.MODE_PRIVATE).getBoolean("use_engineering_format", true)
+            return if (useEngineering) NumberFormat.ENGINEERING else NumberFormat.SCIENTIFIC
         }
 
     private val sigfigHighlight : Boolean
@@ -121,6 +126,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         val skinId = resources.getIdentifier(skinName, "id", packageName)
         applySkin(skinFromResource(this, skinId))
 
+        number_format_switcher.isChecked = numberFormat == NumberFormat.ENGINEERING
+
         populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
         populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
@@ -134,9 +141,11 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         }
     }
 
-    override fun onPostResume() {
-        super.onPostResume()
+    override fun onResume() {
+        super.onResume()
         input.text.replace(0, input.text.length, getPreferences(Context.MODE_PRIVATE).getString("input_value", ""))
+
+        refreshPurchases()
     }
 
     fun connectToBillingService() {
@@ -182,12 +191,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        refreshPurchases()
-    }
-
     fun calculatorButtonClick(button: View) {
         val buttonCommand = (button as CalculatorButton).primaryCommand
         if (buttonCommand == "ENT") {
@@ -207,6 +210,14 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
                 editingInput.setSelection(editingInput.selectionStart + offset - insertText.length)
             }
         }
+    }
+
+    fun numberFormatToggled(view: View) {
+        with (getPreferences(Context.MODE_PRIVATE).edit()) {
+            putBoolean("use_engineering_format", number_format_switcher.isChecked)
+            commit()
+        }
+        updatePreview()
     }
 
     fun toggleUnitConversion(view: View) {
@@ -416,7 +427,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         var humanString = humanQuantity.humanString(resultSeparator)
         val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
         while (result_preview.paint.measureText(humanString.string) >= availableSpacePx && humanString.string.length > 0) {
-            humanString = humanQuantity.humanString(resultSeparator, humanString.string.length - 1)
+            humanString = humanQuantity.humanString(resultSeparator, numberFormat, humanString.string.length - 1)
         }
 
         val coloredText =

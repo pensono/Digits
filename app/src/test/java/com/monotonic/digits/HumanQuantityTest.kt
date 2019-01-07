@@ -15,7 +15,7 @@ class HumanQuantityTest {
     fun useDecimalNotation() {
         assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString(SeperatorType.NONE).string)
         assertEquals("56000", humanize(evaluateExpression("56k").value).humanString(SeperatorType.NONE).string)
-        assertEquals("1.…ᴇ20", humanize(evaluateExpression("1.0ᴇ20").value).humanString(SeperatorType.NONE, 6).string)
+        assertEquals("1.…ᴇ20", humanize(evaluateExpression("1.0ᴇ20").value).humanString(SeperatorType.NONE, NumberFormat.SCIENTIFIC, 6).string)
     }
 
     @Test
@@ -31,69 +31,84 @@ class HumanQuantityTest {
 
     @Test
     fun limitedHumanStringNoSeparator() {
-        assertEquals("1.2…ᴇ-1", HumanQuantity(SciNumber.Real(".1234567"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 7).string)
-        assertEquals("0.12345", HumanQuantity(SciNumber.Real(".12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 7).string)
-        assertEquals("0.12345", HumanQuantity(SciNumber.Real(".12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 10).string)
-        assertEquals("1.2…ᴇ-4", HumanQuantity(SciNumber.Real(".00012345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 7).string)
-        assertEquals("1.2345…ᴇ-4", HumanQuantity(SciNumber.Real(".000123456"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 10).string)
+        testHumanString("1.2…ᴇ-1", ".1234567", 7, SeperatorType.NONE)
+        testHumanString("0.12345", ".12345", 7, SeperatorType.NONE)
+        testHumanString("0.12345", ".12345", 10, SeperatorType.NONE)
+        testHumanString("1.2…ᴇ-4", ".00012345", 7, SeperatorType.NONE)
+        testHumanString("1.2345…ᴇ-4", ".000123456", 10, SeperatorType.NONE)
 
-        assertEquals("12345", HumanQuantity(SciNumber.Real("12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 7).string)
-        assertEquals("12345", HumanQuantity(SciNumber.Real("12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 10).string)
+        testHumanString("12345", "12345", 7, SeperatorType.NONE)
+        testHumanString("12345", "12345", 10, SeperatorType.NONE)
 
-        assertEquals("1.234…ᴇ8", HumanQuantity(SciNumber.Real("123456789"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 8).string)
+        testHumanString("1.234…ᴇ8", "123456789", 8, SeperatorType.NONE)
 
         // Untested is small maxChars values < 4
     }
 
     @Test
     fun limitedHumanStringSpace() {
-        assertEquals("1.2…ᴇ-1", HumanQuantity(SciNumber.Real(".1234567"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 7).string)
-        assertEquals("0.123 4", HumanQuantity(SciNumber.Real(".1234"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 7).string)
-        assertEquals("0.123 4", HumanQuantity(SciNumber.Real(".1234"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 10).string)
-        assertEquals("0.123", HumanQuantity(SciNumber.Real(".123"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 7).string)
-        assertEquals("1.234…ᴇ-4", HumanQuantity(SciNumber.Real(".000123456"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 10).string)
+        testHumanString("1.2…ᴇ-1", ".1234567", 7, SeperatorType.SPACE)
+        testHumanString("0.123 4", ".1234", 7, SeperatorType.SPACE)
+        testHumanString("0.123 4", ".1234", 10, SeperatorType.SPACE)
+        testHumanString("0.123", ".123", 7, SeperatorType.SPACE)
+        testHumanString("1.234…ᴇ-4", ".000123456", 10, SeperatorType.SPACE)
 
-        assertEquals("12 345", HumanQuantity(SciNumber.Real("12345"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 7).string)
-        assertEquals("12 345", HumanQuantity(SciNumber.Real("12345"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 10).string)
+        testHumanString("12 345", "12345", 7, SeperatorType.SPACE)
+        testHumanString("12 345", "12345", 10, SeperatorType.SPACE)
 
-        assertEquals("12 345.678 9", HumanQuantity(SciNumber.Real("12345.6789"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 15).string)
-        assertEquals("1.234 56…ᴇ4", HumanQuantity(SciNumber.Real("12345.6789"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 11).string)
-
-        assertEquals("1.234…ᴇ8", HumanQuantity(SciNumber.Real("123456789"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 8).string)
+        testHumanString("12 345.678 9", "12345.6789", 15, SeperatorType.SPACE)
+        testHumanString("1.234 56…ᴇ4", "12345.6789", 11, SeperatorType.SPACE)
+        testHumanString("1.234…ᴇ8", "123456789", 8, SeperatorType.SPACE)
     }
 
     @Test
     fun negativeLimitedHumanStringNoSeparator() {
-        assertEquals("-1.2…ᴇ-1", HumanQuantity(SciNumber.Real("-.1234567"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 8).string)
-        assertEquals("-0.12345", HumanQuantity(SciNumber.Real("-.12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 8).string)
-        assertEquals("-0.12345", HumanQuantity(SciNumber.Real("-.12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 11).string)
-        assertEquals("-1.2…ᴇ-4", HumanQuantity(SciNumber.Real("-.00012345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 8).string)
-        assertEquals("-1.2345…ᴇ-4", HumanQuantity(SciNumber.Real("-.000123456"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 11).string)
+        testHumanString("-1.2…ᴇ-1", "-.1234567", 8, SeperatorType.NONE)
+        testHumanString("-0.12345", "-.12345", 8, SeperatorType.NONE)
+        testHumanString("-0.12345", "-.12345", 11, SeperatorType.NONE)
+        testHumanString("-1.2…ᴇ-4", "-.00012345", 8, SeperatorType.NONE)
+        testHumanString("-1.2345…ᴇ-4", "-.000123456", 11, SeperatorType.NONE)
 
-        assertEquals("-12345", HumanQuantity(SciNumber.Real("-12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 8).string)
-        assertEquals("-12345", HumanQuantity(SciNumber.Real("-12345"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 11).string)
+        testHumanString("-12345", "-12345", 8, SeperatorType.NONE)
+        testHumanString("-12345", "-12345", 11, SeperatorType.NONE)
 
-        assertEquals("-1.234…ᴇ8", HumanQuantity(SciNumber.Real("-123456789"), HumanUnit(mapOf())).humanString(SeperatorType.NONE, 9).string)
+        testHumanString("-1.234…ᴇ8", "-123456789", 9, SeperatorType.NONE)
 
         // Untested is small maxChars values < 4
     }
 
     @Test
     fun negativeLimitedHumanStringSpace() {
-        assertEquals("-1.2…ᴇ-1", HumanQuantity(SciNumber.Real("-.1234567"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 8).string)
-        assertEquals("-0.123 4", HumanQuantity(SciNumber.Real("-.1234"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 8).string)
-        assertEquals("-0.123 4", HumanQuantity(SciNumber.Real("-.1234"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 11).string)
-        assertEquals("-1.2…ᴇ-4", HumanQuantity(SciNumber.Real("-.00012345"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 8).string)
-        assertEquals("-1.234…ᴇ-4", HumanQuantity(SciNumber.Real("-.000123456"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 11).string)
+        testHumanString("-1.2…ᴇ-1", "-.1234567", 8, SeperatorType.SPACE)
+        testHumanString("-0.123 4", "-.1234", 8, SeperatorType.SPACE)
+        testHumanString("-0.123 4", "-.1234", 11, SeperatorType.SPACE)
+        testHumanString("-1.2…ᴇ-4", "-.00012345", 8, SeperatorType.SPACE)
+        testHumanString("-1.234…ᴇ-4", "-.000123456", 11, SeperatorType.SPACE)
 
-        assertEquals("-12 345", HumanQuantity(SciNumber.Real("-12345"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 7).string)
-        assertEquals("-12 345", HumanQuantity(SciNumber.Real("-12345"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 11).string)
+        testHumanString("-12 345", "-12345",7, SeperatorType.SPACE)
+        testHumanString("-12 345", "-12345",11, SeperatorType.SPACE)
 
-        assertEquals("-1.234…ᴇ8", HumanQuantity(SciNumber.Real("-123456789"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 9).string)
-        assertEquals("-1.234…ᴇ8", HumanQuantity(SciNumber.Real("-123456789"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 10).string)
-        assertEquals("-1.234 5…ᴇ8", HumanQuantity(SciNumber.Real("-123456789"), HumanUnit(mapOf())).humanString(SeperatorType.SPACE, 11).string)
+        testHumanString("-1.234…ᴇ8", "-123456789", 9, SeperatorType.SPACE)
+        testHumanString("-1.234…ᴇ8", "-123456789", 10, SeperatorType.SPACE)
+        testHumanString("-1.234 5…ᴇ8", "-123456789", 11, SeperatorType.SPACE)
 
         // Untested is small maxChars values < 4
+    }
+    
+    @Test
+    fun engineeringExponents() {
+        testHumanString("123.4…ᴇ6", "123456789", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("12.34…ᴇ6", "12345678.0", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("1.234…ᴇ6", "1234567.00", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("123.4…ᴇ3", "123456.000", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
+
+        testHumanString("123.45…ᴇ-6", ".000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("12.345…ᴇ-6", ".0000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("1.2345…ᴇ-6", ".00000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("123.45…ᴇ-9", ".000000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
+
+        testHumanString("12345", "12345", 7, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("12345", "12345", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
     }
 
     @Test
@@ -134,6 +149,7 @@ class HumanQuantityTest {
         testInsigfigStart(1, "9999.99", 1, SeperatorType.SPACE)
         testInsigfigStart(3, "9999.99", 2, SeperatorType.SPACE)
         testInsigfigStart(5, "9999.99", 4, SeperatorType.SPACE)
+        testInsigfigStart(3, "777.9", 3, SeperatorType.SPACE)
         testInsigfigStart(5, "777.9", 4, SeperatorType.SPACE)
         testInsigfigStart(1, "999777.99", 1, SeperatorType.SPACE)
         testInsigfigStart(3, "999777.99", 3, SeperatorType.SPACE)
@@ -161,28 +177,33 @@ class HumanQuantityTest {
 
     @Test
     fun insignificantWithEllipsis() {
-        testHumanString(SigfigString("1.2345…ᴇ3", 6, 6), "1234.56789", 10, 9, SeperatorType.NONE)
-        testHumanString(SigfigString("1.3333…ᴇ3", 3, 6), "1333.33333", 2, 9, SeperatorType.NONE)
-        testHumanString(SigfigString("1.3333…ᴇ3", 6, 6), "1333.33333", 5, 9, SeperatorType.NONE)
+        testSigfigString(SigfigString("1.2345…ᴇ3", 6, 6), "1234.56789", 10, 9, SeperatorType.NONE)
+        testSigfigString(SigfigString("1.3333…ᴇ3", 3, 6), "1333.33333", 2, 9, SeperatorType.NONE)
+        testSigfigString(SigfigString("1.3333…ᴇ3", 6, 6), "1333.33333", 5, 9, SeperatorType.NONE)
 
-        testHumanString(SigfigString("-1.2345…ᴇ3", 7, 7), "-1234.56789", 10, 10, SeperatorType.NONE)
-        testHumanString(SigfigString("-1.3333…ᴇ3", 4, 7), "-1333.33333", 2, 10, SeperatorType.NONE)
-        testHumanString(SigfigString("-1.3333…ᴇ3", 7, 7), "-1333.33333", 5, 10, SeperatorType.NONE)
+        testSigfigString(SigfigString("-1.2345…ᴇ3", 7, 7), "-1234.56789", 10, 10, SeperatorType.NONE)
+        testSigfigString(SigfigString("-1.3333…ᴇ3", 4, 7), "-1333.33333", 2, 10, SeperatorType.NONE)
+        testSigfigString(SigfigString("-1.3333…ᴇ3", 7, 7), "-1333.33333", 5, 10, SeperatorType.NONE)
 
         // No E for *10^0
-        testHumanString(SigfigString("1.333333…", 6, 8), "1.333333333", 5, 9, SeperatorType.NONE)
+        testSigfigString(SigfigString("1.333333…", 6, 8), "1.333333333", 5, 9, SeperatorType.NONE)
     }
 
     @Test
     fun zeroCharacters() {
-        testHumanString(SigfigString("", 0, 0), "-1234.56789", 10, 0, SeperatorType.NONE)
+        testSigfigString(SigfigString("", 0, 0), "-1234.56789", 10, 0, SeperatorType.NONE)
     }
 
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int, seperatorType: SeperatorType) {
         Assert.assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType).insigfigStart)
     }
 
-    private fun testHumanString(expected: SigfigString, value: String, sigFigs: Int, maxChars: Int, seperatorType: SeperatorType) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType, maxChars))
+
+    private fun testHumanString(expected: String, value: String, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
+        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(seperatorType, numberFormat, maxChars).string)
+    }
+
+    private fun testSigfigString(expected: SigfigString, value: String, sigFigs: Int, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
+        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType, numberFormat, maxChars))
     }
 }

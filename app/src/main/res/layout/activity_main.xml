@@ -73,13 +73,16 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:paddingBottom="8dp">
-        <Button android:id="@+id/number_format_switcher"
+
+        <ToggleButton android:id="@+id/number_format_switcher"
             style="@style/AppTheme.InlineSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:minWidth="48dp"
-            android:text="Eng"/>
+            android:textOn="@string/option_text_eng"
+            android:textOff="@string/option_text_sci"
+            android:onClick="numberFormatToggled"/>
 
         <Spinner android:id="@+id/discipline_dropdown"
             style="@style/AppTheme.InlineSetting"

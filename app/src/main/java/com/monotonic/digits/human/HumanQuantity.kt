@@ -18,7 +18,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
     /**
      * @param maxChars must be non-negative
      */
-    fun humanString(separatorType: SeperatorType, maxChars: Int) : SigfigString {
+    fun humanString(separatorType: SeperatorType, numberFormat: NumberFormat, maxChars: Int) : SigfigString {
         if (maxChars == 0) {
             return SigfigString("", 0, 0)
         }
@@ -35,9 +35,10 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
         return if (regularString.string.length <= maxValueChars) {
             SigfigString(regularString.string + unitString, regularString.insigfigStart, regularString.insigfigEnd)
         } else {
-            val magnitude = value.magnitude - 1
-            val eNotation = if (magnitude == 0) "…" else "…ᴇ$magnitude"
-            val normalizedValue = value / SciNumber.Real(10).pow(magnitude)
+            val rawMagnitude = value.magnitude - 1.0
+            val roundedMagnitude = Math.floor(rawMagnitude / numberFormat.exponentGranularity).toInt() * numberFormat.exponentGranularity
+            val eNotation = if (roundedMagnitude == 0) "…" else "…ᴇ$roundedMagnitude"
+            val normalizedValue = value / SciNumber.Real(10).pow(roundedMagnitude)
             val normalizedString = normalizedValue.valueString(separatorType)
             val sizedString = normalizedString.string.substring(0, max(0, min(normalizedString.string.length, maxValueChars - eNotation.length)))
                     .trimEnd { !(it.isDigit() || it == '.') } // Remove trailing non-numeric characters like separators
