@@ -30,9 +30,9 @@
     </GridLayout>
 
     <ScrollView
+        style="@style/AppTheme.UnitSelector"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/primary"
         android:id="@+id/prefix_selector_container"
         android:saveEnabled="false" >
         <LinearLayout
@@ -44,9 +44,9 @@
     </ScrollView>
 
     <ScrollView
+        style="@style/AppTheme.UnitSelector"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@color/primary">
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
