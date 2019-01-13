@@ -3,8 +3,6 @@ Pre-release:
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - Setting to prefer US or Metric units
 - In-app purchase for pro mode
-- Clear all animation
-- Engineering/Scientific mode
 
 Post-release:
 - Unit corrections
@@ -36,3 +34,4 @@ Post-release:
 - Short and long scale names for the unit prefixes
 - Factor MainActivity into different parts (billing, input, display, ...)
 - Support for different number formats in different locales
+- Hex mode (data only?)
