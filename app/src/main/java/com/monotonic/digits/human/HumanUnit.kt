@@ -23,7 +23,20 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
 
     val exponentMagnitude = components.values.map{ it.absoluteValue }.sum()
 
-    val abbreviation = prefix.abbreviation + components.map { entry -> entry.key.abbreviation + prettyExponent(entry.value) }.joinToString("")
+    val abbreviation : String
+        get() {
+            val splitComponents = components.entries.partition { it.value > 0 }
+            val numerator = splitComponents.first.map { entry -> entry.key.abbreviation + prettyExponent(entry.value) }.joinToString("")
+            val denominator = splitComponents.second.map { entry -> entry.key.abbreviation + prettyExponent(-entry.value) }.joinToString("")
+
+            val completeNumerator = if (numerator.isEmpty()) "1" else numerator
+            val completeDenominator = if (denominator.isEmpty()) "" else "/$denominator"
+
+            return if (numerator.isEmpty() && denominator.isEmpty())
+                prefix.abbreviation
+            else
+                prefix.abbreviation + completeNumerator + completeDenominator
+        }
 
     operator fun plus(other: AtomicHumanUnit) = incorperateUnit(other, 1)
     operator fun minus(other: AtomicHumanUnit) = incorperateUnit(other, -1)

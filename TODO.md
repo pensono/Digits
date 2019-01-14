@@ -36,3 +36,4 @@ Post-release:
 - Short and long scale names for the unit prefixes
 - Factor MainActivity into different parts (billing, input, display, ...)
 - Support for different number formats in different locales
+- Setting for units written with negative exponents vs. with the slash
