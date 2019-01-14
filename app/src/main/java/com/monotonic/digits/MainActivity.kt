@@ -3,7 +3,6 @@ package com.monotonic.digits
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
@@ -26,6 +25,7 @@ import com.monotonic.digits.units.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
 import android.content.Intent
+import android.graphics.drawable.*
 
 
 class MainActivity : Activity(), PurchasesUpdatedListener {
@@ -259,7 +259,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
         if (button.primaryCommand == "DEL") {
-            editingInput.text.clear()
+            doClearAnimation()
             return
         }
 
@@ -468,5 +468,18 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         )
 
         updateSkinIn(mainRootLayout, colorMap)
+    }
+
+    private fun doClearAnimation() {
+        val circleAnimation = GrowingCircle(skin.primary, editor_area)
+        circleAnimation.registerAnimationCallback(object : Animatable2.AnimationCallback() {
+            override fun onAnimationEnd(drawable: Drawable) {
+                editor_area.foreground = null
+            }
+        })
+        circleAnimation.peakCallback = { editingInput.text.clear() }
+        editor_area.foreground = circleAnimation
+
+        circleAnimation.start()
     }
 }
