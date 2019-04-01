@@ -1,10 +1,12 @@
 package com.monotonic.digits
 
+import com.monotonic.digits.evaluator.Precision
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
 import junit.framework.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 /**
@@ -15,7 +17,7 @@ class HumanQuantityTest {
     fun useDecimalNotation() {
         assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString(SeperatorType.NONE).string)
         assertEquals("56000", humanize(evaluateExpression("56k").value).humanString(SeperatorType.NONE).string)
-        assertEquals("1.…ᴇ20", humanize(evaluateExpression("1.0ᴇ20").value).humanString(SeperatorType.NONE, NumberFormat.SCIENTIFIC, 6).string)
+        assertEquals("1.…ᴇ20", humanize(evaluateExpression("1.0ᴇ20").value).humanString(6, SeperatorType.NONE, NumberFormat.SCIENTIFIC).string)
     }
 
     @Test
@@ -191,20 +193,70 @@ class HumanQuantityTest {
     }
 
     @Test
+    fun basicValueString() {
+        testValueString("1.234", "1.234", sf(4))
+        testValueString("1.2", "1.234", sf(2))
+        testValueString("3.33300000000", "3.333", Precision.Infinite)
+        testValueString("3.33333333333", "3.3333333333333333333", Precision.Infinite)
+
+        testValueString("12.3", "12.34", sf(3))
+        testValueString("12", "12.34", sf(2))
+
+        testValueString("123400", "123400", sf(4))
+        testValueString("120000", "123400", sf(2))
+        testValueString("333300.000000", "333300", Precision.Infinite)
+        testValueString("333300000000", "333300000000", Precision.Infinite)
+
+        testValueString("0.001234", ".001234", sf(4))
+        testValueString("0.0012", ".001234", sf(2))
+        testValueString("0.00000003333", ".00000003333", sf(4))
+    }
+
+    @Test
+    fun valueStringUsesScientificWhenTooLong() {
+        testValueString("3.33333333333ᴇ19", "33333333333333333333", Precision.Infinite)
+        testValueString("3.333ᴇ-17", ".00000000000000003333", sf(4))
+        testValueString("3.33333333333ᴇ-3", ".0033333333333333333333", Precision.Infinite)
+        testValueString("3.33300000000ᴇ-3", ".003333", Precision.Infinite)
+    }
+
+    @Test
+    fun valueStringWithUnit() {
+        testValueString("1.234m", "1.234", sf(4), HumanUnit(mapOf(u("m") to 1)))
+        testValueString("1.2m", "1.234", sf(2), HumanUnit(mapOf(u("m") to 1)))
+        testValueString("3.33300000000m", "3.333", Precision.Infinite, HumanUnit(mapOf(u("m") to 1)))
+        testValueString("3.33333333333m", "3.3333333333333333333", Precision.Infinite, HumanUnit(mapOf(u("m") to 1)))
+        testValueString("3.333ᴇ-17m", ".00000000000000003333", sf(4), HumanUnit(mapOf(u("m") to 1)))
+    }
+
+    @Test
+    fun valueStringConstant() {
+        Assert.assertEquals("3.14159265358", HumanQuantity(SciNumber.Real(Math.PI), HumanUnit(mapOf())).valueString())
+        Assert.assertEquals("3.14159265358m", HumanQuantity(SciNumber.Real(Math.PI), HumanUnit(mapOf(u("m") to 1))).valueString())
+    }
+
+    @Test
     fun zeroCharacters() {
-        testSigfigString(SigfigString("", 0, 0), "-1234.56789", 10, 0, SeperatorType.NONE)
+        testSigfigString(SigfigString("",0), "-1234.56789", 10, 0, SeperatorType.NONE)
     }
 
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int, seperatorType: SeperatorType) {
         Assert.assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType).insigfigStart)
     }
 
-
     private fun testHumanString(expected: String, value: String, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(seperatorType, numberFormat, maxChars).string)
+        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat).string)
     }
 
     private fun testSigfigString(expected: SigfigString, value: String, sigFigs: Int, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType, numberFormat, maxChars))
+        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat))
+    }
+
+    private fun testValueString(expected: String, value: String, precision: Precision) {
+        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, precision), HumanUnit(mapOf())).valueString())
+    }
+
+    private fun testValueString(expected: String, value: String, precision: Precision, unit: HumanUnit) {
+        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, precision), unit).valueString())
     }
 }

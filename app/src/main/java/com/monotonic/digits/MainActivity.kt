@@ -59,7 +59,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     private val sigfigHighlight : Boolean
         get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", true)
 
-    // TODO move these default colors to a file or something
     private lateinit var skin : Skin
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -195,7 +194,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         val buttonCommand = (button as CalculatorButton).primaryCommand
         if (buttonCommand == "ENT") {
             history += HistoryItem(input.text.toString(), result_preview.text.toString())
-            input.text.replace(0, editingInput.text.length, humanizedQuantity.humanString(resultSeparator).string)
+            input.text.replace(0, editingInput.text.length, humanizedQuantity.valueString())
         } else if (buttonCommand == "DEL") {
             if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
                 editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
@@ -427,7 +426,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         var humanString = humanQuantity.humanString(resultSeparator)
         val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
         while (result_preview.paint.measureText(humanString.string) >= availableSpacePx && humanString.string.length > 0) {
-            humanString = humanQuantity.humanString(resultSeparator, numberFormat, humanString.string.length - 1)
+            humanString = humanQuantity.humanString(humanString.string.length - 1, resultSeparator, numberFormat)
         }
 
         val coloredText =
