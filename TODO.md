@@ -41,3 +41,4 @@ Post-release:
 - Support for different number formats in different locales
 - Hex mode (data only?)
 - Test figureStart in SigfigNumber.valueString
+- Setting for units written with negative exponents vs. with the slash

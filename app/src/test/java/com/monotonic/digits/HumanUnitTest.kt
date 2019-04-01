@@ -36,6 +36,20 @@ class HumanUnitTest {
     }
 
     @Test
+    fun useSlashForNegative() {
+        assertEquals("Ω/m", HumanUnit(mapOf(u("Ω") to 1, u("m") to -1)).abbreviation)
+        assertEquals("Ω/m²", HumanUnit(mapOf(u("Ω") to 1, u("m") to -2)).abbreviation)
+
+        assertEquals("Ω²/m", HumanUnit(mapOf(u("Ω") to 2, u("m") to -1)).abbreviation)
+    }
+
+    @Test
+    fun useExponent() {
+        assertEquals("Ω²m", HumanUnit(mapOf(u("Ω") to 2, u("m") to 1)).abbreviation)
+        assertEquals("Ω²m²", HumanUnit(mapOf(u("Ω") to 2, u("m") to 2)).abbreviation)
+    }
+
+    @Test
     fun changeFactor() {
         assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("V") to 1), p("k"))), humanize(Quantity(Kilo, u("V"))))
     }
