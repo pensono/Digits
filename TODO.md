@@ -1,5 +1,4 @@
 Pre-release:
-- Allow the unit to be changed to something like mm
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - Setting to prefer US or Metric units
 - In-app purchase for pro mode
@@ -9,6 +8,7 @@ Pre-release:
 - exp function
 - Input can be scrolled vertically
 - Bug where m/s is marsed as mHz
+- Horizontal mode sizing/layout
 
 Post-release:
 - Properly round when a number is shortened
@@ -46,3 +46,6 @@ Post-release:
 - Use U+23E8 or e instead of E for scientific notation
   + Also have an option to always use a plus sign in the exponent
 - Make the ErrorInput not show underlines when using swiftkey
+
+Pro Mode:
+- Unlock all skins
