@@ -44,6 +44,8 @@ class ErrorInput: EditText {
         typedArray.recycle()
 
         underlinePaint.style = Paint.Style.STROKE
+
+        movementMethod = null
     }
 
     override fun onDraw(canvas: Canvas) {

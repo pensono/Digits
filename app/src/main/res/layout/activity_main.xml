@@ -23,78 +23,105 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:paddingBottom="8dp">
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp">
 
-                <ToggleButton android:id="@+id/number_format_switcher"
+                <ToggleButton
+                    android:id="@+id/number_format_switcher"
                     style="@style/AppTheme.InlineSetting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:minWidth="48dp"
-                    android:textOn="@string/option_text_eng"
+                    android:onClick="numberFormatToggled"
                     android:textOff="@string/option_text_sci"
-                    android:onClick="numberFormatToggled"/>
+                    android:textOn="@string/option_text_eng" />
 
-                <Spinner android:id="@+id/discipline_dropdown"
+                <Spinner
+                    android:id="@+id/discipline_dropdown"
                     style="@style/AppTheme.InlineSetting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/number_format_switcher"
-                    android:spinnerMode="dropdown"/>
+                    android:spinnerMode="dropdown" />
 
                 <ImageButton
                     style="@style/AppTheme.ActionButton"
-                    android:src="@drawable/ic_more_vert_black_grey600_24dp"
-                    android:onClick="openPopupMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true"
+                    android:onClick="openPopupMenu"
+                    android:src="@drawable/ic_more_vert_black_grey600_24dp" />
             </RelativeLayout>
 
-            <com.monotonic.digits.ErrorInput
-                android:id="@+id/input"
-                style="@style/AppTheme.Display"
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="8dp"
-                android:paddingEnd="8dp"
                 android:layout_weight="1"
-                android:inputType="text|textNoSuggestions" />
+                android:scrollbars="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal">
+
+                    <Space
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary" />
+
+                    <com.monotonic.digits.ErrorInput
+                        android:id="@+id/input"
+                        style="@style/AppTheme.Display"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|end"
+                        android:inputType="text|textNoSuggestions"
+                        android:lines="1" />
+
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary" />
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp">
+
                 <ImageButton
                     style="@style/AppTheme.ActionButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_swap_vertical_bold_grey600_24dp"
-                    android:onClick="toggleUnitConversion"/>
+                    android:onClick="toggleUnitConversion"
+                    android:src="@drawable/ic_swap_vertical_bold_grey600_24dp" />
+
                 <TextView
                     android:id="@+id/result_preview"
                     style="@style/AppTheme.Display.Preview"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:paddingEnd="8dp"
-                    android:onClick="toggleUnitConversion"/>
+                    android:layout_weight="1"
+                    android:onClick="toggleUnitConversion"
+                    android:paddingEnd="8dp" />
 
                 <EditText
                     android:id="@+id/unit_input"
                     style="@style/AppTheme.Display.Preview"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:cursorVisible="true"
+                    android:inputType="text|textNoSuggestions"
                     android:minWidth="48dp"
                     android:paddingEnd="8dp"
-                    android:cursorVisible="true"
-                    android:inputType="text|textNoSuggestions" />
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
         <include android:id="@+id/button_area"

@@ -8,6 +8,7 @@ Pre-release:
 - ln doesn't work
 - exp function
 - Input can be scrolled vertically
+- Bug where m/s is marsed as mHz
 
 Post-release:
 - Properly round when a number is shortened
@@ -42,3 +43,5 @@ Post-release:
 - Hex mode (data only?)
 - Test figureStart in SigfigNumber.valueString
 - Setting for units written with negative exponents vs. with the slash
+- Use U+23E8 or e instead of E for scientific notation
+  + Also have an option to always use a plus sign in the exponent
