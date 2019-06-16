@@ -45,3 +45,4 @@ Post-release:
 - Setting for units written with negative exponents vs. with the slash
 - Use U+23E8 or e instead of E for scientific notation
   + Also have an option to always use a plus sign in the exponent
+- Make the ErrorInput not show underlines when using swiftkey
