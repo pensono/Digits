@@ -9,6 +9,8 @@ Pre-release:
 - Input can be scrolled vertically
 - Bug where m/s is marsed as mHz
 - Horizontal mode sizing/layout
+- 5V input has wrong number of sigfigs when being converted into mV
+- Equals resets caret to the end
 
 Post-release:
 - Properly round when a number is shortened
