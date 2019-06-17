@@ -4,7 +4,6 @@ Pre-release:
 - In-app purchase for pro mode
 - Make input text size shrink with number of characters
 - Ripple color for color schemes
-- ln doesn't work
 - exp function
 - Input can be scrolled vertically
 - Bug where m/s is marsed as mHz
@@ -16,12 +15,11 @@ Post-release:
 - Properly round when a number is shortened
 - Unit corrections
 - Small space between every three digits in the output (should be a setting)
-- Engineering vs scientific mode (also a setting, or an option in the main screen)
 - Report bug button
 - Suggest feature button
 - Animate secondary button appearing
 - Better job of showing sigfigs in input
-- Sigfigs for transindental numbers (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
+- Sigfigs for transindental numbers and log/exp/trig functions (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
 - Refactor CalculatorButton into two subclasses and a superclass for the secondary and primary buttons
 - Nonintegral powers
 - Unparenthesized functions
@@ -31,6 +29,7 @@ Post-release:
 - Option to always round results to a certain decimal place or the number of sigfigs
 - Support for affine units (temperature)
 - Support for area units (like the acre)
+- Support for logarithmic units
 - Make the unit exponent too large error only highlight the number which is too large instead of the entire unit
 - Abbreviation alias (for degree, abbreviated deg)
 - Gi/Mi/Ki prefixes
@@ -48,6 +47,7 @@ Post-release:
 - Use U+23E8 or e instead of E for scientific notation
   + Also have an option to always use a plus sign in the exponent
 - Make the ErrorInput not show underlines when using swiftkey
+- log(1e3) isn't quite equal to 3
 
 Pro Mode:
 - Unlock all skins

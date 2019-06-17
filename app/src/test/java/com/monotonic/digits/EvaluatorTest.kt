@@ -290,6 +290,25 @@ class EvaluatorTest {
         errorTest(Interval(2,4), "√(-4m)")
     }
 
+    @Test
+    fun logarithm() {
+        evalTest(Quantity(SciNumber.Real("1")), "ln(e)")
+        evalTest(Quantity(SciNumber.Real("2")), "ln(e2)")
+
+        evalTest(Quantity(SciNumber.Real("1")), "log₁₀(10)")
+        evalTest(Quantity(SciNumber.Real("2")), "log₁₀(100)")
+        evalTest(Quantity(SciNumber.Real("1")), "log(10)")
+
+        evalTest(Quantity(SciNumber.Real("1")), "log₂(2)")
+        evalTest(Quantity(SciNumber.Real("4")), "log₂(16)")
+    }
+
+    @Test
+    fun invalidLogarithm() {
+        evalTest(Quantity(SciNumber.Nan), "ln(-e)")
+        evalTest(Quantity(SciNumber.Nan), "ln(0)") // Should be -inf? Lets not worry about infinity for now
+    }
+
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertTrue(result.errors.isEmpty())

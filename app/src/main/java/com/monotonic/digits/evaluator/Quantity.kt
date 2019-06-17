@@ -2,6 +2,7 @@ package com.monotonic.digits.evaluator
 
 import com.monotonic.digits.units.NaturalUnit
 import com.monotonic.digits.units.UnitSystem
+import java.math.BigDecimal
 
 /**
  * @author Ethan
@@ -41,6 +42,9 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     }
 
     fun sqrt() = Quantity(value.sqrt(), unit.half())
+
+    // What to put for unit here? Need logarithmic units
+    fun log(base: BigDecimal) = Quantity(value.log(base), UnitSystem.void)
 
     // Really not sure what to do with units on this one
     fun sin() = Quantity(value.sin(), unit)

@@ -7,6 +7,7 @@ import com.monotonic.digits.parser.DigitsParserBaseVisitor
 import com.monotonic.digits.units.UnitSystem
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.misc.Interval
+import java.math.BigDecimal
 import kotlin.math.abs
 
 /**
@@ -86,7 +87,12 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
             "cot" to wrapQuantityOperation(Quantity::cot),
 
             "√" to ::sqrt,
-            "sqrt" to ::sqrt
+            "sqrt" to ::sqrt,
+
+            "ln" to wrapQuantityOperation { q -> q.log(BigDecimal.valueOf(Math.E)) },
+            "log₁₀" to wrapQuantityOperation { q -> q.log(BigDecimal.TEN) },
+            "log" to wrapQuantityOperation { q -> q.log(BigDecimal.TEN) },
+            "log₂" to wrapQuantityOperation { q -> q.log(BigDecimal("2")) }
     )
 
     private fun sqrt(quantity: Quantity, interval: Interval) =
