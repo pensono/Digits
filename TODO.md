@@ -11,6 +11,8 @@ Pre-release:
 - 5V input has wrong number of sigfigs when being converted into mV
 - Equals resets caret to the end
 
+- Weird error line for the input "()"
+
 Post-release:
 - Properly round when a number is shortened
 - Unit corrections
@@ -23,6 +25,7 @@ Post-release:
 - Refactor CalculatorButton into two subclasses and a superclass for the secondary and primary buttons
 - Nonintegral powers
 - Unparenthesized functions
+- Secondary buttons swap with primary when they're used so they're easier to press next time
 - Calculation History
 - Undo button (undo in history?)
 - Option: Always use scientific vs natural notation for the results

@@ -70,11 +70,6 @@
                     android:layout_gravity="end"
                     android:orientation="horizontal">
 
-                    <Space
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/primary" />
-
                     <com.monotonic.digits.ErrorInput
                         android:id="@+id/input"
                         style="@style/AppTheme.Display"
@@ -83,6 +78,7 @@
                         android:gravity="bottom|end"
                         android:inputType="text|textNoSuggestions"
                         android:cursorVisible="true"
+                        android:paddingStart="40dp"
                         android:lines="1" />
 
                     <Space

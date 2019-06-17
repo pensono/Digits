@@ -60,6 +60,7 @@ sealed class SciNumber {
     abstract fun pow(n: Int): SciNumber
     abstract fun sqrt() : SciNumber
     abstract fun log(base: BigDecimal): SciNumber
+    abstract fun exp(): SciNumber // Base e
 
     abstract fun sin() : SciNumber
     abstract fun cos() : SciNumber
@@ -214,6 +215,8 @@ sealed class SciNumber {
                 else
                     Nan
 
+        override fun exp(): SciNumber = Real(Math.exp(backing.toDouble()))
+
         // Condition numbers:
         // https://www.cl.cam.ac.uk/~jrh13/papers/transcendentals.pdf
         override fun sin() = doubleFunction(Math::sin)
@@ -335,7 +338,8 @@ sealed class SciNumber {
 
         override fun pow(n: Int): SciNumber = this
         override fun sqrt(): SciNumber = this
-        override fun log(n: BigDecimal): SciNumber = this
+        override fun log(base: BigDecimal): SciNumber = this
+        override fun exp(): SciNumber = this
 
         override fun sin() = this
         override fun cos() = this

@@ -309,6 +309,15 @@ class EvaluatorTest {
         evalTest(Quantity(SciNumber.Nan), "ln(0)") // Should be -inf? Lets not worry about infinity for now
     }
 
+    @Test
+    fun exponential() {
+        evalTest(Quantity(SciNumber.Real(Math.E)), "exp(1)")
+        evalTest(Quantity(SciNumber.Real(Math.E * Math.E)), "exp(2)")
+
+        evalTest(Quantity(SciNumber.Real(1)), "exp(0)")
+        evalTest(Quantity(SciNumber.Real(1/Math.E)), "exp(-1)")
+    }
+
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertTrue(result.errors.isEmpty())

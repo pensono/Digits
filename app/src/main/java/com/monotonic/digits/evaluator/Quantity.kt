@@ -45,6 +45,7 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
 
     // What to put for unit here? Need logarithmic units
     fun log(base: BigDecimal) = Quantity(value.log(base), UnitSystem.void)
+    fun exp() = Quantity(value.exp(), UnitSystem.void)
 
     // Really not sure what to do with units on this one
     fun sin() = Quantity(value.sin(), unit)

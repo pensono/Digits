@@ -92,7 +92,9 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
             "ln" to wrapQuantityOperation { q -> q.log(BigDecimal.valueOf(Math.E)) },
             "log₁₀" to wrapQuantityOperation { q -> q.log(BigDecimal.TEN) },
             "log" to wrapQuantityOperation { q -> q.log(BigDecimal.TEN) },
-            "log₂" to wrapQuantityOperation { q -> q.log(BigDecimal("2")) }
+            "log₂" to wrapQuantityOperation { q -> q.log(BigDecimal("2")) },
+
+            "exp" to wrapQuantityOperation(Quantity::exp)
     )
 
     private fun sqrt(quantity: Quantity, interval: Interval) =
