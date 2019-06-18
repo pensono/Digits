@@ -4,8 +4,6 @@ Pre-release:
 - In-app purchase for pro mode
 - Make input text size shrink with number of characters
 - Ripple color for color schemes
-- exp function
-- Input can be scrolled vertically
 - Bug where m/s is marsed as mHz
 - Horizontal mode sizing/layout
 - 5V input has wrong number of sigfigs when being converted into mV

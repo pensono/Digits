@@ -7,7 +7,9 @@
     </style>
 
     <style name="AppTheme.Display" parent="AppTheme.BaseDisplay">
-        <item name="android:textSize">72dp</item>
+        <item name="maxTextSize">72dp</item>
+        <item name="minTextSize">48dp</item>
+        <item name="textSizeStep">8dp</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Unit" parent="AppTheme.BaseCalculatorButton.Unit">

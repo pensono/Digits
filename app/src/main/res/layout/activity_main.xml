@@ -58,35 +58,17 @@
                     android:src="@drawable/ic_more_vert_black_grey600_24dp" />
             </RelativeLayout>
 
-            <HorizontalScrollView
+            <com.monotonic.digits.ErrorInput
+                android:id="@+id/input"
+                style="@style/AppTheme.Display"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:orientation="horizontal">
-
-                    <com.monotonic.digits.ErrorInput
-                        android:id="@+id/input"
-                        style="@style/AppTheme.Display"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom|end"
-                        android:inputType="text|textNoSuggestions"
-                        android:cursorVisible="true"
-                        android:paddingStart="40dp"
-                        android:lines="1" />
-
-                    <Space
-                        android:layout_width="8dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/primary" />
-                </LinearLayout>
-            </HorizontalScrollView>
+                android:cursorVisible="true"
+                android:gravity="bottom|end"
+                android:inputType="text|textNoSuggestions"
+                android:lines="1"
+                android:paddingEnd="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
