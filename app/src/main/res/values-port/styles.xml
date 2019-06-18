@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="forehead_padding">8dp</dimen>
+
     <style name="AppTheme.CalculatorButton" parent="AppTheme.BaseCalculatorButton">
         <item name="android:textSize">25dp</item>
         <item name="android:minWidth">25dp</item>
@@ -15,6 +17,10 @@
     <style name="AppTheme.CalculatorButton.Unit" parent="AppTheme.BaseCalculatorButton.Unit">
         <item name="android:minWidth">55dp</item>
         <item name="android:minHeight">55dp</item>
+    </style>
+
+    <style name="AppTheme.Display.Preview" parent="AppTheme.Display.BasePreview">
+        <item name="android:textSize">36dp</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Digit" parent="AppTheme.BaseCalculatorButton.Digit">

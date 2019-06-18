@@ -2,7 +2,6 @@ Pre-release:
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - Setting to prefer US or Metric units
 - In-app purchase for pro mode
-- Make input text size shrink with number of characters
 - Ripple color for color schemes
 - Bug where m/s is marsed as mHz
 - Horizontal mode sizing/layout
@@ -12,6 +11,7 @@ Pre-release:
 - Weird error line for the input "()"
 
 Post-release:
+- Haptics
 - Properly round when a number is shortened
 - Unit corrections
 - Small space between every three digits in the output (should be a setting)

@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
-                android:paddingTop="8dp">
+                android:paddingTop="@dimen/forehead_padding">
 
                 <ToggleButton
                     android:id="@+id/number_format_switcher"
@@ -68,7 +68,8 @@
                 android:gravity="bottom|end"
                 android:inputType="text|textNoSuggestions"
                 android:lines="1"
-                android:paddingEnd="20dp"/>
+                android:paddingEnd="20dp"
+                android:includeFontPadding="false"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
