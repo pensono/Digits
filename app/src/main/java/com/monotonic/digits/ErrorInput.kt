@@ -11,6 +11,7 @@ import android.graphics.Rect
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
+import java.lang.Math.max
 import java.lang.Math.min
 
 
@@ -86,11 +87,20 @@ class ErrorInput: EditText, TextWatcher {
         selectionListeners?.forEach { it.invoke(selStart, selEnd) }
     }
 
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        fitText(text)
+    }
+
     override fun afterTextChanged(s: Editable?) { }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        fitText(s)
+    }
+
+    fun fitText(s: CharSequence?) {
         // It would be nice to make the ErrorInput handle scrolling itself.
         if (measuredWidth == 0) {
             return // Likely the inflation process hasn't finished yet.
@@ -99,7 +109,7 @@ class ErrorInput: EditText, TextWatcher {
         setTextSize(TypedValue.COMPLEX_UNIT_PX, maxTextSizePx)
 
         while (paint.measureText(s.toString()) > measuredWidth - paddingEnd && textSize > minTextSizePx) {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize - textSizeStepPx)
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, max(textSize - textSizeStepPx, minTextSizePx))
         }
     }
 }

@@ -11,7 +11,7 @@
     <style name="AppTheme.Display" parent="AppTheme.BaseDisplay">
         <item name="maxTextSize">72dp</item>
         <item name="minTextSize">48dp</item>
-        <item name="textSizeStep">8dp</item>
+        <item name="textSizeStep">16dp</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Unit" parent="AppTheme.BaseCalculatorButton.Unit">
