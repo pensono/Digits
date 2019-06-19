@@ -1,8 +1,5 @@
 Pre-release:
-- Support multiple units of the same dimension (min/hr, ft/mile)
-- Setting to prefer US or Metric units
 - In-app purchase for pro mode
-- Ripple color for color schemes
 - Bug where m/s is marsed as mHz
 - Horizontal mode sizing/layout
 - 5V input has wrong number of sigfigs when being converted into mV
@@ -11,12 +8,13 @@ Pre-release:
 - Weird error line for the input "()"
 
 Post-release:
+- Support multiple units of the same dimension (min/hr, ft/mile)
+- Setting to prefer US or Metric units
 - Haptics
+- Ripple color for color schemes
 - Properly round when a number is shortened
 - Unit corrections
 - Small space between every three digits in the output (should be a setting)
-- Report bug button
-- Suggest feature button
 - Animate secondary button appearing
 - Better job of showing sigfigs in input
 - Sigfigs for transindental numbers and log/exp/trig functions (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)

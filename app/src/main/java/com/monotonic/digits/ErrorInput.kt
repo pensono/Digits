@@ -109,7 +109,7 @@ class ErrorInput: EditText, TextWatcher {
         setTextSize(TypedValue.COMPLEX_UNIT_PX, maxTextSizePx)
 
         while (paint.measureText(s.toString()) > measuredWidth - paddingEnd && textSize > minTextSizePx) {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, max(textSize - textSizeStepPx, minTextSizePx))
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, max(textSize - textSizeStepPx, minTextSizePx)   )
         }
     }
 }
