@@ -1,7 +1,5 @@
 Pre-release:
 - In-app purchase for pro mode
-- Equals resets caret to the end
-- Weird error line for the input "()"
 
 Post-release:
 - Support multiple units of the same dimension (min/hr, ft/mile)
