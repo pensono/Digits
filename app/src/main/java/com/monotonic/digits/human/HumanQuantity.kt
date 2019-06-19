@@ -6,7 +6,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 
-data class HumanQuantity(val value: SciNumber, val unit: HumanUnit) {
+data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.Void) {
     // TODO eventually make this accept a value for engineering or scientific mode
     fun humanString(separatorType: SeperatorType) : SigfigString {
         val valueString = value.valueString(separatorType)

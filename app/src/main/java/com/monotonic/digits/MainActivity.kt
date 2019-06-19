@@ -372,10 +372,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         } else {
             unit_input.visibility = View.GONE
             try {
-                val parseResult = evaluateExpression(input.text.toString())
-
-                val preferredUnit = preferredUnits[parseResult.value.unit.dimensions]
-                humanizedQuantity = if (preferredUnit == null) humanize(parseResult.value) else convert(parseResult.value, preferredUnit)
+                val parseResult = evaluateHumanized(input.text.toString(), preferredUnits)
+                humanizedQuantity = parseResult.value
                 val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
 
                 result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)

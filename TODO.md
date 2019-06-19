@@ -1,6 +1,5 @@
 Pre-release:
 - In-app purchase for pro mode
-- Bug where m/s is marsed as mHz
 - 5V input has wrong number of sigfigs when being converted into mV
 - Equals resets caret to the end
 

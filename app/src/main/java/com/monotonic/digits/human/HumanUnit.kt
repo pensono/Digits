@@ -14,6 +14,10 @@ import kotlin.math.absoluteValue
  */
 
 class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUnit = PrefixUnit.One) : NaturalUnit() {
+    companion object {
+        val Void = HumanUnit(mapOf())
+    }
+
     val underlyingUnit =
             components.map { entry -> entry.key * entry.value }
                     .fold(UnitSystem.void, NaturalUnit::plus)
