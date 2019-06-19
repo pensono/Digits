@@ -1,0 +1,1 @@
+No information is collected on users. Billing is processed by Google.
