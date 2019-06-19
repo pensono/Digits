@@ -18,11 +18,20 @@ fun createSkinPickerDialog(context: Context, action: (Skin) -> Unit) : Dialog {
     builder.setTitle(R.string.skin_dialog_title)
     val layoutInflater = context.getSystemService(LayoutInflater::class.java)
     val main_view = layoutInflater.inflate(R.layout.dialog_skin_picker, null, false) as ViewGroup
-    val container = main_view.findViewById<ViewGroup>(R.id.theme_picker_container)
     builder.setView(main_view)
     val dialog = builder.create()
 
-    val menuResources = context.resources.obtainTypedArray(R.array.themes)
+    fillThemeGrid(context, dialog, main_view, layoutInflater, R.id.theme_picker_container, R.array.themes, action)
+    fillThemeGrid(context, dialog, main_view, layoutInflater, R.id.theme_picker_container_pro, R.array.themes_pro, action)
+
+    return dialog
+}
+
+// There's alot of args to this method, sad
+fun fillThemeGrid(context: Context, dialog: Dialog, main_view: ViewGroup, layoutInflater: LayoutInflater, gridContainerResId: Int, skinListResId: Int, action: (Skin) -> Unit) {
+    val container = main_view.findViewById<ViewGroup>(gridContainerResId)
+
+    val menuResources = context.resources.obtainTypedArray(skinListResId)
     for (i in 0 until menuResources.length()) {
         val resId = menuResources.getResourceId(i, -1)
         if (resId < 0) {
@@ -40,6 +49,4 @@ fun createSkinPickerDialog(context: Context, action: (Skin) -> Unit) : Dialog {
         container.addView(button)
     }
     menuResources.recycle()
-
-    return dialog
 }
