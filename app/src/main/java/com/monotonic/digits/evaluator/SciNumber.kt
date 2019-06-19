@@ -271,11 +271,11 @@ sealed class SciNumber {
                     when (precision) {
                         is Precision.Infinite -> SigfigString(resultStr)
                         is Precision.SigFigs -> {
-                            // Where to start counting seperators from. If we have 9 999
+                            // Where to start counting separators from. If we have 9 999
                             // Then we must start counting the first group from 2 since there's 1 more digit in the first group
                             val initialOffset = ((-paddedStr.length % 3) + 3) % 3
                             val separatorSize = ((precision.amount - 1 + initialOffset) / 3) * seperatorType.separator.length
-                            SigfigString(resultStr, separatorSize + signStr.length + numPaddingZeroes + precision.amount)
+                            SigfigString(resultStr, separatorSize + signStr.length + precision.amount)
                         }
                     }
                 }

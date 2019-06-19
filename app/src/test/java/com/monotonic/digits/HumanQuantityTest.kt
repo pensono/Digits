@@ -8,6 +8,7 @@ import junit.framework.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Test
+import java.math.BigDecimal
 
 /**
  * @author Ethan
@@ -233,6 +234,12 @@ class HumanQuantityTest {
     fun valueStringConstant() {
         Assert.assertEquals("3.14159265358", HumanQuantity(SciNumber.Real(Math.PI), HumanUnit(mapOf())).valueString())
         Assert.assertEquals("3.14159265358m", HumanQuantity(SciNumber.Real(Math.PI), HumanUnit(mapOf(u("m") to 1))).valueString())
+    }
+
+    @Test
+    fun unusualBackings() {
+        Assert.assertEquals(SigfigString("5000", 1, 4), SciNumber.Real("5E+3", sf(1)).valueString(SeperatorType.NONE))
+        Assert.assertEquals(SigfigString("5000", 4, 4), SciNumber.Real("5E+3", Precision.Infinite).valueString(SeperatorType.NONE))
     }
 
     @Test
