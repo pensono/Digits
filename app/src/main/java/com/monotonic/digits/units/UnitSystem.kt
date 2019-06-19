@@ -33,15 +33,19 @@ object UnitSystem { // Preferred Units?
 
     val units = listOf(
             AtomicHumanUnit("m", "Meters", null, length),
-//            AtomicHumanUnit("ft", "feet", length, Real("3.28084")),
-//            AtomicHumanUnit("mi", "miles", length, Real("0.000621371")),
-//            AtomicHumanUnit("L", "liters", length, Real(1000).reciprocal()),
+//            AtomicHumanUnit("ft", "feet", "12in", length, Real("3.28084")),
+//            AtomicHumanUnit("mi", "miles", "5280ft", length, Real("0.000621371")),
+
+            AtomicHumanUnit("L", "liters", "1000cm³", volume, SciNumber.Real(1000).reciprocal()),
+//            AtomicHumanUnit("L", "floz", "2Tbsp", weight, SciNumber.Real(1000).reciprocal()),
+
+            //            AtomicHumanUnit("L", "oz", "¹⁄₁₆lb", weight, SciNumber.Real(1000).reciprocal()),
 
             AtomicHumanUnit("rad", "Radians", "m/m", angle),
             AtomicHumanUnit("°", "Degrees", "m/m", angle, SciNumber.Real(Math.PI / 180.0)),
             AtomicHumanUnit("sr", "Steradian", "m²/m²", solid_angle),
 
-//             AtomicHumanUnit("acre", "acres", area, Real("4046.86")),
+//             AtomicHumanUnit("acre", "acres", "4840yd²", area, Real("4046.86")),
 
             AtomicHumanUnit("s", "Seconds", null, time),
 //            AtomicHumanUnit("min", "minutes", time, Real(60).reciprocal()),
@@ -64,7 +68,9 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("T", "Teslas", "Wb/m²", magnetic_flux_density),
             AtomicHumanUnit("Wb", "Webers", "Vs", magnetic_flux),
             AtomicHumanUnit("H", "Henries", "Wb/A", inductance),
-            AtomicHumanUnit("C", "Coulombs", "sA", charge)
+            AtomicHumanUnit("C", "Coulombs", "sA", charge),
+
+            AtomicHumanUnit("hp", "Horsepower", "33 000ft lbf/min", power, SciNumber.Real(745.69987158227022))
     )
 
     val prefixMagStart = -24

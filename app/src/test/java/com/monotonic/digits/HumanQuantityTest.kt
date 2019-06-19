@@ -199,7 +199,6 @@ class HumanQuantityTest {
         Assert.assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType).insigfigStart)
     }
 
-
     private fun testHumanString(expected: String, value: String, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
         Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(seperatorType, numberFormat, maxChars).string)
     }
