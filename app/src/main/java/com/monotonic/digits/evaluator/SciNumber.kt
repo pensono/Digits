@@ -142,7 +142,6 @@ sealed class SciNumber {
         // Should be considered an infinite number of sigfigs, they are exact quantities (like 10 or 2)
         constructor(value: Int) : this(BigDecimal(value, MathContext.DECIMAL128), Precision.Infinite)
         constructor(value: Double) : this(BigDecimal(value, MathContext.DECIMAL128))
-        constructor(value: Double, sigFigs: Int) : this(BigDecimal(value, MathContext.DECIMAL128), Precision.SigFigs(sigFigs))
 
         constructor(value: String, precision: Precision) : this(BigDecimal(value), precision)
 
@@ -211,7 +210,7 @@ sealed class SciNumber {
         // Kinda a shitty calculation
         override fun log(base: BigDecimal) =
                 if (backing > BigDecimal.ZERO)
-                    Real(Math.log(backing.toDouble()) / Math.log(base.toDouble()))
+                    Real(BigDecimal(Math.log(backing.toDouble()) / Math.log(base.toDouble()), MathContext.DECIMAL128), precision)
                 else
                     Nan
 

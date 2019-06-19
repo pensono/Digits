@@ -5,6 +5,7 @@ import com.monotonic.digits.evaluator.SciNumber
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.Test
+import java.math.BigDecimal
 
 class SciNumberTest {
     @Test
@@ -191,6 +192,12 @@ class SciNumberTest {
     @Test
     fun trigProducesNans() {
         assertEquals(SciNumber.Nan, SciNumber.Real(Math.PI).asin())
+    }
+
+    @Test
+    fun logPrecision() {
+        // Not actually how it should work. For now, just keep the original precision
+        assertEquals(SciNumber.Real("2", sf(2)), SciNumber.Real("100", sf(2)).log(BigDecimal.TEN))
     }
 
     // Test that other operations preserve precision
