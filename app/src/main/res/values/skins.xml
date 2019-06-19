@@ -7,17 +7,20 @@
     <array name="themes">
         <item>@array/skin_default_light</item>
         <item>@array/skin_blue_grey</item>
-        <!--<item>@array/skin_leather</item>-->
-        <item>@array/skin_brown</item>
+        <item>@array/skin_light_blue</item>
+    </array>
+
+    <array name="themes_pro">
         <item>@array/skin_purple</item>
         <item>@array/skin_red</item>
         <item>@array/skin_green</item>
+        <item>@array/skin_brown</item>
         <item>@array/skin_orange</item>
-        <item>@array/skin_light_blue</item>
         <item>@array/skin_all_blue</item>
         <item>@array/skin_dark_blue</item>
         <item>@array/skin_pink</item>
         <item>@array/skin_all_pink</item>
+        <!--<item>@array/skin_leather</item>-->
     </array>
 
     <array name="skin_default_light">

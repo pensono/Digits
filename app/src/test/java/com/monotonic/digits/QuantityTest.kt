@@ -28,12 +28,4 @@ class QuantityTest {
         assertEquals(Quantity(SciNumber.Real(".999", sf(1)), kilometers), q("1.0", kilometers) - q("1", meters))
         assertEquals(Quantity(SciNumber.Real("-999", sf(0)), meters), q("1", meters) - q("1", kilometers)) // Should only have one sigfig
     }
-
-    @Test
-    fun times() {
-    }
-
-    @Test
-    fun div() {
-    }
 }

@@ -4,6 +4,9 @@
         <attr name="underlineThickness" format="dimension" />
         <attr name="underlineOffset" format="dimension" />
         <attr name="underlineColor" format="color" />
+        <attr name="maxTextSize" format="dimension" />
+        <attr name="minTextSize" format="dimension" />
+        <attr name="textSizeStep" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="CalculatorButton">

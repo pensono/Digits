@@ -59,6 +59,8 @@ sealed class SciNumber {
 
     abstract fun pow(n: Int): SciNumber
     abstract fun sqrt() : SciNumber
+    abstract fun log(base: BigDecimal): SciNumber
+    abstract fun exp(): SciNumber // Base e
 
     abstract fun sin() : SciNumber
     abstract fun cos() : SciNumber
@@ -140,7 +142,6 @@ sealed class SciNumber {
         // Should be considered an infinite number of sigfigs, they are exact quantities (like 10 or 2)
         constructor(value: Int) : this(BigDecimal(value, MathContext.DECIMAL128), Precision.Infinite)
         constructor(value: Double) : this(BigDecimal(value, MathContext.DECIMAL128))
-        constructor(value: Double, sigFigs: Int) : this(BigDecimal(value, MathContext.DECIMAL128), Precision.SigFigs(sigFigs))
 
         constructor(value: String, precision: Precision) : this(BigDecimal(value), precision)
 
@@ -206,6 +207,15 @@ sealed class SciNumber {
                     Nan // Until imaginary numbers are implemented
         fun abs() = Real(backing.abs())
 
+        // Kinda a shitty calculation
+        override fun log(base: BigDecimal) =
+                if (backing > BigDecimal.ZERO)
+                    Real(BigDecimal(Math.log(backing.toDouble()) / Math.log(base.toDouble()), MathContext.DECIMAL128), precision)
+                else
+                    Nan
+
+        override fun exp(): SciNumber = Real(Math.exp(backing.toDouble()))
+
         // Condition numbers:
         // https://www.cl.cam.ac.uk/~jrh13/papers/transcendentals.pdf
         override fun sin() = doubleFunction(Math::sin)
@@ -253,18 +263,18 @@ sealed class SciNumber {
             }
 
             return when {
-                decimalLocation >= preciseStr.length -> {
+                decimalLocation >= preciseStr.length -> { // Has digits greater than 0
                     val numPaddingZeroes = decimalLocation - preciseStr.length
                     val paddedStr = preciseStr + "0".repeat(numPaddingZeroes)
                     val resultStr = signStr + insertGroupingSeparator(paddedStr.reversed(), seperatorType).reversed()
                     when (precision) {
                         is Precision.Infinite -> SigfigString(resultStr)
                         is Precision.SigFigs -> {
-                            // Where to start counting seperators from. If we have 9 999
+                            // Where to start counting separators from. If we have 9 999
                             // Then we must start counting the first group from 2 since there's 1 more digit in the first group
                             val initialOffset = ((-paddedStr.length % 3) + 3) % 3
-                            val separatorSize = ((precision.amount - 1 + initialOffset) / 3) * seperatorType.seperator.length
-                            SigfigString(resultStr, separatorSize + signStr.length + numPaddingZeroes + precision.amount)
+                            val separatorSize = ((precision.amount - 1 + initialOffset) / 3) * seperatorType.separator.length
+                            SigfigString(resultStr, separatorSize + signStr.length + precision.amount)
                         }
                     }
                 }
@@ -274,7 +284,7 @@ sealed class SciNumber {
                     when (precision) {
                         is Precision.Infinite -> SigfigString(resultStr)
                         is Precision.SigFigs -> {
-                            val separatorSize = ((precision.amount - decimalLocation - 1) / 3) * seperatorType.seperator.length
+                            val separatorSize = ((precision.amount - decimalLocation - 1) / 3) * seperatorType.separator.length
                             SigfigString(resultStr, signStr.length + 2 + separatorSize + precision.amount + -decimalLocation)
                         }
                     }
@@ -295,7 +305,7 @@ sealed class SciNumber {
                             val initialOffset = ((-intStr.length % 3) + 3) % 3
                             val intSeparatorCount = min((precision.amount - 1 + initialOffset) / 3, (intStr.length - 1) / 3)
                             val fracSeparatorCount = max((precision.amount - intStr.length - 1) / 3, 0)
-                            val separatorSize = (intSeparatorCount + fracSeparatorCount) * seperatorType.seperator.length
+                            val separatorSize = (intSeparatorCount + fracSeparatorCount) * seperatorType.separator.length
 
                             SigfigString(resultStr, signStr.length + decimalSigfig + precision.amount + separatorSize)
                         }
@@ -312,7 +322,7 @@ sealed class SciNumber {
                 // Chop into bits and join together
             (0 .. input.length / 3).map { input.substring(it * 3, min(it * 3 + 3, input.length)) }
                     .filter { it.isNotEmpty() } // Removes last one if it's empty
-                    .joinToString(seperatorType.seperator)
+                    .joinToString(seperatorType.separator)
     }
 
     object Nan : SciNumber() {
@@ -327,6 +337,8 @@ sealed class SciNumber {
 
         override fun pow(n: Int): SciNumber = this
         override fun sqrt(): SciNumber = this
+        override fun log(base: BigDecimal): SciNumber = this
+        override fun exp(): SciNumber = this
 
         override fun sin() = this
         override fun cos() = this
@@ -341,7 +353,7 @@ sealed class SciNumber {
         override fun sec() = this
         override fun cot() = this
 
-        override fun valueString(seperatorType: SeperatorType) = SigfigString("NaN", 3, 3)
+        override fun valueString(seperatorType: SeperatorType) = SigfigString("NaN",3)
         override fun valueEqual(other: SciNumber): Boolean = other === Nan
         override fun toDouble(): Double = Double.NaN
     }

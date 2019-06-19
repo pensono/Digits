@@ -1,5 +1,6 @@
 package com.monotonic.digits
 
+import com.monotonic.digits.evaluator.Precision
 import com.monotonic.digits.human.HumanQuantity
 import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
@@ -9,11 +10,18 @@ import com.monotonic.digits.human.convert
 import com.monotonic.digits.human.humanize
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.math.BigDecimal
 
 /**
  * @author Ethan
  */
 class HumanUnitTest {
+    @Test
+    fun convertBasic() {
+        testCoversion(SciNumber.Real(4000), HumanUnit(mapOf(u("m") to 1)), Quantity(SciNumber.Real(4), u("m") + p("k")))
+        testCoversion(SciNumber.Real(4), HumanUnit(mapOf(u("m") to 1),  p("k")), Quantity(SciNumber.Real(4000), u("m")))
+    }
+
     @Test
     fun humanize() {
         assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf())), humanize(Quantity(SciNumber.One)))
@@ -69,12 +77,12 @@ class HumanUnitTest {
         assertEquals("", humanize(Quantity(Micro)).unit.abbreviation)
     }
 
+
     @Test(timeout = 10000)
     fun largeUnitQuick() {
         val components = humanize(evaluateExpression("4m99").value).unit.components
         assertEquals(1, components.size)
     }
-
 
     @Test(timeout = 10000)
     fun largeUnitQuickCached() {
@@ -88,12 +96,6 @@ class HumanUnitTest {
     fun keepsPrecision() {
         assertEquals(sf(4), humanize(Quantity(SciNumber.Real("99.99"))).value.precision)
         assertEquals(sf(4), humanize(Quantity(SciNumber.Real("99.99"), u("m"))).value.precision)
-    }
-
-    @Test
-    fun convertBasic() {
-        testCoversion(SciNumber.Real(4000), HumanUnit(mapOf(u("m") to 1)), Quantity(SciNumber.Real(4), u("m") + p("k")))
-        testCoversion(SciNumber.Real(4), HumanUnit(mapOf(u("m") to 1),  p("k")), Quantity(SciNumber.Real(4000), u("m")))
     }
 
     fun testCoversion(destValue: SciNumber.Real, destUnit: HumanUnit, inputValue: Quantity) {

@@ -59,7 +59,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     private val sigfigHighlight : Boolean
         get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", true)
 
-    // TODO move these default colors to a file or something
     private lateinit var skin : Skin
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,25 +79,24 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         })
 
         unit_input.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
+            override fun afterTextChanged(p0: Editable?) { }
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                try {
-                    val unit = parseHumanUnit(unit_input.text.toString()) ?: return
-
-                    if (unit.dimensionallyEqual(humanizedQuantity.unit)) {
-                        preferredUnits[unit.dimensions] = unit
-                        unit_input.text.clear()
-                        editingUnit = false
-                        updatePreview()
-                    }
-                } catch (e: Exception) {
-                    result_preview.text = "Error"
-                    Log.e(TAG, "Unit parsing error", e)
+                val input = unit_input.text.toString()
+                val ambiguousInputs = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
+                if (ambiguousInputs.contains(input)) {
+                    return // Let the user move focus to submit this entry
                 }
+
+                tryUnitConversion()
             }
         })
+        unit_input.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                tryUnitConversion()
+            }
+        }
 
         discipline_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
         discipline_dropdown.setSelection(getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.pref_discipline), 0))
@@ -131,6 +129,22 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
         populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
+    }
+
+    fun tryUnitConversion() {
+        try {
+            val unit = parseHumanUnit(unit_input.text.toString()) ?: return
+
+            if (unit.dimensionallyEqual(humanizedQuantity.unit)) {
+                preferredUnits[unit.dimensions] = unit
+                unit_input.text.clear()
+                editingUnit = false
+                updatePreview()
+            }
+        } catch (e: Exception) {
+            result_preview.text = "Error"
+            Log.e(TAG, "Unit parsing error", e)
+        }
     }
 
     override fun onPause() {
@@ -195,7 +209,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         val buttonCommand = (button as CalculatorButton).primaryCommand
         if (buttonCommand == "ENT") {
             history += HistoryItem(input.text.toString(), result_preview.text.toString())
-            input.text.replace(0, editingInput.text.length, humanizedQuantity.humanString(resultSeparator).string)
+            input.text.replace(0, input.text.length, humanizedQuantity.valueString())
+            input.setSelection(input.text.length)
         } else if (buttonCommand == "DEL") {
             if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
                 editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
@@ -358,10 +373,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         } else {
             unit_input.visibility = View.GONE
             try {
-                val parseResult = evaluateExpression(input.text.toString())
-
-                val preferredUnit = preferredUnits[parseResult.value.unit.dimensions]
-                humanizedQuantity = if (preferredUnit == null) humanize(parseResult.value) else convert(parseResult.value, preferredUnit)
+                val parseResult = evaluateHumanized(input.text.toString(), preferredUnits)
+                humanizedQuantity = parseResult.value
                 val coloredText = formatResultForDisplay(humanizedQuantity, R.color.detail_text)
 
                 result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
@@ -427,7 +440,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         var humanString = humanQuantity.humanString(resultSeparator)
         val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
         while (result_preview.paint.measureText(humanString.string) >= availableSpacePx && humanString.string.length > 0) {
-            humanString = humanQuantity.humanString(resultSeparator, numberFormat, humanString.string.length - 1)
+            humanString = humanQuantity.humanString(humanString.string.length - 1, resultSeparator, numberFormat)
         }
 
         val coloredText =

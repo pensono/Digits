@@ -12,7 +12,7 @@ fun u(abbr: String) = UnitSystem.unitAbbreviations[abbr]!!
 data class Discipline(val nameResource: Int, val iconResource: Int, val units: List<AtomicHumanUnit>)
 
 val disciplines = listOf(
-        Discipline(R.string.discipline_basic, 0, listOf(u("m"), u("g"), u("L"), u("V"), u("A"), u("Ω"), u("W"))), // Liters
+        Discipline(R.string.discipline_basic, 0, listOf(u("m"), u("g"), u("V"), u("A"), u("Ω"), u("W"), u("s"), u("Hz"))), // Liters
         Discipline(R.string.discipline_astronomical, R.drawable.ic_telescope_black_24dp, listOf(u("m"), u("°"), u("sr"))),
         Discipline(R.string.discipline_carpentry, R.drawable.ic_hand_saw, listOf(u("m"))),
         Discipline(R.string.discipline_chemistry, R.drawable.ic_flask_black_24dp, listOf(u("mol"))),

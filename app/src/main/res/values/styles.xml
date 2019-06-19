@@ -17,9 +17,8 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.Display.Preview" parent="AppTheme.Display">
+    <style name="AppTheme.Display.BasePreview" parent="AppTheme.Display">
         <item name="android:textColor">@color/secondary_text</item>
-        <item name="android:textSize">36dp</item>
     </style>
 
     <style name="AppTheme.BaseCalculatorButton" parent="android:Widget.Material.Button.Borderless">
@@ -35,6 +34,7 @@
         <item name="android:onClick">calculatorButtonClick</item>
         <item name="android:longClickable">true</item>
         <item name="onLongClick">calculatorButtonLongClick</item>
+        <item name="android:hapticFeedbackEnabled">true</item>
     </style>
 
     <style name="AppTheme.BaseCalculatorButton.DigitTheme">
