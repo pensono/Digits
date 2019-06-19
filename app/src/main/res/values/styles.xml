@@ -7,6 +7,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.InfoTextView" parent="android:Widget.Material.Light.TextView">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="AppTheme.Display.Group">
         <item name="android:background">@color/background</item>
         <item name="android:elevation">2dp</item>
