@@ -245,7 +245,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_get_pro -> {
-                    doProPurchase()
+                    val dialog = createProValueDialog(this) { doProPurchase() }
+                    dialog.show()
                     true
                 }
                 R.id.menu_customize -> {

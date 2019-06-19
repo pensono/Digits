@@ -1,5 +1,7 @@
 Pre-release:
 - In-app purchase for pro mode
+- Setting to disable sigfig rounding when you press equal
+- Proper sigfig rounding
 
 Post-release:
 - Support multiple units of the same dimension (min/hr, ft/mile)
