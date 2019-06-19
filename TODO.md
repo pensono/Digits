@@ -1,8 +1,6 @@
 Pre-release:
 - In-app purchase for pro mode
-- 5V input has wrong number of sigfigs when being converted into mV
 - Equals resets caret to the end
-
 - Weird error line for the input "()"
 
 Post-release:

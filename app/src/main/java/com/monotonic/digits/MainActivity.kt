@@ -210,6 +210,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         if (buttonCommand == "ENT") {
             history += HistoryItem(input.text.toString(), result_preview.text.toString())
             input.text.replace(0, input.text.length, humanizedQuantity.valueString())
+            input.setSelection(input.text.length)
         } else if (buttonCommand == "DEL") {
             if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
                 editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
