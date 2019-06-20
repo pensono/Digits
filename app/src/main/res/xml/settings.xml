@@ -16,12 +16,13 @@
             android:title="Round results by significant figures"
             android:defaultValue="false"/>
 
-        <ListPreference
-            android:key="unit_system_preference"
-            android:title="Preferred unit system"
-            android:entries="@array/unitSystems"
-            android:entryValues="@array/unitSystems_values"
-            android:defaultValue="0"
-            android:summary="%s"/>
+        <!-- US units not implemented yet -->
+        <!--<ListPreference-->
+            <!--android:key="unit_system_preference"-->
+            <!--android:title="Preferred unit system"-->
+            <!--android:entries="@array/unitSystems"-->
+            <!--android:entryValues="@array/unitSystems_values"-->
+            <!--android:defaultValue="0"-->
+            <!--android:summary="%s"/>-->
     </PreferenceCategory>
 </PreferenceScreen>

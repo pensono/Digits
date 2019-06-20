@@ -6,7 +6,6 @@ Post-release:
 - Setting to prefer US or Metric units
 - Ripple color for color schemes
 - European locale (commas and periods where they shouldn't be)
-- Properly round when a number is shortened
 - Unit corrections
 - Animate secondary button appearing
 - Better job of showing sigfigs in input

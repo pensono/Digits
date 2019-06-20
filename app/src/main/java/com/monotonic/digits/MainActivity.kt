@@ -505,7 +505,10 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
                 editor_area.foreground = null
             }
         })
-        circleAnimation.peakCallback = { editingInput.text.clear() }
+        circleAnimation.peakCallback = {
+            editingInput.text.clear()
+            preferredUnits.clear()
+        }
         editor_area.foreground = circleAnimation
 
         circleAnimation.start()
