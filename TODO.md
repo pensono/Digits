@@ -8,7 +8,6 @@ Post-release:
 - European locale (commas and periods where they shouldn't be)
 - Properly round when a number is shortened
 - Unit corrections
-- Small space between every three digits in the output (should be a setting)
 - Animate secondary button appearing
 - Better job of showing sigfigs in input
 - Sigfigs for transindental numbers and log/exp/trig functions (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)

@@ -210,28 +210,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         }
     }
 
-    fun calculatorButtonClick(button: View) {
-        val buttonCommand = (button as CalculatorButton).primaryCommand
-        if (buttonCommand == "ENT") {
-            history += HistoryItem(input.text.toString(), result_preview.text.toString())
-            input.text.replace(0, input.text.length, humanizedQuantity.valueString(roundingMode))
-            input.setSelection(input.text.length)
-        } else if (buttonCommand == "DEL") {
-            if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
-                editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
-            } else {
-                editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, "")
-            }
-        } else {
-            val insertText = buttonCommand.replace("|", "")
-            editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, insertText)
-            if (buttonCommand.contains('|')) {
-                val offset = buttonCommand.indexOf('|')
-                editingInput.setSelection(editingInput.selectionStart + offset - insertText.length)
-            }
-        }
-    }
-
     fun numberFormatToggled(view: View) {
         with (getPreferences(Context.MODE_PRIVATE).edit()) {
             putBoolean("use_engineering_format", number_format_switcher.isChecked)
@@ -277,6 +255,28 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         popup.show()
     }
 
+    fun calculatorButtonClick(button: View) {
+        val buttonCommand = (button as CalculatorButton).primaryCommand
+        if (buttonCommand == "ENT") {
+            history += HistoryItem(input.text.toString(), result_preview.text.toString())
+            input.text.replace(0, input.text.length, humanizedQuantity.valueString(roundingMode))
+            input.setSelection(input.text.length)
+        } else if (buttonCommand == "DEL") {
+            if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
+                editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
+            } else {
+                editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, "")
+            }
+        } else {
+            val insertText = buttonCommand.replace("|", "")
+            editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, insertText)
+            if (buttonCommand.contains('|')) {
+                val offset = buttonCommand.indexOf('|')
+                editingInput.setSelection(editingInput.selectionStart + offset - insertText.length)
+            }
+        }
+    }
+
     // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
         if (button.primaryCommand == "DEL") {
@@ -289,10 +289,19 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         }
 
         val layout = createFloatingSecondaryFor(button)
-        button.secondary.forEach { pair ->
+        button.secondary.forEach { (text, command) ->
             val secondaryButton = layoutInflater.inflate(R.layout.button_calc_secondary, layout, false) as CalculatorButton
-            secondaryButton.text = pair.first
-            secondaryButton.primaryCommand = pair.second
+            secondaryButton.text = text
+            secondaryButton.primaryCommand = command
+            if (button.adaptPrimary) {
+                secondaryButton.setOnClickListener {
+                    run {
+                        calculatorButtonClick(secondaryButton)
+                        button.text = text
+                        button.primaryCommand = command
+                    }
+                }
+            }
 
             layout.addView(secondaryButton)
         }

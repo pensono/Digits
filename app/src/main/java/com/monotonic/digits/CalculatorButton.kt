@@ -33,16 +33,21 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
      */
     var targetBottomExtendPx = 0
 
+    /**
+     * Should swap the secondary button with the primary when it is selected
+     */
+    var adaptPrimary = true
+
     init {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.CalculatorButton)
         for (i in 0 until attributes.indexCount) {
             val attribute = attributes.getIndex(i)
             when (attribute) {
                 R.styleable.CalculatorButton_primary -> {
-                    primaryCommand = attributes.getString(i)
+                    primaryCommand = attributes.getString(attribute)
                 }
                 R.styleable.CalculatorButton_secondary -> {
-                    val secondarySettingString = attributes.getString(i)
+                    val secondarySettingString = attributes.getString(attribute)
 
                     secondary = secondarySettingString.split(";")
                             .map { it.split(":") }
@@ -51,7 +56,7 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
                 R.styleable.CalculatorButton_onLongClick -> {
                     // https://stackoverflow.com/questions/5706038/long-press-definition-at-xml-layout-like-androidonclick-does
                     // Assume the attribute is correct. We don't need to bother with error messages
-                    val methodName = attributes.getString(i)
+                    val methodName = attributes.getString(attribute)
                     setOnLongClickListener(object : OnLongClickListener {
                         var handler : Method? = null
 
@@ -72,6 +77,9 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
                 }
                 R.styleable.CalculatorButton_targetBottomExtend -> {
                     targetBottomExtendPx = attributes.getDimensionPixelSize(attribute, 0)
+                }
+                R.styleable.CalculatorButton_adaptPrimary -> {
+                    adaptPrimary = attributes.getBoolean(attribute, true)
                 }
             }
         }
