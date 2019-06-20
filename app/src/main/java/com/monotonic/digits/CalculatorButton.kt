@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.Button
 import java.lang.reflect.Method
@@ -55,6 +56,8 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
                         var handler : Method? = null
 
                         override fun onLongClick(view: View?): Boolean {
+                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+
                             // https://stackoverflow.com/a/42210910/2496050
                             var listenerContext = getContext()
                             if (listenerContext is ContextWrapper && listenerContext !is Activity) { // Not sure what I'm doing here with the context
@@ -74,11 +77,6 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
         }
 
         attributes.recycle()
-    }
-
-    // Android says this needs to be overridden. Ok sure?
-    override fun performClick(): Boolean {
-        return super.performClick()
     }
 
     override fun getHitRect(outRect: Rect) {

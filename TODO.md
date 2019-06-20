@@ -4,7 +4,6 @@ Pre-release:
 Post-release:
 - Support multiple units of the same dimension (min/hr, ft/mile)
 - Setting to prefer US or Metric units
-- Haptics
 - Ripple color for color schemes
 - European locale (commas and periods where they shouldn't be)
 - Properly round when a number is shortened
