@@ -4,11 +4,8 @@ import com.monotonic.digits.evaluator.Precision
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
-import junit.framework.Assert
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Test
-import java.math.BigDecimal
 
 /**
  * @author Ethan
@@ -195,51 +192,93 @@ class HumanQuantityTest {
 
     @Test
     fun basicValueString() {
-        testValueString("1.234", "1.234", sf(4))
-        testValueString("1.2", "1.234", sf(2))
-        testValueString("3.33300000000", "3.333", Precision.Infinite)
-        testValueString("3.33333333333", "3.3333333333333333333", Precision.Infinite)
+        testValueString("1.234", "1.234", sf(4), RoundingMode.SIGFIG)
+        testValueString("1.2", "1.234", sf(2), RoundingMode.SIGFIG)
+        testValueString("3.33300000000", "3.333", Precision.Infinite, RoundingMode.SIGFIG)
+        testValueString("3.33333333333", "3.3333333333333333333", Precision.Infinite, RoundingMode.SIGFIG)
 
-        testValueString("12.3", "12.34", sf(3))
-        testValueString("12", "12.34", sf(2))
+        testValueString("12.3", "12.34", sf(3), RoundingMode.SIGFIG)
+        testValueString("12", "12.34", sf(2), RoundingMode.SIGFIG)
 
-        testValueString("123400", "123400", sf(4))
-        testValueString("120000", "123400", sf(2))
-        testValueString("333300.000000", "333300", Precision.Infinite)
-        testValueString("333300000000", "333300000000", Precision.Infinite)
+        testValueString("123400", "123400", sf(4), RoundingMode.SIGFIG)
+        testValueString("120000", "123400", sf(2), RoundingMode.SIGFIG)
+        testValueString("333300.000000", "333300", Precision.Infinite, RoundingMode.SIGFIG)
+        testValueString("333300000000", "333300000000", Precision.Infinite, RoundingMode.SIGFIG)
 
-        testValueString("0.001234", ".001234", sf(4))
-        testValueString("0.0012", ".001234", sf(2))
-        testValueString("0.00000003333", ".00000003333", sf(4))
+        testValueString("0.001234", ".001234", sf(4), RoundingMode.SIGFIG)
+        testValueString("0.0012", ".001234", sf(2), RoundingMode.SIGFIG)
+        testValueString("0.00000003333", ".00000003333", sf(4), RoundingMode.SIGFIG)
     }
 
     @Test
     fun valueStringUsesScientificWhenTooLong() {
-        testValueString("3.33333333333ᴇ19", "33333333333333333333", Precision.Infinite)
-        testValueString("3.333ᴇ-17", ".00000000000000003333", sf(4))
-        testValueString("3.33333333333ᴇ-3", ".0033333333333333333333", Precision.Infinite)
-        testValueString("3.33300000000ᴇ-3", ".003333", Precision.Infinite)
+        testValueString("3.33333333333ᴇ19", "33333333333333333333", Precision.Infinite, RoundingMode.SIGFIG)
+        testValueString("3.333ᴇ-17", ".00000000000000003333", sf(4), RoundingMode.SIGFIG)
+        testValueString("3.33333333333ᴇ-3", ".0033333333333333333333", Precision.Infinite, RoundingMode.SIGFIG)
+        testValueString("3.33300000000ᴇ-3", ".003333", Precision.Infinite, RoundingMode.SIGFIG)
     }
 
     @Test
     fun valueStringWithUnit() {
-        testValueString("1.234m", "1.234", sf(4), HumanUnit(mapOf(u("m") to 1)))
-        testValueString("1.2m", "1.234", sf(2), HumanUnit(mapOf(u("m") to 1)))
-        testValueString("3.33300000000m", "3.333", Precision.Infinite, HumanUnit(mapOf(u("m") to 1)))
-        testValueString("3.33333333333m", "3.3333333333333333333", Precision.Infinite, HumanUnit(mapOf(u("m") to 1)))
-        testValueString("3.333ᴇ-17m", ".00000000000000003333", sf(4), HumanUnit(mapOf(u("m") to 1)))
+        testValueString("1.234m", "1.234", sf(4), HumanUnit(mapOf(u("m") to 1)), RoundingMode.SIGFIG)
+        testValueString("1.2m", "1.234", sf(2), HumanUnit(mapOf(u("m") to 1)), RoundingMode.SIGFIG)
+        testValueString("3.33300000000m", "3.333", Precision.Infinite, HumanUnit(mapOf(u("m") to 1)), RoundingMode.SIGFIG)
+        testValueString("3.33333333333m", "3.3333333333333333333", Precision.Infinite, HumanUnit(mapOf(u("m") to 1)), RoundingMode.SIGFIG)
+        testValueString("3.333ᴇ-17m", ".00000000000000003333", sf(4), HumanUnit(mapOf(u("m") to 1)), RoundingMode.SIGFIG)
     }
 
     @Test
     fun valueStringConstant() {
-        Assert.assertEquals("3.14159265358", HumanQuantity(SciNumber.Real(Math.PI), HumanUnit(mapOf())).valueString())
-        Assert.assertEquals("3.14159265358m", HumanQuantity(SciNumber.Real(Math.PI), HumanUnit(mapOf(u("m") to 1))).valueString())
+        assertEquals("3.14159265358m", HumanQuantity(SciNumber.Real(Math.PI), HumanUnit(mapOf(u("m") to 1))).valueString(RoundingMode.SIGFIG))
+    }
+
+    @Test
+    fun valueStringRoundingSigfig() {
+        testValueString("1.8", "1.78", sf(2), RoundingMode.SIGFIG)
+        testValueString("1.8", "1.75", sf(2), RoundingMode.SIGFIG)
+        testValueString("1.8", "1.78245", sf(2), RoundingMode.SIGFIG)
+        testValueString("1.8", "1.75245", sf(2), RoundingMode.SIGFIG)
+
+        testValueString("0.8", "0.78245", sf(1), RoundingMode.SIGFIG)
+        testValueString("0.8", "0.75245", sf(1), RoundingMode.SIGFIG)
+
+        testValueString("0.008", "0.0078245", sf(1), RoundingMode.SIGFIG)
+        testValueString("0.008", "0.0075245", sf(1), RoundingMode.SIGFIG)
+
+        testValueString("2", "1.8", sf(1), RoundingMode.SIGFIG)
+        testValueString("2", "1.5", sf(1), RoundingMode.SIGFIG)
+
+        testValueString("20", "18", sf(1), RoundingMode.SIGFIG)
+        testValueString("20", "15", sf(1), RoundingMode.SIGFIG)
+    }
+
+    @Test
+    fun roundingCascades() {
+        testValueString("1.800", "1.79999", sf(4), RoundingMode.SIGFIG)
+    }
+
+    @Test
+    fun roundingStopAtLastCharacter() {
+        testValueString("1.78", "1.78", sf(3), RoundingMode.SIGFIG)
+        testValueString("1.75", "1.75", sf(3), RoundingMode.SIGFIG)
+    }
+
+    @Test
+    fun valueStringRoundingRemoveTrailing() {
+        testValueString("1.78", "1.78", sf(2), RoundingMode.REMOVE_TRAILING)
+        testValueString("1.75", "1.75", sf(2), RoundingMode.REMOVE_TRAILING)
+
+        testValueString("1.8", "1.80000", sf(1), RoundingMode.REMOVE_TRAILING)
+        testValueString("1.5", "1.5", sf(1), RoundingMode.REMOVE_TRAILING)
+
+        testValueString("20", "20", sf(1), RoundingMode.REMOVE_TRAILING)
+        testValueString("20", "20", sf(1), RoundingMode.REMOVE_TRAILING)
     }
 
     @Test
     fun unusualBackings() {
-        Assert.assertEquals(SigfigString("5000", 1, 4), SciNumber.Real("5E+3", sf(1)).valueString(SeperatorType.NONE))
-        Assert.assertEquals(SigfigString("5000", 4, 4), SciNumber.Real("5E+3", Precision.Infinite).valueString(SeperatorType.NONE))
+        assertEquals(SigfigString("5000", 1, 4), SciNumber.Real("5E+3", sf(1)).valueString(SeperatorType.NONE))
+        assertEquals(SigfigString("5000", 4, 4), SciNumber.Real("5E+3", Precision.Infinite).valueString(SeperatorType.NONE))
     }
 
     @Test
@@ -248,22 +287,22 @@ class HumanQuantityTest {
     }
 
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int, seperatorType: SeperatorType) {
-        Assert.assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType).insigfigStart)
+        assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType).insigfigStart)
     }
 
     private fun testHumanString(expected: String, value: String, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat).string)
+        assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat).string)
     }
 
     private fun testSigfigString(expected: SigfigString, value: String, sigFigs: Int, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat))
+        assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat))
     }
 
-    private fun testValueString(expected: String, value: String, precision: Precision) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, precision), HumanUnit(mapOf())).valueString())
+    private fun testValueString(expected: String, value: String, precision: Precision, roundingMode: RoundingMode) {
+        assertEquals(expected, HumanQuantity(SciNumber.Real(value, precision), HumanUnit(mapOf())).valueString(roundingMode))
     }
 
-    private fun testValueString(expected: String, value: String, precision: Precision, unit: HumanUnit) {
-        Assert.assertEquals(expected, HumanQuantity(SciNumber.Real(value, precision), unit).valueString())
+    private fun testValueString(expected: String, value: String, precision: Precision, unit: HumanUnit, roundingMode: RoundingMode) {
+        assertEquals(expected, HumanQuantity(SciNumber.Real(value, precision), unit).valueString(roundingMode))
     }
 }

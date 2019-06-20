@@ -18,7 +18,6 @@ import android.widget.*
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponse
 import com.monotonic.digits.evaluator.SciNumber
-import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
 import com.monotonic.digits.skin.*
 import com.monotonic.digits.units.*
@@ -56,8 +55,14 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             return if (useEngineering) NumberFormat.ENGINEERING else NumberFormat.SCIENTIFIC
         }
 
+    private val roundingMode : RoundingMode
+        get() {
+            val roundResults = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("round_results", false)
+            return if (roundResults) RoundingMode.SIGFIG else RoundingMode.REMOVE_TRAILING
+        }
+
     private val sigfigHighlight : Boolean
-        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", true)
+        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", false)
 
     private lateinit var skin : Skin
 
@@ -209,7 +214,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         val buttonCommand = (button as CalculatorButton).primaryCommand
         if (buttonCommand == "ENT") {
             history += HistoryItem(input.text.toString(), result_preview.text.toString())
-            input.text.replace(0, input.text.length, humanizedQuantity.valueString())
+            input.text.replace(0, input.text.length, humanizedQuantity.valueString(roundingMode))
             input.setSelection(input.text.length)
         } else if (buttonCommand == "DEL") {
             if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {

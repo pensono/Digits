@@ -8,8 +8,13 @@
 
         <SwitchPreference
             android:key="sigfig_highlight"
-            android:title="Highlight significant digits in result"
+            android:title="Highlight significant figures in result"
             android:defaultValue="true"/>
+
+        <SwitchPreference
+            android:key="round_results"
+            android:title="Round results by significant figures"
+            android:defaultValue="false"/>
 
         <ListPreference
             android:key="unit_system_preference"
