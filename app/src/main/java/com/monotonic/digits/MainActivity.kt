@@ -15,8 +15,6 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
-import com.android.billingclient.api.*
-import com.android.billingclient.api.BillingClient.BillingResponse
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.human.*
 import com.monotonic.digits.skin.*
@@ -27,8 +25,10 @@ import android.content.Intent
 import android.graphics.drawable.*
 
 
-class MainActivity : Activity(), PurchasesUpdatedListener {
-    val TAG = "Digits_MainActivity"
+class MainActivity : Activity() {
+    companion object {
+        public val TAG = "Digits_MainActivity"
+    }
     private val history = mutableListOf<HistoryItem>()
     private val preferredUnits = mutableMapOf<Map<String, Int>, HumanUnit>()
 
@@ -36,9 +36,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
     private var editingUnit = false
 
-    val PRO_SKU = "com.monotonic.digits.pro"
-    private lateinit var billingClient: BillingClient
-    private var hasPro = false
+    private lateinit var billingManager : BillingManager
 
     private val editingInput
         get() = if (editingUnit) unit_input else input
@@ -121,9 +119,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
 
         result_preview.post { updatePreview() }
 
-        billingClient = BillingClient.newBuilder(this).setListener(this).build()
-        connectToBillingService()
-
         val skinName = getPreferences(Context.MODE_PRIVATE)
                 .getString(getString(R.string.pref_skin), resources.getResourceName(R.array.skin_default_light))
         val skinId = resources.getIdentifier(skinName, "id", packageName)
@@ -134,6 +129,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
         populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
+
+        billingManager = BillingManager(this)
     }
 
     fun tryUnitConversion() {
@@ -164,50 +161,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         super.onResume()
         input.text.replace(0, input.text.length, getPreferences(Context.MODE_PRIVATE).getString("input_value", ""))
 
-        refreshPurchases()
-    }
-
-    fun connectToBillingService() {
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(@BillingResponse billingResponseCode: Int) {
-                if (billingResponseCode == BillingResponse.OK) {
-                    refreshPurchases()
-                    Log.i(TAG, "Connected to billing service")
-                }
-            }
-
-            override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                connectToBillingService()
-            }
-        })
-    }
-
-    private fun refreshPurchases() {
-        val purchasesResult: Purchase.PurchasesResult =
-                billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        if (purchasesResult.purchasesList != null && purchasesResult.purchasesList.any { it.sku == PRO_SKU })
-            hasPro = true
-    }
-
-    private fun doProPurchase() {
-        val flowParams = BillingFlowParams.newBuilder()
-                .setSku(PRO_SKU)
-                .setType(BillingClient.SkuType.INAPP)
-                .build()
-        val responseCode = billingClient.launchBillingFlow(this, flowParams)
-    }
-
-    override fun onPurchasesUpdated(@BillingResponse responseCode: Int, purchases: List<Purchase>?) {
-        if (responseCode == BillingResponse.OK && purchases != null) {
-            refreshPurchases()
-        } else if (responseCode == BillingResponse.USER_CANCELED) {
-            // Handle an error caused by a user cancelling the purchase flow.
-        } else {
-            // Handle any other error codes.
-            Log.e(TAG, "Billing error: $responseCode")
-        }
+        billingManager.refreshPurchases()
     }
 
     fun numberFormatToggled(view: View) {
@@ -228,12 +182,12 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_get_pro -> {
-                    val dialog = createProValueDialog(this) { doProPurchase() }
+                    val dialog = createProValueDialog(this) { billingManager.doProPurchase(this) }
                     dialog.show()
                     true
                 }
                 R.id.menu_customize -> {
-                    val dialog = createSkinPickerDialog(this) {
+                    val dialog = createSkinPickerDialog(this, billingManager) {
                         with (getPreferences(Context.MODE_PRIVATE).edit()) {
                             putString(getString(R.string.pref_skin), resources.getResourceName(it.id))
                             apply()

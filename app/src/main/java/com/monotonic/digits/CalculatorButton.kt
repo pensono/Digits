@@ -87,6 +87,11 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
         attributes.recycle()
     }
 
+    // Cuz intellij warns about this not being overridden
+    override fun performClick(): Boolean {
+        return super.performClick()
+    }
+
     override fun getHitRect(outRect: Rect) {
         super.getHitRect(outRect)
         outRect.bottom += targetBottomExtendPx
