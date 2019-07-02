@@ -13,181 +13,181 @@ import org.junit.Test
 class HumanQuantityTest {
     @Test
     fun useDecimalNotation() {
-        assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString(SeperatorType.NONE).string)
-        assertEquals("56000", humanize(evaluateExpression("56k").value).humanString(SeperatorType.NONE).string)
-        assertEquals("1.…ᴇ20", humanize(evaluateExpression("1.0ᴇ20").value).humanString(6, SeperatorType.NONE, NumberFormat.SCIENTIFIC).string)
+        assertEquals("0.05", humanize(evaluateExpression("1/20").value).humanString(SeparatorType.NONE).string)
+        assertEquals("56000", humanize(evaluateExpression("56k").value).humanString(SeparatorType.NONE).string)
+        assertEquals("1.…ᴇ20", humanize(evaluateExpression("1.0ᴇ20").value).humanString(6, SeparatorType.NONE, NumberFormat.SCIENTIFIC).string)
     }
 
     @Test
     fun engineeringNotation() {
-        assertEquals("123", humanize(evaluateExpression("123").value).humanString(SeperatorType.NONE).string)
+        assertEquals("123", humanize(evaluateExpression("123").value).humanString(SeparatorType.NONE).string)
 
-        assertEquals("1m", humanize(evaluateExpression("1m").value).humanString(SeperatorType.NONE).string)
-        assertEquals("123m", humanize(evaluateExpression("123m").value).humanString(SeperatorType.NONE).string)
-        assertEquals("12.3m", humanize(evaluateExpression("12.3m").value).humanString(SeperatorType.NONE).string)
-        assertEquals("1.23m", humanize(evaluateExpression("1.23m").value).humanString(SeperatorType.NONE).string)
-        assertEquals("123mm", humanize(evaluateExpression(".123m").value).humanString(SeperatorType.NONE).string)
+        assertEquals("1m", humanize(evaluateExpression("1m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("123m", humanize(evaluateExpression("123m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("12.3m", humanize(evaluateExpression("12.3m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("1.23m", humanize(evaluateExpression("1.23m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("123mm", humanize(evaluateExpression(".123m").value).humanString(SeparatorType.NONE).string)
     }
 
     @Test
     fun limitedHumanStringNoSeparator() {
-        testHumanString("1.2…ᴇ-1", ".1234567", 7, SeperatorType.NONE)
-        testHumanString("0.12345", ".12345", 7, SeperatorType.NONE)
-        testHumanString("0.12345", ".12345", 10, SeperatorType.NONE)
-        testHumanString("1.2…ᴇ-4", ".00012345", 7, SeperatorType.NONE)
-        testHumanString("1.2345…ᴇ-4", ".000123456", 10, SeperatorType.NONE)
+        testHumanString("1.2…ᴇ-1", ".1234567", 7, SeparatorType.NONE)
+        testHumanString("0.12345", ".12345", 7, SeparatorType.NONE)
+        testHumanString("0.12345", ".12345", 10, SeparatorType.NONE)
+        testHumanString("1.2…ᴇ-4", ".00012345", 7, SeparatorType.NONE)
+        testHumanString("1.2345…ᴇ-4", ".000123456", 10, SeparatorType.NONE)
 
-        testHumanString("12345", "12345", 7, SeperatorType.NONE)
-        testHumanString("12345", "12345", 10, SeperatorType.NONE)
+        testHumanString("12345", "12345", 7, SeparatorType.NONE)
+        testHumanString("12345", "12345", 10, SeparatorType.NONE)
 
-        testHumanString("1.234…ᴇ8", "123456789", 8, SeperatorType.NONE)
+        testHumanString("1.234…ᴇ8", "123456789", 8, SeparatorType.NONE)
 
         // Untested is small maxChars values < 4
     }
 
     @Test
     fun limitedHumanStringSpace() {
-        testHumanString("1.2…ᴇ-1", ".1234567", 7, SeperatorType.SPACE)
-        testHumanString("0.123 4", ".1234", 7, SeperatorType.SPACE)
-        testHumanString("0.123 4", ".1234", 10, SeperatorType.SPACE)
-        testHumanString("0.123", ".123", 7, SeperatorType.SPACE)
-        testHumanString("1.234…ᴇ-4", ".000123456", 10, SeperatorType.SPACE)
+        testHumanString("1.2…ᴇ-1", ".1234567", 7, SeparatorType.SPACE)
+        testHumanString("0.123 4", ".1234", 7, SeparatorType.SPACE)
+        testHumanString("0.123 4", ".1234", 10, SeparatorType.SPACE)
+        testHumanString("0.123", ".123", 7, SeparatorType.SPACE)
+        testHumanString("1.234…ᴇ-4", ".000123456", 10, SeparatorType.SPACE)
 
-        testHumanString("12 345", "12345", 7, SeperatorType.SPACE)
-        testHumanString("12 345", "12345", 10, SeperatorType.SPACE)
+        testHumanString("12 345", "12345", 7, SeparatorType.SPACE)
+        testHumanString("12 345", "12345", 10, SeparatorType.SPACE)
 
-        testHumanString("12 345.678 9", "12345.6789", 15, SeperatorType.SPACE)
-        testHumanString("1.234 56…ᴇ4", "12345.6789", 11, SeperatorType.SPACE)
-        testHumanString("1.234…ᴇ8", "123456789", 8, SeperatorType.SPACE)
+        testHumanString("12 345.678 9", "12345.6789", 15, SeparatorType.SPACE)
+        testHumanString("1.234 56…ᴇ4", "12345.6789", 11, SeparatorType.SPACE)
+        testHumanString("1.234…ᴇ8", "123456789", 8, SeparatorType.SPACE)
     }
 
     @Test
     fun negativeLimitedHumanStringNoSeparator() {
-        testHumanString("-1.2…ᴇ-1", "-.1234567", 8, SeperatorType.NONE)
-        testHumanString("-0.12345", "-.12345", 8, SeperatorType.NONE)
-        testHumanString("-0.12345", "-.12345", 11, SeperatorType.NONE)
-        testHumanString("-1.2…ᴇ-4", "-.00012345", 8, SeperatorType.NONE)
-        testHumanString("-1.2345…ᴇ-4", "-.000123456", 11, SeperatorType.NONE)
+        testHumanString("-1.2…ᴇ-1", "-.1234567", 8, SeparatorType.NONE)
+        testHumanString("-0.12345", "-.12345", 8, SeparatorType.NONE)
+        testHumanString("-0.12345", "-.12345", 11, SeparatorType.NONE)
+        testHumanString("-1.2…ᴇ-4", "-.00012345", 8, SeparatorType.NONE)
+        testHumanString("-1.2345…ᴇ-4", "-.000123456", 11, SeparatorType.NONE)
 
-        testHumanString("-12345", "-12345", 8, SeperatorType.NONE)
-        testHumanString("-12345", "-12345", 11, SeperatorType.NONE)
+        testHumanString("-12345", "-12345", 8, SeparatorType.NONE)
+        testHumanString("-12345", "-12345", 11, SeparatorType.NONE)
 
-        testHumanString("-1.234…ᴇ8", "-123456789", 9, SeperatorType.NONE)
+        testHumanString("-1.234…ᴇ8", "-123456789", 9, SeparatorType.NONE)
 
         // Untested is small maxChars values < 4
     }
 
     @Test
     fun negativeLimitedHumanStringSpace() {
-        testHumanString("-1.2…ᴇ-1", "-.1234567", 8, SeperatorType.SPACE)
-        testHumanString("-0.123 4", "-.1234", 8, SeperatorType.SPACE)
-        testHumanString("-0.123 4", "-.1234", 11, SeperatorType.SPACE)
-        testHumanString("-1.2…ᴇ-4", "-.00012345", 8, SeperatorType.SPACE)
-        testHumanString("-1.234…ᴇ-4", "-.000123456", 11, SeperatorType.SPACE)
+        testHumanString("-1.2…ᴇ-1", "-.1234567", 8, SeparatorType.SPACE)
+        testHumanString("-0.123 4", "-.1234", 8, SeparatorType.SPACE)
+        testHumanString("-0.123 4", "-.1234", 11, SeparatorType.SPACE)
+        testHumanString("-1.2…ᴇ-4", "-.00012345", 8, SeparatorType.SPACE)
+        testHumanString("-1.234…ᴇ-4", "-.000123456", 11, SeparatorType.SPACE)
 
-        testHumanString("-12 345", "-12345",7, SeperatorType.SPACE)
-        testHumanString("-12 345", "-12345",11, SeperatorType.SPACE)
+        testHumanString("-12 345", "-12345",7, SeparatorType.SPACE)
+        testHumanString("-12 345", "-12345",11, SeparatorType.SPACE)
 
-        testHumanString("-1.234…ᴇ8", "-123456789", 9, SeperatorType.SPACE)
-        testHumanString("-1.234…ᴇ8", "-123456789", 10, SeperatorType.SPACE)
-        testHumanString("-1.234 5…ᴇ8", "-123456789", 11, SeperatorType.SPACE)
+        testHumanString("-1.234…ᴇ8", "-123456789", 9, SeparatorType.SPACE)
+        testHumanString("-1.234…ᴇ8", "-123456789", 10, SeparatorType.SPACE)
+        testHumanString("-1.234 5…ᴇ8", "-123456789", 11, SeparatorType.SPACE)
 
         // Untested is small maxChars values < 4
     }
     
     @Test
     fun engineeringExponents() {
-        testHumanString("123.4…ᴇ6", "123456789", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("12.34…ᴇ6", "12345678.0", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("1.234…ᴇ6", "1234567.00", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("123.4…ᴇ3", "123456.000", 8, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("123.4…ᴇ6", "123456789", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("12.34…ᴇ6", "12345678.0", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("1.234…ᴇ6", "1234567.00", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("123.4…ᴇ3", "123456.000", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
 
-        testHumanString("123.45…ᴇ-6", ".000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("12.345…ᴇ-6", ".0000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("1.2345…ᴇ-6", ".00000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("123.45…ᴇ-9", ".000000123456", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("123.45…ᴇ-6", ".000123456", 10, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("12.345…ᴇ-6", ".0000123456", 10, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("1.2345…ᴇ-6", ".00000123456", 10, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("123.45…ᴇ-9", ".000000123456", 10, SeparatorType.NONE, NumberFormat.ENGINEERING)
 
-        testHumanString("12345", "12345", 7, SeperatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("12345", "12345", 10, SeperatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("12345", "12345", 7, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("12345", "12345", 10, SeparatorType.NONE, NumberFormat.ENGINEERING)
     }
 
     @Test
     fun addsZeroes() {
-        assertEquals("0.500", HumanQuantity(SciNumber.Real(".5", sf(3)), HumanUnit(mapOf())).humanString(SeperatorType.NONE).string)
-        assertEquals("5.00", HumanQuantity(SciNumber.Real("5", sf(3)), HumanUnit(mapOf())).humanString(SeperatorType.NONE).string)
-        assertEquals("5.00m", HumanQuantity(SciNumber.Real("5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString(SeperatorType.NONE).string)
+        assertEquals("0.500", HumanQuantity(SciNumber.Real(".5", sf(3)), HumanUnit(mapOf())).humanString(SeparatorType.NONE).string)
+        assertEquals("5.00", HumanQuantity(SciNumber.Real("5", sf(3)), HumanUnit(mapOf())).humanString(SeparatorType.NONE).string)
+        assertEquals("5.00m", HumanQuantity(SciNumber.Real("5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString(SeparatorType.NONE).string)
 
-        assertEquals("-0.500", HumanQuantity(SciNumber.Real("-.5", sf(3)), HumanUnit(mapOf())).humanString(SeperatorType.NONE).string)
-        assertEquals("-5.00", HumanQuantity(SciNumber.Real("-5", sf(3)), HumanUnit(mapOf())).humanString(SeperatorType.NONE).string)
-        assertEquals("-5.00m", HumanQuantity(SciNumber.Real("-5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString(SeperatorType.NONE).string)
+        assertEquals("-0.500", HumanQuantity(SciNumber.Real("-.5", sf(3)), HumanUnit(mapOf())).humanString(SeparatorType.NONE).string)
+        assertEquals("-5.00", HumanQuantity(SciNumber.Real("-5", sf(3)), HumanUnit(mapOf())).humanString(SeparatorType.NONE).string)
+        assertEquals("-5.00m", HumanQuantity(SciNumber.Real("-5", sf(3)), HumanUnit(mapOf(u("m") to 1))).humanString(SeparatorType.NONE).string)
     }
 
     @Test
     fun insignificantPosition() {
-        testInsigfigStart(1, "9900", 1, SeperatorType.NONE)
-        testInsigfigStart(2, "9900", 2, SeperatorType.NONE)
-        testInsigfigStart(1, "99.99", 1, SeperatorType.NONE)
-        testInsigfigStart(2, "99.99", 2, SeperatorType.NONE) // Before the period
-        testInsigfigStart(3, "0.2", 1, SeperatorType.NONE)  // With a leading 0
-        testInsigfigStart(3, "0.22", 1, SeperatorType.NONE)
-        testInsigfigStart(5, "0.002", 1, SeperatorType.NONE)
-        testInsigfigStart(5, "0.0020", 1, SeperatorType.NONE)
-        testInsigfigStart(5, "0.0022", 1, SeperatorType.NONE)
+        testInsigfigStart(1, "9900", 1, SeparatorType.NONE)
+        testInsigfigStart(2, "9900", 2, SeparatorType.NONE)
+        testInsigfigStart(1, "99.99", 1, SeparatorType.NONE)
+        testInsigfigStart(2, "99.99", 2, SeparatorType.NONE) // Before the period
+        testInsigfigStart(3, "0.2", 1, SeparatorType.NONE)  // With a leading 0
+        testInsigfigStart(3, "0.22", 1, SeparatorType.NONE)
+        testInsigfigStart(5, "0.002", 1, SeparatorType.NONE)
+        testInsigfigStart(5, "0.0020", 1, SeparatorType.NONE)
+        testInsigfigStart(5, "0.0022", 1, SeparatorType.NONE)
 
-        testInsigfigStart(2, "-99.99", 1, SeperatorType.NONE)
-        testInsigfigStart(3, "-99.99", 2, SeperatorType.NONE) // Before the period
-        testInsigfigStart(4, "-0.2", 1, SeperatorType.NONE)  // With a leading 0
-        testInsigfigStart(4, "-0.22", 1, SeperatorType.NONE)
-        testInsigfigStart(6, "-0.002", 1, SeperatorType.NONE)
-        testInsigfigStart(6, "-0.0020", 1, SeperatorType.NONE)
-        testInsigfigStart(6, "-0.0022", 1, SeperatorType.NONE)
+        testInsigfigStart(2, "-99.99", 1, SeparatorType.NONE)
+        testInsigfigStart(3, "-99.99", 2, SeparatorType.NONE) // Before the period
+        testInsigfigStart(4, "-0.2", 1, SeparatorType.NONE)  // With a leading 0
+        testInsigfigStart(4, "-0.22", 1, SeparatorType.NONE)
+        testInsigfigStart(6, "-0.002", 1, SeparatorType.NONE)
+        testInsigfigStart(6, "-0.0020", 1, SeparatorType.NONE)
+        testInsigfigStart(6, "-0.0022", 1, SeparatorType.NONE)
     }
 
     @Test
     fun insignificantPositionSpace() {
-        testInsigfigStart(1, "99.99", 1, SeperatorType.SPACE)
-        testInsigfigStart(1, "9999.99", 1, SeperatorType.SPACE)
-        testInsigfigStart(3, "9999.99", 2, SeperatorType.SPACE)
-        testInsigfigStart(5, "9999.99", 4, SeperatorType.SPACE)
-        testInsigfigStart(3, "777.9", 3, SeperatorType.SPACE)
-        testInsigfigStart(5, "777.9", 4, SeperatorType.SPACE)
-        testInsigfigStart(1, "999777.99", 1, SeperatorType.SPACE)
-        testInsigfigStart(3, "999777.99", 3, SeperatorType.SPACE)
-        testInsigfigStart(11, "9999.9999", 8, SeperatorType.SPACE)
-        testInsigfigStart(5, "7.999", 4, SeperatorType.SPACE)
+        testInsigfigStart(1, "99.99", 1, SeparatorType.SPACE)
+        testInsigfigStart(1, "9999.99", 1, SeparatorType.SPACE)
+        testInsigfigStart(3, "9999.99", 2, SeparatorType.SPACE)
+        testInsigfigStart(5, "9999.99", 4, SeparatorType.SPACE)
+        testInsigfigStart(3, "777.9", 3, SeparatorType.SPACE)
+        testInsigfigStart(5, "777.9", 4, SeparatorType.SPACE)
+        testInsigfigStart(1, "999777.99", 1, SeparatorType.SPACE)
+        testInsigfigStart(3, "999777.99", 3, SeparatorType.SPACE)
+        testInsigfigStart(11, "9999.9999", 8, SeparatorType.SPACE)
+        testInsigfigStart(5, "7.999", 4, SeparatorType.SPACE)
 
-        testInsigfigStart(2, "-99.99", 1, SeperatorType.SPACE)
-        testInsigfigStart(2, "-9999.99", 1, SeperatorType.SPACE)
-        testInsigfigStart(4, "-9999.99", 2, SeperatorType.SPACE)
-        testInsigfigStart(6, "-9999.99", 4, SeperatorType.SPACE)
-        testInsigfigStart(12, "-9999.9999", 8, SeperatorType.SPACE)
+        testInsigfigStart(2, "-99.99", 1, SeparatorType.SPACE)
+        testInsigfigStart(2, "-9999.99", 1, SeparatorType.SPACE)
+        testInsigfigStart(4, "-9999.99", 2, SeparatorType.SPACE)
+        testInsigfigStart(6, "-9999.99", 4, SeparatorType.SPACE)
+        testInsigfigStart(12, "-9999.9999", 8, SeparatorType.SPACE)
 
-        testInsigfigStart(4, "0.9999", 2, SeperatorType.SPACE)
-        testInsigfigStart(7, "0.99999", 4, SeperatorType.SPACE)
-        testInsigfigStart(5, "0.009999", 1, SeperatorType.SPACE)
-        testInsigfigStart(8, "0.009999", 3, SeperatorType.SPACE)
-        testInsigfigStart(6, "-0.009999", 1, SeperatorType.SPACE)
+        testInsigfigStart(4, "0.9999", 2, SeparatorType.SPACE)
+        testInsigfigStart(7, "0.99999", 4, SeparatorType.SPACE)
+        testInsigfigStart(5, "0.009999", 1, SeparatorType.SPACE)
+        testInsigfigStart(8, "0.009999", 3, SeparatorType.SPACE)
+        testInsigfigStart(6, "-0.009999", 1, SeparatorType.SPACE)
 
-        testInsigfigStart(3, "9999", 2, SeperatorType.SPACE)
-        testInsigfigStart(5, "9999", 4, SeperatorType.SPACE)
-        testInsigfigStart(1, "999900", 1, SeperatorType.SPACE)
-        testInsigfigStart(3, "999900", 3, SeperatorType.SPACE)
-        testInsigfigStart( 4, "-999900", 3, SeperatorType.SPACE)
+        testInsigfigStart(3, "9999", 2, SeparatorType.SPACE)
+        testInsigfigStart(5, "9999", 4, SeparatorType.SPACE)
+        testInsigfigStart(1, "999900", 1, SeparatorType.SPACE)
+        testInsigfigStart(3, "999900", 3, SeparatorType.SPACE)
+        testInsigfigStart( 4, "-999900", 3, SeparatorType.SPACE)
     }
 
 
     @Test
     fun insignificantWithEllipsis() {
-        testSigfigString(SigfigString("1.2345…ᴇ3", 6, 6), "1234.56789", 10, 9, SeperatorType.NONE)
-        testSigfigString(SigfigString("1.3333…ᴇ3", 3, 6), "1333.33333", 2, 9, SeperatorType.NONE)
-        testSigfigString(SigfigString("1.3333…ᴇ3", 6, 6), "1333.33333", 5, 9, SeperatorType.NONE)
+        testSigfigString(SigfigString("1.2345…ᴇ3", 6, 6), "1234.56789", 10, 9, SeparatorType.NONE)
+        testSigfigString(SigfigString("1.3333…ᴇ3", 3, 6), "1333.33333", 2, 9, SeparatorType.NONE)
+        testSigfigString(SigfigString("1.3333…ᴇ3", 6, 6), "1333.33333", 5, 9, SeparatorType.NONE)
 
-        testSigfigString(SigfigString("-1.2345…ᴇ3", 7, 7), "-1234.56789", 10, 10, SeperatorType.NONE)
-        testSigfigString(SigfigString("-1.3333…ᴇ3", 4, 7), "-1333.33333", 2, 10, SeperatorType.NONE)
-        testSigfigString(SigfigString("-1.3333…ᴇ3", 7, 7), "-1333.33333", 5, 10, SeperatorType.NONE)
+        testSigfigString(SigfigString("-1.2345…ᴇ3", 7, 7), "-1234.56789", 10, 10, SeparatorType.NONE)
+        testSigfigString(SigfigString("-1.3333…ᴇ3", 4, 7), "-1333.33333", 2, 10, SeparatorType.NONE)
+        testSigfigString(SigfigString("-1.3333…ᴇ3", 7, 7), "-1333.33333", 5, 10, SeparatorType.NONE)
 
         // No E for *10^0
-        testSigfigString(SigfigString("1.333333…", 6, 8), "1.333333333", 5, 9, SeperatorType.NONE)
+        testSigfigString(SigfigString("1.333333…", 6, 8), "1.333333333", 5, 9, SeparatorType.NONE)
     }
 
     @Test
@@ -277,25 +277,25 @@ class HumanQuantityTest {
 
     @Test
     fun unusualBackings() {
-        assertEquals(SigfigString("5000", 1, 4), SciNumber.Real("5E+3", sf(1)).valueString(SeperatorType.NONE))
-        assertEquals(SigfigString("5000", 4, 4), SciNumber.Real("5E+3", Precision.Infinite).valueString(SeperatorType.NONE))
+        assertEquals(SigfigString("5000", 1, 4), SciNumber.Real("5E+3", sf(1)).valueString(SeparatorType.NONE))
+        assertEquals(SigfigString("5000", 4, 4), SciNumber.Real("5E+3", Precision.Infinite).valueString(SeparatorType.NONE))
     }
 
     @Test
     fun zeroCharacters() {
-        testSigfigString(SigfigString("",0), "-1234.56789", 10, 0, SeperatorType.NONE)
+        testSigfigString(SigfigString("",0), "-1234.56789", 10, 0, SeparatorType.NONE)
     }
 
-    private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int, seperatorType: SeperatorType) {
-        assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(seperatorType).insigfigStart)
+    private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int, separatorType: SeparatorType) {
+        assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(separatorType).insigfigStart)
     }
 
-    private fun testHumanString(expected: String, value: String, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
-        assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat).string)
+    private fun testHumanString(expected: String, value: String, maxChars: Int, separatorType: SeparatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
+        assertEquals(expected, HumanQuantity(SciNumber.Real(value), HumanUnit(mapOf())).humanString(maxChars, separatorType, numberFormat).string)
     }
 
-    private fun testSigfigString(expected: SigfigString, value: String, sigFigs: Int, maxChars: Int, seperatorType: SeperatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
-        assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(maxChars, seperatorType, numberFormat))
+    private fun testSigfigString(expected: SigfigString, value: String, sigFigs: Int, maxChars: Int, separatorType: SeparatorType, numberFormat: NumberFormat = NumberFormat.SCIENTIFIC) {
+        assertEquals(expected, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(maxChars, separatorType, numberFormat))
     }
 
     private fun testValueString(expected: String, value: String, precision: Precision, roundingMode: RoundingMode) {

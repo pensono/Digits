@@ -41,10 +41,10 @@ class MainActivity : Activity() {
     private val editingInput
         get() = if (editingUnit) unit_input else input
 
-    private val resultSeparator : SeperatorType
+    private val resultSeparator : SeparatorType
         get() {
             val spaceSeparate = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("space_grouping", true)
-            return if (spaceSeparate) SeperatorType.SPACE else SeperatorType.NONE
+            return if (spaceSeparate) SeparatorType.SPACE else SeparatorType.NONE
         }
 
     private val numberFormat : NumberFormat
@@ -206,6 +206,11 @@ class MainActivity : Activity() {
             }
         }
         popup.inflate(R.menu.popup_menu)
+
+        if (billingManager.hasPro){
+            popup.menu.findItem(R.id.menu_get_pro).isVisible = false
+        }
+
         popup.show()
     }
 
@@ -413,22 +418,14 @@ class MainActivity : Activity() {
         }
 
         val coloredText =
-            if (sigfigHighlight)
-                humanString.string
-                .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
-                .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='$colorStr'>")
-            else humanString.string
+                if (sigfigHighlight)
+                    humanString.string
+                            .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
+                            .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='$colorStr'>")
+                else humanString.string
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
         return htmlToSpannable(coloredText)
-    }
-
-    private fun htmlToSpannable(coloredText: String): Spanned {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(coloredText, Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            Html.fromHtml(coloredText)
-        }
     }
 
     private fun hexStringForColor(colorResourceId: Int) =
@@ -466,5 +463,13 @@ class MainActivity : Activity() {
         editor_area.foreground = circleAnimation
 
         circleAnimation.start()
+    }
+}
+
+private fun htmlToSpannable(coloredText: String): Spanned {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(coloredText, Html.FROM_HTML_MODE_LEGACY)
+    } else {
+        Html.fromHtml(coloredText)
     }
 }

@@ -1,6 +1,6 @@
 package com.monotonic.digits.evaluator
 
-import com.monotonic.digits.human.SeperatorType
+import com.monotonic.digits.human.SeparatorType
 import com.monotonic.digits.human.SigfigString
 import java.lang.Integer.*
 import java.math.BigDecimal
@@ -75,7 +75,7 @@ sealed class SciNumber {
     abstract fun sec() : SciNumber
     abstract fun cot() : SciNumber
 
-    abstract fun valueString(seperatorType: SeperatorType) : SigfigString
+    abstract fun valueString(separatorType: SeparatorType) : SigfigString
     abstract fun valueEqual(other: SciNumber) : Boolean
     abstract fun toDouble() : Double
 
@@ -249,7 +249,7 @@ sealed class SciNumber {
         override fun valueEqual(other: SciNumber): Boolean = other is SciNumber.Real && backing.compareTo(other.backing) == 0
 
         // TODO move this into humanization
-        override fun valueString(seperatorType: SeperatorType): SigfigString {
+        override fun valueString(separatorType: SeparatorType): SigfigString {
             // We can't use java's number formatting facilities, because there's no way to
             // insert grouping separators in the fractional component of the string
 
@@ -266,25 +266,25 @@ sealed class SciNumber {
                 decimalLocation >= preciseStr.length -> { // Has digits greater than 0
                     val numPaddingZeroes = decimalLocation - preciseStr.length
                     val paddedStr = preciseStr + "0".repeat(numPaddingZeroes)
-                    val resultStr = signStr + insertGroupingSeparator(paddedStr.reversed(), seperatorType).reversed()
+                    val resultStr = signStr + insertGroupingSeparator(paddedStr.reversed(), separatorType).reversed()
                     when (precision) {
                         is Precision.Infinite -> SigfigString(resultStr)
                         is Precision.SigFigs -> {
                             // Where to start counting separators from. If we have 9 999
                             // Then we must start counting the first group from 2 since there's 1 more digit in the first group
                             val initialOffset = ((-paddedStr.length % 3) + 3) % 3
-                            val separatorSize = ((precision.amount - 1 + initialOffset) / 3) * seperatorType.separator.length
+                            val separatorSize = ((precision.amount - 1 + initialOffset) / 3) * separatorType.separator.length
                             SigfigString(resultStr, separatorSize + signStr.length + precision.amount)
                         }
                     }
                 }
                 decimalLocation <= 0 -> {
                     val paddedStr = "0".repeat(-decimalLocation) + preciseStr
-                    val resultStr = signStr + "0." + insertGroupingSeparator(paddedStr, seperatorType)
+                    val resultStr = signStr + "0." + insertGroupingSeparator(paddedStr, separatorType)
                     when (precision) {
                         is Precision.Infinite -> SigfigString(resultStr)
                         is Precision.SigFigs -> {
-                            val separatorSize = ((precision.amount - decimalLocation - 1) / 3) * seperatorType.separator.length
+                            val separatorSize = ((precision.amount - decimalLocation - 1) / 3) * separatorType.separator.length
                             SigfigString(resultStr, signStr.length + 2 + separatorSize + precision.amount + -decimalLocation)
                         }
                     }
@@ -294,8 +294,8 @@ sealed class SciNumber {
                     val fracStr = preciseStr.substring(decimalLocation)
 
                     // Double reversing is not efficient to run, but efficient to code
-                    val seperatedIntStr = insertGroupingSeparator(intStr.reversed(), seperatorType).reversed()
-                    val seperatedFracStr = insertGroupingSeparator(fracStr, seperatorType)
+                    val seperatedIntStr = insertGroupingSeparator(intStr.reversed(), separatorType).reversed()
+                    val seperatedFracStr = insertGroupingSeparator(fracStr, separatorType)
 
                     val resultStr = "$signStr$seperatedIntStr.$seperatedFracStr"
                     when (precision) {
@@ -305,7 +305,7 @@ sealed class SciNumber {
                             val initialOffset = ((-intStr.length % 3) + 3) % 3
                             val intSeparatorCount = min((precision.amount - 1 + initialOffset) / 3, (intStr.length - 1) / 3)
                             val fracSeparatorCount = max((precision.amount - intStr.length - 1) / 3, 0)
-                            val separatorSize = (intSeparatorCount + fracSeparatorCount) * seperatorType.separator.length
+                            val separatorSize = (intSeparatorCount + fracSeparatorCount) * separatorType.separator.length
 
                             SigfigString(resultStr, signStr.length + decimalSigfig + precision.amount + separatorSize)
                         }
@@ -318,11 +318,11 @@ sealed class SciNumber {
          * Inserts grouping separator from index 0:
          * 000,000,00
          */
-        private fun insertGroupingSeparator(input: String, seperatorType: SeperatorType) : String =
+        private fun insertGroupingSeparator(input: String, separatorType: SeparatorType) : String =
                 // Chop into bits and join together
             (0 .. input.length / 3).map { input.substring(it * 3, min(it * 3 + 3, input.length)) }
                     .filter { it.isNotEmpty() } // Removes last one if it's empty
-                    .joinToString(seperatorType.separator)
+                    .joinToString(separatorType.separator)
     }
 
     object Nan : SciNumber() {
@@ -353,7 +353,7 @@ sealed class SciNumber {
         override fun sec() = this
         override fun cot() = this
 
-        override fun valueString(seperatorType: SeperatorType) = SigfigString("NaN",3)
+        override fun valueString(separatorType: SeparatorType) = SigfigString("NaN",3)
         override fun valueEqual(other: SciNumber): Boolean = other === Nan
         override fun toDouble(): Double = Double.NaN
     }

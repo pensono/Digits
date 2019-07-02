@@ -1,5 +1,7 @@
 Pre-release:
-- In-app purchase for pro mode
+- Support US units
+- Round out disciplines
+- Make pulley on icon look good
 
 Post-release:
 - Support multiple units of the same dimension (min/hr, ft/mile)

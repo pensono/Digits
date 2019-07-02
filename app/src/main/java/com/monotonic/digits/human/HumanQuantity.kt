@@ -8,7 +8,7 @@ import kotlin.math.min
 
 data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.Void) {
     // TODO eventually make this accept a value for engineering or scientific mode
-    fun humanString(separatorType: SeperatorType) : SigfigString {
+    fun humanString(separatorType: SeparatorType) : SigfigString {
         val valueString = value.valueString(separatorType)
 
         return SigfigString(valueString.string + unitString(), valueString.insigfigStart, valueString.string.length)
@@ -19,11 +19,11 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
     /**
      * @param maxChars must be non-negative
      */
-    fun humanString(maxChars: Int, separatorType: SeperatorType, numberFormat: NumberFormat) : SigfigString {
+    fun humanString(maxChars: Int, separatorType: SeparatorType, numberFormat: NumberFormat) : SigfigString {
         return humanString(maxChars, separatorType, numberFormat, true)
     }
 
-    private fun humanString(maxChars: Int, separatorType: SeperatorType, numberFormat: NumberFormat, includeEllipsis: Boolean): SigfigString {
+    private fun humanString(maxChars: Int, separatorType: SeparatorType, numberFormat: NumberFormat, includeEllipsis: Boolean): SigfigString {
         if (maxChars == 0) {
             return SigfigString("", 0, 0)
         }
@@ -69,7 +69,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
             is Precision.SigFigs -> precision.amount
         }
 
-        val baseString = value.valueString(SeperatorType.NONE)
+        val baseString = value.valueString(SeparatorType.NONE)
         val decimalLocation = baseString.string.indexOf('.')
 
         val sized = if (baseString.insigfigStart >= decimalLocation && decimalLocation != -1) {
@@ -161,7 +161,7 @@ enum class RoundingMode {
     REMOVE_TRAILING
 }
 
-enum class SeperatorType(val separator: String) {
+enum class SeparatorType(val separator: String) {
     NONE(""),
     SPACE("\u2009") // Thin space, according to Wikipedia it should be used as a thousand's separator https://en.wikipedia.org/wiki/Whitespace_character
 }
