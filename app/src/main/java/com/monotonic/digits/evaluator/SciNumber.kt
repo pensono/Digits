@@ -246,7 +246,7 @@ sealed class SciNumber {
 
         fun reciprocal() = Real(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128), precision)
         override fun toDouble(): Double = backing.toDouble()
-        override fun valueEqual(other: SciNumber): Boolean = other is SciNumber.Real && backing.compareTo(other.backing) == 0
+        override fun valueEqual(other: SciNumber): Boolean = other is Real && backing.compareTo(other.backing) == 0
 
         // TODO move this into humanization
         override fun valueString(separatorType: SeparatorType): SigfigString {

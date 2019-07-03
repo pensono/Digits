@@ -125,4 +125,4 @@ fun humanize(quantity: Quantity) : HumanQuantity {
  * @param quantity must be dimensionally equal to unit
  */
 fun convert(quantity: Quantity, unit: HumanUnit) : HumanQuantity =
-    HumanQuantity(quantity.value * (quantity.unit.factor / unit.prefix.factor), unit)
+    HumanQuantity(quantity.value * quantity.unit.factor / (unit.prefix.factor * unit.factor), unit)

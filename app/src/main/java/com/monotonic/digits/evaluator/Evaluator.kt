@@ -1,12 +1,11 @@
 package com.monotonic.digits.evaluator
 
-import com.monotonic.digits.human.HumanUnit
 import com.monotonic.digits.parseNumber
 import com.monotonic.digits.parser.DigitsLexer
 import com.monotonic.digits.parser.DigitsParser
 import com.monotonic.digits.parser.DigitsParserBaseVisitor
+import com.monotonic.digits.units.PrefixUnit
 import com.monotonic.digits.units.UnitSystem
-import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.misc.Interval
 import java.math.BigDecimal
 import kotlin.math.abs
@@ -114,6 +113,11 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
 
         val parseablePrefixes = UnitSystem.prefixAbbreviations.filterValues { it.abbreviation != "" }
         val doubleUnits = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
+        val allAbbreviations = UnitSystem.unitAbbreviations.toMutableMap()
+        for ((k, v) in UnitSystem.prefixAbbreviations) {
+            allAbbreviations[k] = v
+        }
+
         val unitQuantities = UnitSystem.unitAbbreviations.mapValues { Quantity(SciNumber.One, it.value)}
         val constantQuantities = constants.mapValues { Quantity(SciNumber.Real(it.value)) }
         val alphabeticQuantities = constantQuantities + unitQuantities
@@ -128,17 +132,23 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                     val tokens = TokenIterator(term.text, term.sourceInterval)
 
                     // Check for prefixes
-                    val prefix = tokens.nextLargest(parseablePrefixes)
-                    if (prefix != null) {
-                        if (doubleUnits.contains(prefix.abbreviation) && !tokens.hasNext()) { // Special case for mili which conflicts with meters
-                            val unit = unitQuantities[prefix.abbreviation]!!
-                            value = value.invoke { it * unit }
-                            nextExponentBase = unit
-                        } else {
-                            value = value.invoke { it * Quantity(SciNumber.One, prefix) }
+                    if (functions.containsKey(tokens.peekRest())) {
+                        functionName = tokens.rest()
+                        functionInterval = tokens.previousLocation
+                    } else {
+                        val first = tokens.nextLargest(allAbbreviations)
+                        if (first != null) {
+                            if (doubleUnits.contains(first.abbreviation) && !tokens.hasNext()  // Special case for mili which conflicts with meters
+                                    || first !is PrefixUnit) {
+                                val unit = unitQuantities[first.abbreviation]!!
+                                value = value.invoke { it * unit }
+                                nextExponentBase = unit
+                            } else {
+                                value = value.invoke { it * Quantity(SciNumber.One, first) }
 
-                            if (!tokens.hasNext()) {
-                                value = value.error(ErrorMessage("Prefix without unit", tokens.previousLocation))
+                                if (!tokens.hasNext()) {
+                                    value = value.error(ErrorMessage("Prefix without unit", tokens.previousLocation))
+                                }
                             }
                         }
                     }
@@ -171,7 +181,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                         value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
                     } else {
                         val prevTerm = nextExponentBase // Scoot around kotlin's type system
-                        value = value.invoke { it * prevTerm.pow((exponent) - 1) }
+                        value = value.invoke { it * prevTerm.pow((exponent) - 1) } // -1 since we've already incorperated it once
                     }
                 }
                 is DigitsParser.NumericLiteralContext -> {

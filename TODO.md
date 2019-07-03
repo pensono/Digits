@@ -2,6 +2,7 @@ Pre-release:
 - Support US units
 - Round out disciplines
 - Make pulley on icon look good
+- km^2 bug. Should be (km)^2 rather than k(m^2)
 
 Post-release:
 - Support multiple units of the same dimension (min/hr, ft/mile)
