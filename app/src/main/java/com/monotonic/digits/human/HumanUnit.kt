@@ -77,17 +77,9 @@ fun humanize(quantity: Quantity) : HumanQuantity {
         else
             quantity.normalizedValue.magnitude
 
-    // Use the one to round up and avoid 0 digits in the front (like in .123m)
-    val prefixIndex = (prefixMagnitude - UnitSystem.prefixMagStart - 1) / 3
-    val prefixExponent = (prefixIndex * 3) + UnitSystem.prefixMagStart
-    val prefixFactor = SciNumber.Real(10).pow(prefixExponent)
-    val prefixUnit = UnitSystem.prefixes[prefixIndex]
-
-    val humanizedValue = quantity.value * quantity.unit.factor / prefixFactor
-
     val cacheLookup = humanizationCache[quantity.unit.dimensions]
     if (cacheLookup != null) {
-        return HumanQuantity(humanizedValue, cacheLookup.withPrefix(prefixUnit))
+        return applyPrefix(quantity, cacheLookup, prefixMagnitude)
     }
 
     val visitedUnits = mutableSetOf<HumanUnit>()
@@ -109,16 +101,38 @@ fun humanize(quantity: Quantity) : HumanQuantity {
         val correctUnit = newUnits.firstOrNull { unit -> unit.dimensionallyEqual(quantity.unit) }
         if (correctUnit != null) {
             humanizationCache[quantity.unit.dimensions] = correctUnit
-            return HumanQuantity(humanizedValue, correctUnit.withPrefix(prefixUnit))
+            return applyPrefix(quantity, correctUnit, prefixMagnitude)
         }
 
         visitQueue.addAll(newUnits)
     }
 
-    // This code should never really execute because there should be a base unit for each dimension (like meters or seconds)
+    // This code should never execute because there should be a base unit for each dimension (like meters or seconds). We'll do something sensible anyways
     val extraUnit = AtomicHumanUnit("Unk", "Unknown", null, quantity.unit.dimensions, quantity.unit.factor)
-    return HumanQuantity(humanizedValue, HumanUnit(mapOf(extraUnit to 1)))
+    return applyPrefix(quantity, HumanUnit(mapOf(extraUnit to 1)), prefixMagnitude)
 }
+
+private fun applyPrefix(quantity: Quantity, unit: HumanUnit, prefixMagnitude: Int): HumanQuantity {
+    // Use the one to round up and avoid 0 digits in the front (like in .123m)
+    val index = (prefixMagnitude - UnitSystem.prefixMagStart - 1) / 3
+    val exponent = (index * 3) + UnitSystem.prefixMagStart
+    val factor = SciNumber.Real(10).pow(exponent)
+    val unscaledPrefix = UnitSystem.prefixes[index]
+
+    val prefix =
+            if (unit.components.size == 1) {
+                val nameScale = unit.components.values.first() // So that we can fake (km)2 rather than k(m^2)
+                val scaledIndex = (((prefixMagnitude - 1) / nameScale) - UnitSystem.prefixMagStart) / 3
+                val scaledUnit = UnitSystem.prefixes[scaledIndex]
+                PrefixUnit(scaledUnit.abbreviation, scaledUnit.name, unscaledPrefix.factor, "")
+            } else {
+                unscaledPrefix
+            }
+
+    val humanizedValue = quantity.value * quantity.unit.factor / factor
+    return HumanQuantity(humanizedValue, unit.withPrefix(prefix))
+}
+
 
 /**
  *

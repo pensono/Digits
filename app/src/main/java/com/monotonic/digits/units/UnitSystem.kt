@@ -25,7 +25,7 @@ object UnitSystem { // Preferred Units?
     val charge = mapOf("current" to 1, "time" to 1)
     val pressure = mapOf("mass" to 1, "time" to -2, "length" to 1)
     val data = mapOf("data" to 1)
-    val morarity = mapOf("molarity" to 1)
+    val molarity = mapOf("molarity" to 1)
 
     val tt = mapOf<String, Int>()
 
@@ -59,7 +59,7 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("g", "Grams", null, mass),
             AtomicHumanUnit("N", "Newtons", "kgm/s²", force),
             AtomicHumanUnit("Pa", "Pascals", "N/m²", pressure),
-            AtomicHumanUnit("mol", "Moles", null, pressure),
+            AtomicHumanUnit("mol", "Moles", null, molarity),
 
             AtomicHumanUnit("b", "Bits", null, data),
 

@@ -1,11 +1,9 @@
 Pre-release:
-- Support US units
-- Round out disciplines
 - Make pulley on icon look good
 - km^2 bug. Should be (km)^2 rather than k(m^2)
 
 Post-release:
-- Support multiple units of the same dimension (min/hr, ft/mile)
+- Calculation History
 - Setting to prefer US or Metric units
 - Ripple color for color schemes
 - European locale (commas and periods where they shouldn't be)
@@ -17,7 +15,6 @@ Post-release:
 - Nonintegral powers
 - Unparenthesized functions
 - Secondary buttons swap with primary when they're used so they're easier to press next time
-- Calculation History
 - Undo button (undo in history?)
 - Option: Always use scientific vs natural notation for the results
 - Option to always round results to a certain decimal place or the number of sigfigs

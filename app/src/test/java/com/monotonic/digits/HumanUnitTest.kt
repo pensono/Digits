@@ -7,6 +7,7 @@ import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.HumanUnit
 import com.monotonic.digits.human.convert
 import com.monotonic.digits.human.humanize
+import com.monotonic.digits.units.PrefixUnit
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -73,6 +74,22 @@ class HumanUnitTest {
         assertEquals(HumanQuantity(SciNumber.Real("0"), HumanUnit(mapOf(u("V") to 1))), humanize(Quantity(SciNumber.Real("0"), u("V"))))
         assertEquals(HumanQuantity(SciNumber.Real("0"), HumanUnit(mapOf(u("V") to 1), p("m"))), humanize(Quantity(SciNumber.Real("0"), p("m") + u("V"))))
     }
+
+    @Test
+    fun areaUnits() {
+        // Kinda fudging it with changing the meaning of the prefix "k" to get things to work in this special case
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", ""))), humanize(Quantity(Mega, u("m") * 2)))
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("m", "Milli", "1e-6", ""))), humanize(Quantity(Micro, u("m") * 2)))
+    }
+
+    @Test
+    fun areaUnitsWorksWithCache() {
+        // Run the test twice to fill the cache, then hit the cache
+        areaUnits()
+        areaUnits()
+        areaUnits()
+    }
+
 
     @Test
     fun noPrefixForVoid() {
