@@ -99,9 +99,15 @@
                     android:layout_height="wrap_content"
                     android:cursorVisible="true"
                     android:inputType="text|textNoSuggestions"
-                    android:minWidth="48dp"
-                    android:paddingEnd="8dp"
-                    android:visibility="gone" />
+                    android:minWidth="48dp"/>
+
+                <ImageButton
+                    style="@style/AppTheme.ActionButton"
+                    android:id="@+id/submit_conversion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="submitUnitConversion"
+                    android:src="@drawable/ic_done" />
             </LinearLayout>
         </LinearLayout>
         <include android:id="@+id/button_area"

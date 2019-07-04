@@ -35,12 +35,6 @@ class MainActivity : Activity() {
     private var floating : View? = null
     private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
     private var editingUnit = false
-        set(value) {
-            field = value
-            input.isFocusable = !value
-            input.isFocusableInTouchMode = !value
-            Log.d(TAG, "Editing unit switched: " + value)
-        }
 
     private lateinit var billingManager : BillingManager
 
@@ -90,14 +84,7 @@ class MainActivity : Activity() {
         unit_input.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) { }
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val input = unit_input.text.toString()
-                val ambiguousInputs = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
-                if (ambiguousInputs.contains(input)) {
-                    return // Let the user move focus to submit this entry
-                }
-
                 tryUnitConversion()
             }
         })
@@ -139,22 +126,6 @@ class MainActivity : Activity() {
         billingManager = BillingManager(this)
     }
 
-    fun tryUnitConversion() {
-        try {
-            val unit = parseHumanUnit(unit_input.text.toString()) ?: return
-
-            if (unit.dimensionallyEqual(humanizedQuantity.unit)) {
-                preferredUnits[unit.dimensions] = unit
-                unit_input.text.clear()
-                editingUnit = false
-                updatePreview()
-            }
-        } catch (e: Exception) {
-            result_preview.text = "Error"
-            Log.e(TAG, "Unit parsing error", e)
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         with (getPreferences(Context.MODE_PRIVATE).edit()) {
@@ -180,6 +151,38 @@ class MainActivity : Activity() {
 
     fun toggleUnitConversion(view: View) {
         editingUnit = !editingUnit
+        updatePreview()
+    }
+
+    fun submitUnitConversion(view: View) {
+        val unit = parseHumanUnit(unit_input.text.toString()) ?: return
+        addPreferredUnit(unit)
+    }
+
+    fun tryUnitConversion() {
+        try {
+            val input = unit_input.text.toString()
+            val unit = parseHumanUnit(input)
+            val validUnit = unit != null && unit.dimensionallyEqual(humanizedQuantity.unit)
+            val ambiguousInputs = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
+
+            if (validUnit && !ambiguousInputs.contains(input)) {
+                addPreferredUnit(unit!!)
+            } else {
+                submit_conversion.isEnabled = validUnit
+                Log.d(TAG, "Enabled: $validUnit")
+            }
+        } catch (e: Exception) {
+            result_preview.text = "Error"
+            submit_conversion.isEnabled = false
+            Log.e(TAG, "Unit parsing error", e)
+        }
+    }
+
+    private fun addPreferredUnit(unit: HumanUnit) {
+        preferredUnits[unit.dimensions] = unit
+        unit_input.text.clear()
+        editingUnit = false
         updatePreview()
     }
 
@@ -343,6 +346,10 @@ class MainActivity : Activity() {
     }
 
     private fun updatePreview() {
+        input.isFocusable = !editingUnit
+        input.isFocusableInTouchMode = !editingUnit
+        submit_conversion.visibility = if (editingUnit) View.VISIBLE else View.GONE
+
         if (editingUnit) {
             unit_input.visibility = View.VISIBLE
             unit_input.requestFocus()
