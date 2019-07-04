@@ -23,5 +23,5 @@ val disciplines = listOf(
         Discipline(R.string.discipline_mechanical, R.drawable.ic_two_gears, listOf(u("m"), u("Pa"), u("Hz"), u("N"), u("g"))),
         Discipline(R.string.discipline_physics, R.drawable.ic_atom_black_24dp, listOf(u("g"), u("Pa"), u("u"), u("Pa"), u("Hz"), u("Wb"), u("C"))),
 //        Discipline(R.string.discipline_signals, R.drawable.ic_current_ac_black_24dp, listOf(u("Hz"))),
-        Discipline(R.string.discipline_surveying, R.drawable.ic_pine_tree_black_24dp, listOf(u("m"), u("mi"))) // Acre, hectare
+        Discipline(R.string.discipline_surveying, R.drawable.ic_pine_tree_black_24dp, listOf(u("m"), u("mi"), u("ft"), u("in"))) // Acre, hectare
 )

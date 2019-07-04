@@ -35,6 +35,12 @@ class MainActivity : Activity() {
     private var floating : View? = null
     private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
     private var editingUnit = false
+        set(value) {
+            field = value
+            input.isFocusable = !value
+            input.isFocusableInTouchMode = !value
+            Log.d(TAG, "Editing unit switched: " + value)
+        }
 
     private lateinit var billingManager : BillingManager
 
