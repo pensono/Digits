@@ -58,5 +58,12 @@ fun parseHumanUnit(input: String) : HumanUnit? {
             return null
         }
     }
+
+    if (unit.components.size == 1) {
+        val exponent = unit.components.values.first()
+        val prefix = unit.prefix
+        unit = unit.withPrefix(PrefixUnit(prefix.abbreviation, prefix.name, prefix.factor.pow(exponent), ""))
+    }
+
     return unit
 }

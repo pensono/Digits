@@ -1,6 +1,7 @@
 package com.monotonic.digits
 
 import com.monotonic.digits.human.*
+import com.monotonic.digits.units.PrefixUnit
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
@@ -75,6 +76,11 @@ class HumanUnitParserTest {
         assertEquals(HumanUnit(mapOf(u("m") to 2)), parseHumanUnit("m²"))
         assertEquals(HumanUnit(mapOf(u("m") to 2)), parseHumanUnit("m2"))
         assertEquals(HumanUnit(mapOf(u("m") to 1)), parseHumanUnit("m1")) // Silly, but should still be supported
+    }
+
+    @Test
+    fun prefixedSingleExponentUnit() {
+        assertEquals(HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", "")), parseHumanUnit("km2"))
     }
 
     @Test
