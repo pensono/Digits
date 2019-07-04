@@ -230,10 +230,16 @@ class MainActivity : Activity() {
             input.text.replace(0, input.text.length, humanizedQuantity.valueString(roundingMode))
             input.setSelection(input.text.length)
         } else if (buttonCommand == "DEL") {
-            if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
-                editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
-            } else {
-                editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, "")
+            if (editingInput.selectionStart == editingInput.selectionEnd) { // No selection
+                if (editingInput.selectionStart == 0) {
+                    if (editingInput.text.isNotEmpty()) {
+                        editingInput.text.delete(0, 1) // Delete at front
+                    }
+                } else {
+                    editingInput.text.delete(editingInput.selectionStart - 1, editingInput.selectionStart)
+                }
+            } else { // Something selected, delete it all
+                editingInput.text.delete(editingInput.selectionStart, editingInput.selectionEnd)
             }
         } else {
             val insertText = buttonCommand.replace("|", "")
