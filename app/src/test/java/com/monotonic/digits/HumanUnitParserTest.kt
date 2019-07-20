@@ -1,6 +1,7 @@
 package com.monotonic.digits
 
 import com.monotonic.digits.human.*
+import com.monotonic.digits.units.PrefixUnit
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
@@ -26,6 +27,13 @@ class HumanUnitParserTest {
     }
 
     @Test
+    fun unitStartsWithPrefix() {
+        assertEquals(HumanUnit(mapOf(u("ft") to 1)), parseHumanUnit("ft"))
+        assertEquals(HumanUnit(mapOf(u("mi") to 1)), parseHumanUnit("mi"))
+        assertEquals(HumanUnit(mapOf(u("pc") to 1)), parseHumanUnit("pc"))
+    }
+
+    @Test
     fun milliSomething() {
         assertEquals(HumanUnit(mapOf(u("V") to 1), p("m")), parseHumanUnit("mV"))
     }
@@ -42,7 +50,7 @@ class HumanUnitParserTest {
     }
 
     @Test
-    fun needsPrefix() {
+    fun prefixOnlyErrors() {
         assertEquals(null, parseHumanUnit("k"))
         assertEquals(null, parseHumanUnit("M"))
         assertEquals(null, parseHumanUnit("μ"))
@@ -63,9 +71,16 @@ class HumanUnitParserTest {
         assertEquals(HumanUnit(mapOf(u("g") to 2)), parseHumanUnit("g2"))
         assertEquals(HumanUnit(mapOf(u("g") to 99)), parseHumanUnit("g⁹⁹"))
         assertEquals(HumanUnit(mapOf(u("g") to 99)), parseHumanUnit("g99"))
+        assertEquals(HumanUnit(mapOf(u("g") to 1)), parseHumanUnit("g1")) // Silly, but should still be supported
 
         assertEquals(HumanUnit(mapOf(u("m") to 2)), parseHumanUnit("m²"))
         assertEquals(HumanUnit(mapOf(u("m") to 2)), parseHumanUnit("m2"))
+        assertEquals(HumanUnit(mapOf(u("m") to 1)), parseHumanUnit("m1")) // Silly, but should still be supported
+    }
+
+    @Test
+    fun prefixedSingleExponentUnit() {
+        assertEquals(HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", "")), parseHumanUnit("km2"))
     }
 
     @Test

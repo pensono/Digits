@@ -8,15 +8,21 @@
 
         <SwitchPreference
             android:key="sigfig_highlight"
-            android:title="Highlight significant digits in result"
+            android:title="Highlight significant figures in result"
             android:defaultValue="true"/>
 
-        <ListPreference
-            android:key="unit_system_preference"
-            android:title="Preferred unit system"
-            android:entries="@array/unitSystems"
-            android:entryValues="@array/unitSystems_values"
-            android:defaultValue="0"
-            android:summary="%s"/>
+        <SwitchPreference
+            android:key="round_results"
+            android:title="Round results by significant figures"
+            android:defaultValue="false"/>
+
+        <!-- US units not implemented yet -->
+        <!--<ListPreference-->
+            <!--android:key="unit_system_preference"-->
+            <!--android:title="Preferred unit system"-->
+            <!--android:entries="@array/unitSystems"-->
+            <!--android:entryValues="@array/unitSystems_values"-->
+            <!--android:defaultValue="0"-->
+            <!--android:summary="%s"/>-->
     </PreferenceCategory>
 </PreferenceScreen>

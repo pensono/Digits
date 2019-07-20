@@ -25,7 +25,7 @@ object UnitSystem { // Preferred Units?
     val charge = mapOf("current" to 1, "time" to 1)
     val pressure = mapOf("mass" to 1, "time" to -2, "length" to 1)
     val data = mapOf("data" to 1)
-    val morarity = mapOf("molarity" to 1)
+    val molarity = mapOf("molarity" to 1)
 
     val tt = mapOf<String, Int>()
 
@@ -33,25 +33,33 @@ object UnitSystem { // Preferred Units?
 
     val units = listOf(
             AtomicHumanUnit("m", "Meters", null, length),
-//            AtomicHumanUnit("ft", "feet", length, Real("3.28084")),
-//            AtomicHumanUnit("mi", "miles", length, Real("0.000621371")),
-//            AtomicHumanUnit("L", "liters", length, Real(1000).reciprocal()),
+            AtomicHumanUnit("in", "Inches", "¹⁄₁₂ft", length, SciNumber.Real(0.0254)),
+            AtomicHumanUnit("ft", "Feet", "12in", length, SciNumber.Real(0.3048)),
+            AtomicHumanUnit("mi", "Miles", "5280ft", length, SciNumber.Real(1609.344)),
+            AtomicHumanUnit("au", "Astronomical Units", "149,597,870,700m", length, SciNumber.Real("149597870700")),
+            AtomicHumanUnit("pc", "Parsecs", "648,000/π au", length, (SciNumber.Real("3.08567758149137") * SciNumber.Real(10).pow(16)) as SciNumber.Real),
+            AtomicHumanUnit("ly", "Light Years", "9.46ᴇ12km", length, SciNumber.Real("9460730472580800")),
+
+            AtomicHumanUnit("L", "Liters", "1000cm³", volume, SciNumber.Real(1000).reciprocal()),
+//            AtomicHumanUnit("L", "floz", "2Tbsp", weight, SciNumber.Real(1000).reciprocal()),
+
+            //            AtomicHumanUnit("L", "oz", "¹⁄₁₆lb", weight, SciNumber.Real(1000).reciprocal()),
 
             AtomicHumanUnit("rad", "Radians", "m/m", angle),
             AtomicHumanUnit("°", "Degrees", "m/m", angle, SciNumber.Real(Math.PI / 180.0)),
             AtomicHumanUnit("sr", "Steradian", "m²/m²", solid_angle),
 
-//             AtomicHumanUnit("acre", "acres", area, Real("4046.86")),
+//             AtomicHumanUnit("acre", "acres", "4840yd²", area, Real("4046.86")),
 
             AtomicHumanUnit("s", "Seconds", null, time),
-//            AtomicHumanUnit("min", "minutes", time, Real(60).reciprocal()),
-//            AtomicHumanUnit("hr", "hours", time, Real(60 * 60).reciprocal()),
+            AtomicHumanUnit("min", "Minutes", "60s", time, SciNumber.Real(60).reciprocal()),
+            AtomicHumanUnit("hr", "Hours", "60min", time, SciNumber.Real(60 * 60).reciprocal()),
 
             AtomicHumanUnit("Hz", "Hertz", "s⁻¹", frequency),
             AtomicHumanUnit("g", "Grams", null, mass),
             AtomicHumanUnit("N", "Newtons", "kgm/s²", force),
             AtomicHumanUnit("Pa", "Pascals", "N/m²", pressure),
-            AtomicHumanUnit("mol", "Moles", null, pressure),
+            AtomicHumanUnit("mol", "Moles", null, molarity),
 
             AtomicHumanUnit("b", "Bits", null, data),
 
@@ -64,7 +72,19 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("T", "Teslas", "Wb/m²", magnetic_flux_density),
             AtomicHumanUnit("Wb", "Webers", "Vs", magnetic_flux),
             AtomicHumanUnit("H", "Henries", "Wb/A", inductance),
-            AtomicHumanUnit("C", "Coulombs", "sA", charge)
+            AtomicHumanUnit("C", "Coulombs", "sA", charge),
+
+            AtomicHumanUnit("hp", "Horsepower", "33 000ft lbf/min", power, SciNumber.Real(745.69987158227022)),
+
+            AtomicHumanUnit("atm", "Atmospheres", "101325 Pa", pressure, SciNumber.Real("101325")),
+            AtomicHumanUnit("at", "Technical Atmospheres", "98.0665 kPa", pressure, SciNumber.Real("98.0665")),
+            AtomicHumanUnit("Torr", "Torres (mmHg)", "¹⁄₇₆₀ atm", pressure, SciNumber.Real("0.007500638")),
+            AtomicHumanUnit("bar", "Bar", "100 kPa", pressure, SciNumber.Real("0.007500638")),
+
+            //AtomicHumanUnit("eV", "Electronvolts", null, mass), // The abbreviation should be eV/c2, and we can't parse that night now
+            AtomicHumanUnit("u", "Unified Atomic Mass Units", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
+            AtomicHumanUnit("Da", "Dalton", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
+            AtomicHumanUnit("lb", "Pound", null, mass, SciNumber.Real("0.4535924"))
     )
 
     val prefixMagStart = -24

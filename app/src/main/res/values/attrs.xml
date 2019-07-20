@@ -14,5 +14,6 @@
         <attr name="secondary" format="string" /> <!-- Semicolon separated. A list would be better -->
         <attr name="onLongClick" format="string" />
         <attr name="targetBottomExtend" format="dimension" />
+        <attr name="adaptPrimary" format="boolean" /> <!-- Swap the secondary button with the primary when it is selected -->
     </declare-styleable>
 </resources>

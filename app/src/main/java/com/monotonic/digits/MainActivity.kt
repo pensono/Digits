@@ -15,10 +15,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
-import com.android.billingclient.api.*
-import com.android.billingclient.api.BillingClient.BillingResponse
 import com.monotonic.digits.evaluator.SciNumber
-import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.*
 import com.monotonic.digits.skin.*
 import com.monotonic.digits.units.*
@@ -28,8 +25,10 @@ import android.content.Intent
 import android.graphics.drawable.*
 
 
-class MainActivity : Activity(), PurchasesUpdatedListener {
-    val TAG = "Digits_MainActivity"
+class MainActivity : Activity() {
+    companion object {
+        public val TAG = "Digits_MainActivity"
+    }
     private val history = mutableListOf<HistoryItem>()
     private val preferredUnits = mutableMapOf<Map<String, Int>, HumanUnit>()
 
@@ -37,17 +36,15 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
     private var editingUnit = false
 
-    val PRO_SKU = "com.monotonic.digits.pro"
-    private lateinit var billingClient: BillingClient
-    private var hasPro = false
+    private lateinit var billingManager : BillingManager
 
     private val editingInput
         get() = if (editingUnit) unit_input else input
 
-    private val resultSeparator : SeperatorType
+    private val resultSeparator : SeparatorType
         get() {
             val spaceSeparate = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("space_grouping", true)
-            return if (spaceSeparate) SeperatorType.SPACE else SeperatorType.NONE
+            return if (spaceSeparate) SeparatorType.SPACE else SeparatorType.NONE
         }
 
     private val numberFormat : NumberFormat
@@ -56,8 +53,14 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             return if (useEngineering) NumberFormat.ENGINEERING else NumberFormat.SCIENTIFIC
         }
 
+    private val roundingMode : RoundingMode
+        get() {
+            val roundResults = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("round_results", false)
+            return if (roundResults) RoundingMode.SIGFIG else RoundingMode.REMOVE_TRAILING
+        }
+
     private val sigfigHighlight : Boolean
-        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", true)
+        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", false)
 
     private lateinit var skin : Skin
 
@@ -81,14 +84,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         unit_input.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) { }
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val input = unit_input.text.toString()
-                val ambiguousInputs = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
-                if (ambiguousInputs.contains(input)) {
-                    return // Let the user move focus to submit this entry
-                }
-
                 tryUnitConversion()
             }
         })
@@ -116,9 +112,6 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
 
         result_preview.post { updatePreview() }
 
-        billingClient = BillingClient.newBuilder(this).setListener(this).build()
-        connectToBillingService()
-
         val skinName = getPreferences(Context.MODE_PRIVATE)
                 .getString(getString(R.string.pref_skin), resources.getResourceName(R.array.skin_default_light))
         val skinId = resources.getIdentifier(skinName, "id", packageName)
@@ -129,22 +122,8 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
         populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
-    }
 
-    fun tryUnitConversion() {
-        try {
-            val unit = parseHumanUnit(unit_input.text.toString()) ?: return
-
-            if (unit.dimensionallyEqual(humanizedQuantity.unit)) {
-                preferredUnits[unit.dimensions] = unit
-                unit_input.text.clear()
-                editingUnit = false
-                updatePreview()
-            }
-        } catch (e: Exception) {
-            result_preview.text = "Error"
-            Log.e(TAG, "Unit parsing error", e)
-        }
+        billingManager = BillingManager(this)
     }
 
     override fun onPause() {
@@ -159,72 +138,7 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         super.onResume()
         input.text.replace(0, input.text.length, getPreferences(Context.MODE_PRIVATE).getString("input_value", ""))
 
-        refreshPurchases()
-    }
-
-    fun connectToBillingService() {
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(@BillingResponse billingResponseCode: Int) {
-                if (billingResponseCode == BillingResponse.OK) {
-                    refreshPurchases()
-                    Log.i(TAG, "Connected to billing service")
-                }
-            }
-
-            override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                connectToBillingService()
-            }
-        })
-    }
-
-    private fun refreshPurchases() {
-        val purchasesResult: Purchase.PurchasesResult =
-                billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        if (purchasesResult.purchasesList != null && purchasesResult.purchasesList.any { it.sku == PRO_SKU })
-            hasPro = true
-    }
-
-    private fun doProPurchase() {
-        val flowParams = BillingFlowParams.newBuilder()
-                .setSku(PRO_SKU)
-                .setType(BillingClient.SkuType.INAPP)
-                .build()
-        val responseCode = billingClient.launchBillingFlow(this, flowParams)
-    }
-
-    override fun onPurchasesUpdated(@BillingResponse responseCode: Int, purchases: List<Purchase>?) {
-        if (responseCode == BillingResponse.OK && purchases != null) {
-            refreshPurchases()
-        } else if (responseCode == BillingResponse.USER_CANCELED) {
-            // Handle an error caused by a user cancelling the purchase flow.
-        } else {
-            // Handle any other error codes.
-            Log.e(TAG, "Billing error: $responseCode")
-        }
-    }
-
-    fun calculatorButtonClick(button: View) {
-        val buttonCommand = (button as CalculatorButton).primaryCommand
-        if (buttonCommand == "ENT") {
-            history += HistoryItem(input.text.toString(), result_preview.text.toString())
-            input.text.replace(0, input.text.length, humanizedQuantity.valueString())
-            input.setSelection(input.text.length)
-        } else if (buttonCommand == "DEL") {
-            if (editingInput.selectionStart == editingInput.selectionEnd && editingInput.selectionStart != 0) {
-                editingInput.text.replace(editingInput.selectionStart-1, editingInput.selectionStart, "")
-            } else {
-                editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, "")
-            }
-        } else {
-            val insertText = buttonCommand.replace("|", "")
-            editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, insertText)
-            if (buttonCommand.contains('|')) {
-                val offset = buttonCommand.indexOf('|')
-                editingInput.setSelection(editingInput.selectionStart + offset - insertText.length)
-            }
-        }
+        billingManager.refreshPurchases()
     }
 
     fun numberFormatToggled(view: View) {
@@ -240,16 +154,49 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         updatePreview()
     }
 
+    fun submitUnitConversion(view: View) {
+        val unit = parseHumanUnit(unit_input.text.toString()) ?: return
+        addPreferredUnit(unit)
+    }
+
+    fun tryUnitConversion() {
+        try {
+            val input = unit_input.text.toString()
+            val unit = parseHumanUnit(input)
+            val validUnit = unit != null && unit.dimensionallyEqual(humanizedQuantity.unit)
+            val ambiguousInputs = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
+
+            if (validUnit && !ambiguousInputs.contains(input)) {
+                addPreferredUnit(unit!!)
+            } else {
+                submit_conversion.isEnabled = validUnit
+                Log.d(TAG, "Enabled: $validUnit")
+            }
+        } catch (e: Exception) {
+            result_preview.text = "Error"
+            submit_conversion.isEnabled = false
+            Log.e(TAG, "Unit parsing error", e)
+        }
+    }
+
+    private fun addPreferredUnit(unit: HumanUnit) {
+        preferredUnits[unit.dimensions] = unit
+        unit_input.text.clear()
+        editingUnit = false
+        updatePreview()
+    }
+
     fun openPopupMenu(view: View) {
         val popup = PopupMenu(this, view, Gravity.NO_GRAVITY)
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_get_pro -> {
-                    doProPurchase()
+                    val dialog = createProValueDialog(this) { billingManager.doProPurchase(this) }
+                    dialog.show()
                     true
                 }
                 R.id.menu_customize -> {
-                    val dialog = createSkinPickerDialog(this) {
+                    val dialog = createSkinPickerDialog(this, billingManager) {
                         with (getPreferences(Context.MODE_PRIVATE).edit()) {
                             putString(getString(R.string.pref_skin), resources.getResourceName(it.id))
                             apply()
@@ -268,7 +215,40 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
             }
         }
         popup.inflate(R.menu.popup_menu)
+
+        if (billingManager.hasPro){
+            popup.menu.findItem(R.id.menu_get_pro).isVisible = false
+        }
+
         popup.show()
+    }
+
+    fun calculatorButtonClick(button: View) {
+        val buttonCommand = (button as CalculatorButton).primaryCommand
+        if (buttonCommand == "ENT") {
+            history += HistoryItem(input.text.toString(), result_preview.text.toString())
+            input.text.replace(0, input.text.length, humanizedQuantity.valueString(roundingMode))
+            input.setSelection(input.text.length)
+        } else if (buttonCommand == "DEL") {
+            if (editingInput.selectionStart == editingInput.selectionEnd) { // No selection
+                if (editingInput.selectionStart == 0) {
+                    if (editingInput.text.isNotEmpty()) {
+                        editingInput.text.delete(0, 1) // Delete at front
+                    }
+                } else {
+                    editingInput.text.delete(editingInput.selectionStart - 1, editingInput.selectionStart)
+                }
+            } else { // Something selected, delete it all
+                editingInput.text.delete(editingInput.selectionStart, editingInput.selectionEnd)
+            }
+        } else {
+            val insertText = buttonCommand.replace("|", "")
+            editingInput.text.replace(editingInput.selectionStart, editingInput.selectionEnd, insertText)
+            if (buttonCommand.contains('|')) {
+                val offset = buttonCommand.indexOf('|')
+                editingInput.setSelection(editingInput.selectionStart + offset - insertText.length)
+            }
+        }
     }
 
     // It would be pretty schweet if this was in the CalculatorButton class itself
@@ -283,10 +263,19 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         }
 
         val layout = createFloatingSecondaryFor(button)
-        button.secondary.forEach { pair ->
+        button.secondary.forEach { (text, command) ->
             val secondaryButton = layoutInflater.inflate(R.layout.button_calc_secondary, layout, false) as CalculatorButton
-            secondaryButton.text = pair.first
-            secondaryButton.primaryCommand = pair.second
+            secondaryButton.text = text
+            secondaryButton.primaryCommand = command
+            if (button.adaptPrimary) {
+                secondaryButton.setOnClickListener {
+                    run {
+                        calculatorButtonClick(secondaryButton)
+                        button.text = text
+                        button.primaryCommand = command
+                    }
+                }
+            }
 
             layout.addView(secondaryButton)
         }
@@ -363,6 +352,10 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
     }
 
     private fun updatePreview() {
+        input.isFocusable = !editingUnit
+        input.isFocusableInTouchMode = !editingUnit
+        submit_conversion.visibility = if (editingUnit) View.VISIBLE else View.GONE
+
         if (editingUnit) {
             unit_input.visibility = View.VISIBLE
             unit_input.requestFocus()
@@ -444,22 +437,14 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
         }
 
         val coloredText =
-            if (sigfigHighlight)
-                humanString.string
-                .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
-                .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='$colorStr'>")
-            else humanString.string
+                if (sigfigHighlight)
+                    humanString.string
+                            .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
+                            .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='$colorStr'>")
+                else humanString.string
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
         return htmlToSpannable(coloredText)
-    }
-
-    private fun htmlToSpannable(coloredText: String): Spanned {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(coloredText, Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            Html.fromHtml(coloredText)
-        }
     }
 
     private fun hexStringForColor(colorResourceId: Int) =
@@ -490,9 +475,20 @@ class MainActivity : Activity(), PurchasesUpdatedListener {
                 editor_area.foreground = null
             }
         })
-        circleAnimation.peakCallback = { editingInput.text.clear() }
+        circleAnimation.peakCallback = {
+            editingInput.text.clear()
+            preferredUnits.clear()
+        }
         editor_area.foreground = circleAnimation
 
         circleAnimation.start()
+    }
+}
+
+private fun htmlToSpannable(coloredText: String): Spanned {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(coloredText, Html.FROM_HTML_MODE_LEGACY)
+    } else {
+        Html.fromHtml(coloredText)
     }
 }

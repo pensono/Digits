@@ -1,28 +1,32 @@
 package com.monotonic.digits.skin
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.monotonic.digits.BillingManager
 import com.monotonic.digits.R
 
 
 /**
  * @author Ethan
  */
-fun createSkinPickerDialog(context: Context, action: (Skin) -> Unit) : Dialog {
-    val builder = AlertDialog.Builder(context)
+fun createSkinPickerDialog(activity: Activity, billingManager: BillingManager, action: (Skin) -> Unit) : Dialog {
+    val builder = AlertDialog.Builder(activity)
     builder.setNegativeButton("Cancel") { d, _ -> d.cancel() }
 
     builder.setTitle(R.string.skin_dialog_title)
-    val layoutInflater = context.getSystemService(LayoutInflater::class.java)
+    val layoutInflater = activity.getSystemService(LayoutInflater::class.java)
     val main_view = layoutInflater.inflate(R.layout.dialog_skin_picker, null, false) as ViewGroup
     builder.setView(main_view)
     val dialog = builder.create()
 
-    fillThemeGrid(context, dialog, main_view, layoutInflater, R.id.theme_picker_container, R.array.themes, action)
-    fillThemeGrid(context, dialog, main_view, layoutInflater, R.id.theme_picker_container_pro, R.array.themes_pro, action)
+    fillThemeGrid(activity, dialog, main_view, layoutInflater, R.id.theme_picker_container, R.array.themes, action)
+
+    val proAction = if (billingManager.hasPro) action else { _ -> billingManager.doProPurchase(activity) }
+    fillThemeGrid(activity, dialog, main_view, layoutInflater, R.id.theme_picker_container_pro, R.array.themes_pro, proAction)
 
     return dialog
 }

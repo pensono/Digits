@@ -38,17 +38,17 @@
         android:layout_height="wrap_content"
         android:columnCount="6">
 
-        <com.monotonic.digits.CalculatorButton app:primary="sin(|)" app:secondary="asin:asin(|);sinh:sinh(|);csc:csc(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="cos(|)" app:secondary="acos:acos(|);cosh:cosh(|);sec:sec(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="tan(|)" app:secondary="atan:atan(|);tanh:tanh(|);cot:cot(|)" android:text="tan" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="log₁₀(|)" app:secondary="log₂:log₂(|);ln:ln(|);exp:exp(|)"  android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="sin(|)" app:secondary="sin:sin(|);asin:asin(|);sinh:sinh(|);csc:csc(|)" android:text="sin" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="cos(|)" app:secondary="cos:cos(|);acos:acos(|);cosh:cosh(|);sec:sec(|)" android:text="cos" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="tan(|)" app:secondary="tan:tan(|);atan:atan(|);tanh:tanh(|);cot:cot(|)" android:text="tan" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="log₁₀(|)" app:secondary="log₁₀:log₁₀(|);log₂:log₂(|);ln:ln(|);exp:exp(|)"  android:text="log₁₀" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary="ᴇ" android:text="ᴇᴇ" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="π" app:secondary="e;φ;τ" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="⁻¹" android:text="¹/ₓ" app:secondary="⁻⁰;⁻¹;⁻²;⁻³;⁻⁴;⁻⁵;⁻⁶;⁻⁷;⁻⁸;⁻⁹" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="²" app:secondary="⁰;¹;²;³;⁴;⁵;⁶;⁷;⁸;⁹" android:text="x²" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="π" app:secondary="π;e;φ;τ" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="⁻¹" android:text="¹/ₓ" app:secondary="⁻⁰;⁻¹;⁻²;⁻³;⁻⁴;⁻⁵;⁻⁶;⁻⁷;⁻⁸;⁻⁹" app:adaptPrimary="false" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="²" app:secondary="⁰;¹;²;³;⁴;⁵;⁶;⁷;⁸;⁹" android:text="x²" app:adaptPrimary="false" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary="√(|)" android:text="√" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="(" app:secondary="{;[" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary=")" app:secondary="};]" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="(" app:secondary="(;{;[" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary=")" app:secondary=");};]" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary="DEL" android:text="DEL" style="@style/AppTheme.CalculatorButton.Advanced" />
     </GridLayout>
 

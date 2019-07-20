@@ -22,7 +22,7 @@
     <string name="feedback">Feedback</string>
     <string name="skin_dialog_title">Choose Theme</string>
     <string name="system_metric">Metric</string>
-    <string name="system_us">US</string>
+    <string name="system_us">US Customary</string>
 
     <string name="pref_skin">pref_skin</string>
     <string name="pref_discipline">pref_discipline</string>
@@ -31,4 +31,16 @@
     <string name="option_text_sci">Sci</string>
     <string name="pro_theme_title">Pro Themes</string>
     <string name="free_theme_title">Free Themes</string>
+    <string name="pro_value_title">Digits Pro</string>
+    <string name="pro_value_message">
+        Digits Pro unlocks additional themes for your calculator. You also support
+        the app\'s development and translation efforts.\n
+        \n
+        In the future, Pro users will also have access to the following features:\n
+        - Custom units\n
+        - Custom unit groupings/disciplines\n
+        - Custom skins\n
+        - Calculation History\n
+    </string>
+    <string name="discipline_basic_us">US Basic</string>
 </resources>

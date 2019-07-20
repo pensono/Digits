@@ -89,7 +89,7 @@ class TokenIterator(tokens: String, private val location: Interval) {
         if (token != null) {
             consume(token)
         }
-        return  possible[token]
+        return possible[token]
     }
 
     fun peekRest() : String {

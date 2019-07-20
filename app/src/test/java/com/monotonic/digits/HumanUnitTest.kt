@@ -1,6 +1,5 @@
 package com.monotonic.digits
 
-import com.monotonic.digits.evaluator.Precision
 import com.monotonic.digits.human.HumanQuantity
 import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
@@ -8,9 +7,9 @@ import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.HumanUnit
 import com.monotonic.digits.human.convert
 import com.monotonic.digits.human.humanize
+import com.monotonic.digits.units.PrefixUnit
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.math.BigDecimal
 
 /**
  * @author Ethan
@@ -20,6 +19,13 @@ class HumanUnitTest {
     fun convertBasic() {
         testCoversion(SciNumber.Real(4000), HumanUnit(mapOf(u("m") to 1)), Quantity(SciNumber.Real(4), u("m") + p("k")))
         testCoversion(SciNumber.Real(4), HumanUnit(mapOf(u("m") to 1),  p("k")), Quantity(SciNumber.Real(4000), u("m")))
+    }
+
+    @Test
+    fun convertUs() {
+        testCoversion(SciNumber.Real(1), HumanUnit(mapOf(u("ft") to 1)), Quantity(SciNumber.Real(1), u("ft")))
+        testCoversion(SciNumber.Real("0.30479999025"), HumanUnit(mapOf(u("m") to 1)), Quantity(SciNumber.Real(1), u("ft")))
+        testCoversion(SciNumber.Real("3.28084"), HumanUnit(mapOf(u("ft") to 1)), Quantity(SciNumber.Real(1), u("m")))
     }
 
     @Test
@@ -70,6 +76,22 @@ class HumanUnitTest {
     }
 
     @Test
+    fun areaUnits() {
+        // Kinda fudging it with changing the meaning of the prefix "k" to get things to work in this special case
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", ""))), humanize(Quantity(Mega, u("m") * 2)))
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("m", "Milli", "1e-6", ""))), humanize(Quantity(Micro, u("m") * 2)))
+    }
+
+    @Test
+    fun areaUnitsWorksWithCache() {
+        // Run the test twice to fill the cache, then hit the cache
+        areaUnits()
+        areaUnits()
+        areaUnits()
+    }
+
+
+    @Test
     fun noPrefixForVoid() {
         assertEquals("", humanize(Quantity(Kilo)).unit.abbreviation)
         assertEquals("", humanize(Quantity(Milli)).unit.abbreviation)
@@ -99,6 +121,8 @@ class HumanUnitTest {
     }
 
     fun testCoversion(destValue: SciNumber.Real, destUnit: HumanUnit, inputValue: Quantity) {
-        assertEquals(HumanQuantity(destValue, destUnit), convert(inputValue, destUnit))
+        val converted = convert(inputValue, destUnit)
+        assertEquals(destUnit, converted.unit)
+        assertEquals(destValue.toDouble(), converted.value.toDouble(), 1e-3)
     }
 }

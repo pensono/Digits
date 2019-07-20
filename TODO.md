@@ -1,15 +1,13 @@
 Pre-release:
-- In-app purchase for pro mode
+- Make pulley on icon look good
+- km^2 bug. Should be (km)^2 rather than k(m^2)
 
 Post-release:
-- Support multiple units of the same dimension (min/hr, ft/mile)
+- Calculation History
 - Setting to prefer US or Metric units
-- Haptics
 - Ripple color for color schemes
 - European locale (commas and periods where they shouldn't be)
-- Properly round when a number is shortened
 - Unit corrections
-- Small space between every three digits in the output (should be a setting)
 - Animate secondary button appearing
 - Better job of showing sigfigs in input
 - Sigfigs for transindental numbers and log/exp/trig functions (https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions)
@@ -17,7 +15,6 @@ Post-release:
 - Nonintegral powers
 - Unparenthesized functions
 - Secondary buttons swap with primary when they're used so they're easier to press next time
-- Calculation History
 - Undo button (undo in history?)
 - Option: Always use scientific vs natural notation for the results
 - Option to always round results to a certain decimal place or the number of sigfigs

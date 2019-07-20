@@ -28,6 +28,13 @@ class UnitParserTest {
     }
 
     @Test
+    fun unitStartsWithPrefix() {
+        assertEquals(u("pc"), parseUnit("pc").value)
+        assertEquals(u("ft"), parseUnit("ft").value)
+        assertEquals(u("mi"), parseUnit("mi").value)
+    }
+
+    @Test
     fun milliSomething() {
         assertEquals(u("V") + p("m"), parseUnit("mV").value)
     }
@@ -44,7 +51,7 @@ class UnitParserTest {
     }
 
     @Test
-    fun needsPrefix() {
+    fun prefixOnlyErrors() {
         assertTrue(parseUnit("k").errors.size == 1)
         assertTrue(parseUnit("M").errors.size == 1)
         assertTrue(parseUnit("μ").errors.size == 1)
