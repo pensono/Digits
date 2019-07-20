@@ -71,8 +71,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundImage" value="C:\Code\android\Digits\ic_adaptive_bg.png" />
-                                      <entry key="foregroundImage" value="C:\Code\android\Digits\ic_adaptive_fg.png" />
+                                      <entry key="backgroundImage" value="D:\Code\android\Digits\graphics\ic_adaptive_bg.png" />
+                                      <entry key="foregroundImage" value="D:\Code\android\Digits\graphics\ic_adaptive_fg.png" />
                                     </map>
                                   </option>
                                 </PersistentState>

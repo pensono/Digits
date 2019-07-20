@@ -44,10 +44,10 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
             val attribute = attributes.getIndex(i)
             when (attribute) {
                 R.styleable.CalculatorButton_primary -> {
-                    primaryCommand = attributes.getString(attribute)
+                    primaryCommand = attributes.getString(attribute)!!
                 }
                 R.styleable.CalculatorButton_secondary -> {
-                    val secondarySettingString = attributes.getString(attribute)
+                    val secondarySettingString = attributes.getString(attribute)!!
 
                     secondary = secondarySettingString.split(";")
                             .map { it.split(":") }
@@ -56,7 +56,7 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
                 R.styleable.CalculatorButton_onLongClick -> {
                     // https://stackoverflow.com/questions/5706038/long-press-definition-at-xml-layout-like-androidonclick-does
                     // Assume the attribute is correct. We don't need to bother with error messages
-                    val methodName = attributes.getString(attribute)
+                    val methodName = attributes.getString(attribute)!!
                     setOnLongClickListener(object : OnLongClickListener {
                         var handler : Method? = null
 
