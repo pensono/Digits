@@ -19,10 +19,10 @@ val disciplines = listOf(
         Discipline(R.string.discipline_cooking, R.drawable.ic_telescope_black_24dp, listOf(u("g"), u("L"), u("tsp"), u("tbsp"), u("pt"), u("qt"), u("gal"), u("floz"))), // Fahrenheit, celsius
         Discipline(R.string.discipline_chemistry, R.drawable.ic_flask_black_24dp, listOf(u("mol"), u("m"), u("L"), u("Pa"), u("atm"), u("Torr"))), // kelvin, celsius
 //        Discipline(R.string.discipline_data, R.drawable.ic_bits, listOf(u("b"))),
-        Discipline(R.string.discipline_electrical, R.drawable.ic_flash_on_black_24dp, listOf(u("V"), u("A"), u("Ω"), u("W"), u("F"), u("T"), u("H"), u("C"), u("°"), u("sr"), u("S"), u("s"))),
+        Discipline(R.string.discipline_electrical, R.drawable.ic_flash_on_black_24dp, listOf(u("V"), u("A"), u("Ω"), u("s"), u("F"), u("H"), u("T"), u("W"), u("C"), u("S"))),
 //        Discipline(R.string.discipline_fluids, R.drawable.ic_waves_black_24dp, listOf(u("Pa"))),
         Discipline(R.string.discipline_mechanical, R.drawable.ic_two_gears, listOf(u("m"), u("Pa"), u("Hz"), u("N"), u("g"))),
-        Discipline(R.string.discipline_physics, R.drawable.ic_atom_black_24dp, listOf(u("g"), u("Pa"), u("u"), u("Pa"), u("Hz"), u("Wb"), u("C"))),
+        Discipline(R.string.discipline_physics, R.drawable.ic_atom_black_24dp, listOf(u("g"), u("Pa"), u("u"), u("N"), u("Hz"), u("Wb"), u("C"))),
 //        Discipline(R.string.discipline_signals, R.drawable.ic_current_ac_black_24dp, listOf(u("Hz"))),
         Discipline(R.string.discipline_surveying, R.drawable.ic_pine_tree_black_24dp, listOf(u("m"), u("a"), u("ha"), u("in"), u("ft"), u("mi"), u("ac")))
 )

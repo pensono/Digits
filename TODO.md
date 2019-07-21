@@ -1,6 +1,3 @@
-Pre-release:
-- Clear all when converting to a unit should hide the conversion ui
-
 Post-release:
 - Calculation History
 - Button to control number of digits in preview

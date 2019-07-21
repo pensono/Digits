@@ -255,6 +255,7 @@ class MainActivity : Activity() {
     // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
         if (button.primaryCommand == "DEL") {
+            editingUnit = false
             doClearAnimation()
             return
         }
