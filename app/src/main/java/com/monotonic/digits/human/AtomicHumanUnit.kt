@@ -13,7 +13,4 @@ open class AtomicHumanUnit(val abbreviation: String, val name: String, val unitD
     constructor(abbreviation: String, name: String, unitDerivation: String?, dimensions: Map<String, Int>, factor: String = "1")
             : this(abbreviation, name, unitDerivation, dimensions, SciNumber.Real(factor, Precision.Infinite))
     override fun toString() = abbreviation + "-" + super.toString()
-
-//    override operator fun times(amt: Int) = HumanUnit(mapOf(this to amt))
-
 }

@@ -21,7 +21,7 @@ open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open v
     operator fun minus(other: NaturalUnit) =
             NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::minus), (factor / other.factor) as SciNumber.Real)
 
-    operator fun times(n: Int) : NaturalUnit =
+    open operator fun times(n: Int) : NaturalUnit =
             NaturalUnit(dimensions.mapValues { entry -> entry.value * n }, factor.pow(n))
 
     operator fun unaryMinus() =
@@ -30,6 +30,11 @@ open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open v
     fun half() =
             NaturalUnit(dimensions.mapValues { entry -> entry.value / 2 }, factor.sqrt() as SciNumber.Real)
 
+    /**
+     * Result only makes sense iff isMultiple(other)
+     */
+    operator fun div(other: NaturalUnit) : Int =
+            dimensions.map { d -> d.value / other.dimensions.getOrDefault(d.key, 0) }.first()
     /***
      * @return true iff all unit exponents are even
      */
@@ -40,6 +45,11 @@ open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open v
 
     fun representationEqual(other: NaturalUnit) = dimensionallyEqual(other) && factor == other.factor
     fun dimensionallyEqual(other: NaturalUnit) = dimensions == other.dimensions
+
+    fun isMultiple(other: NaturalUnit) = dimensions.keys == other.dimensions.keys
+            && dimensions.all { d -> other.dimensions.getOrDefault(d.key, 0) % d.value == 0 }
+            && dimensions.map { d -> d.value / other.dimensions.getOrDefault(d.key, 0) }.distinct().count() <= 1
+
 
     override fun hashCode() = dimensions.hashCode() xor factor.hashCode()
     override fun toString() = "NaturalUnit(dimensions: $dimensions, factor: $factor)"

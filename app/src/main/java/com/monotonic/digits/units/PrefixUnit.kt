@@ -16,5 +16,9 @@ class PrefixUnit(abbreviation: String, name: String, factor: SciNumber.Real, der
     constructor(abbreviation: String, name: String, factor: String, description: String) :
         this(abbreviation, name, SciNumber.Real(factor, Precision.Infinite), description + ", " + factor.replace('e', 'ᴇ'))
 
+
+    override operator fun times(n: Int) : PrefixUnit =
+            PrefixUnit(abbreviation, name, factor.pow(n), unitDerivation!!) // Strings here may not make sense
+
     override fun equals(other: Any?): Boolean = other is PrefixUnit && other.abbreviation == abbreviation && other.name == name && factor == other.factor
 }

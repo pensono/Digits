@@ -6,6 +6,7 @@ import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.HumanQuantity
 import com.monotonic.digits.human.HumanUnit
 import com.monotonic.digits.human.evaluateHumanized
+import com.monotonic.digits.units.PrefixUnit
 import org.antlr.v4.runtime.misc.Interval
 import org.junit.Assert
 import org.junit.Test
@@ -29,9 +30,14 @@ class HumanEvaluatorTest {
         evalTest(HumanQuantity(SciNumber.Real(".005"), volts), "5mV", mapOf(volts.dimensions to volts))
     }
 
-    // TODO make these tests pass. Humanization should be able to accept "preferred units"
-//    assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", ""))), humanize(Quantity(Mega, u("m") * 2)))
-//    assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("m", "Milli", "1e-6", ""))), humanize(Quantity(Micro, u("m") * 2)))
+    @Test
+    fun factorOfUnitsInInput() {
+        val metersCu = HumanUnit(mapOf(u("m") to 3))
+        evalTest(HumanQuantity(SciNumber.Real(1), metersCu), "1m*1m*1m", mapOf())
+
+        val feetSq = HumanUnit(mapOf(u("ft") to 2))
+        evalTest(HumanQuantity(SciNumber.Real("10.76391041670972122307942467577957"), feetSq), "1m*1m", mapOf(feetSq.dimensions to feetSq))
+    }
 
     @Test
     fun usesUnitsInInput() {

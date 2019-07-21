@@ -44,6 +44,7 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
 
     operator fun plus(other: AtomicHumanUnit) = incorperateUnit(other, 1)
     operator fun minus(other: AtomicHumanUnit) = incorperateUnit(other, -1)
+    override operator fun times(n : Int) = HumanUnit(components.mapValues { e -> e.value * n }, prefix * n)
 
     fun withPrefix(prefix: PrefixUnit) = HumanUnit(components, prefix)
 
