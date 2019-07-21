@@ -240,7 +240,10 @@ sealed class SciNumber {
             }
         }
 
-        override fun equals(other: Any?): Boolean = other is Real && this.backing == other.backing && this.precision == other.precision
+        override fun equals(other: Any?): Boolean =
+                other is Real &&
+                    ((other.precision == Precision.Infinite && this.backing.toDouble() == other.backing.toDouble())
+                    || (this.backing == other.backing && this.precision == other.precision))
         override fun hashCode(): Int = backing.hashCode()
         override fun toString(): String = backing.toPlainString() + " precision: $precision"
 

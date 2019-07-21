@@ -1,5 +1,6 @@
 package com.monotonic.digits.evaluator
 
+import com.monotonic.digits.human.AtomicHumanUnit
 import com.monotonic.digits.parseNumber
 import com.monotonic.digits.parser.DigitsLexer
 import com.monotonic.digits.parser.DigitsParser
@@ -123,6 +124,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
         val alphabeticQuantities = constantQuantities + unitQuantities
 
         var nextExponentBase : Quantity? = null
+        var nextExponentPrefix = Quantity.One
         var functionName : String? = null
         var functionInterval : Interval? = null
         for (term in ctx.terms) {
@@ -143,8 +145,9 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                                 val unit = unitQuantities[first.abbreviation]!!
                                 value = value.invoke { it * unit }
                                 nextExponentBase = unit
-                            } else {
+                            } else { // Normal prefix
                                 value = value.invoke { it * Quantity(SciNumber.One, first) }
+                                nextExponentPrefix = Quantity(SciNumber.One, first)
 
                                 if (!tokens.hasNext()) {
                                     value = value.error(ErrorMessage("Prefix without unit", tokens.previousLocation))
@@ -181,7 +184,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                         value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
                     } else {
                         val prevTerm = nextExponentBase // Scoot around kotlin's type system
-                        value = value.invoke { it * prevTerm.pow((exponent) - 1) } // -1 since we've already incorperated it once
+                        value = value.invoke { it * prevTerm.pow(exponent - 1) * nextExponentPrefix.pow(exponent - 1) } // -1 since we've already incorporated it once
                     }
                 }
                 is DigitsParser.NumericLiteralContext -> {
@@ -196,7 +199,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                             value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
                         } else {
                             val prevTerm = nextExponentBase // Scoot around kotlin's type system
-                            value = value.invoke { it * prevTerm.pow(exponentMag - 1) }
+                            value = value.invoke { it * prevTerm.pow(exponentMag - 1) * nextExponentPrefix.pow(exponentMag - 1) }
                         }
 
                         nextExponentBase = null

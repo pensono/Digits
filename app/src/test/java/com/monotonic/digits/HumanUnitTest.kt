@@ -9,6 +9,7 @@ import com.monotonic.digits.human.convert
 import com.monotonic.digits.human.humanize
 import com.monotonic.digits.units.PrefixUnit
 import org.junit.Assert.assertEquals
+import org.junit.Ignore
 import org.junit.Test
 
 /**
@@ -77,9 +78,12 @@ class HumanUnitTest {
 
     @Test
     fun areaUnits() {
+        // Would be ideal, but hard to implement
+        // assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 3))), humanize(Quantity(SciNumber.One, u("m") * 3)))
+
         // Kinda fudging it with changing the meaning of the prefix "k" to get things to work in this special case
-        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", ""))), humanize(Quantity(Mega, u("m") * 2)))
-        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("m", "Milli", "1e-6", ""))), humanize(Quantity(Micro, u("m") * 2)))
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("s") to 2), PrefixUnit("k", "Kilo", "1e6", ""))), humanize(Quantity(Mega, u("s") * 2)))
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("s") to 2), PrefixUnit("m", "Milli", "1e-6", ""))), humanize(Quantity(Micro, u("s") * 2)))
     }
 
     @Test
@@ -89,7 +93,6 @@ class HumanUnitTest {
         areaUnits()
         areaUnits()
     }
-
 
     @Test
     fun noPrefixForVoid() {

@@ -86,7 +86,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     val comparator = compareBy<HumanUnit> { (it - quantity.unit).dimensionMagnitude }
             .thenBy { it.dimensions.size }
             .thenBy(HumanUnit::exponentMagnitude)
-    val visitQueue = PriorityQueue<HumanUnit>(comparator)
+    val visitQueue = PriorityQueue(comparator)
 
     visitQueue.add(HumanUnit(mapOf())) // No prefix
 
@@ -129,7 +129,7 @@ private fun applyPrefix(quantity: Quantity, unit: HumanUnit, prefixMagnitude: In
                 unscaledPrefix
             }
 
-    val humanizedValue = quantity.value * quantity.unit.factor / factor
+    val humanizedValue = quantity.value * (quantity.unit.factor / factor) / unit.factor
     return HumanQuantity(humanizedValue, unit.withPrefix(prefix))
 }
 

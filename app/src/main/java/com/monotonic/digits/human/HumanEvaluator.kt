@@ -2,7 +2,6 @@ package com.monotonic.digits.human
 
 import com.monotonic.digits.evaluator.ParseResult
 import com.monotonic.digits.evaluator.evaluateExpression
-import com.monotonic.digits.evaluator.largestUsedUnits
 
 /**
  * @author Ethan

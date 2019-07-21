@@ -1,10 +1,9 @@
 Pre-release:
-- Make pulley on icon look good
-- km^2 bug. Should be (km)^2 rather than k(m^2)
+- Clear all when converting to a unit should hide the conversion ui
 
 Post-release:
 - Calculation History
-- Setting to prefer US or Metric units
+- Button to control number of digits in preview
 - Ripple color for color schemes
 - European locale (commas and periods where they shouldn't be)
 - Unit corrections
@@ -14,10 +13,7 @@ Post-release:
 - Refactor CalculatorButton into two subclasses and a superclass for the secondary and primary buttons
 - Nonintegral powers
 - Unparenthesized functions
-- Secondary buttons swap with primary when they're used so they're easier to press next time
 - Undo button (undo in history?)
-- Option: Always use scientific vs natural notation for the results
-- Option to always round results to a certain decimal place or the number of sigfigs
 - Support for affine units (temperature)
 - Support for area units (like the acre)
 - Support for logarithmic units

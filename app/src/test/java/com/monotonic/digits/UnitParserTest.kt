@@ -1,6 +1,7 @@
 package com.monotonic.digits
 
 import com.monotonic.digits.evaluator.ParseResult
+import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.units.NaturalUnit
 import junit.framework.Assert.assertEquals
@@ -78,16 +79,19 @@ class UnitParserTest {
     }
 
     @Test
+    fun prefixedExponentUnits() {
+        // Should parse as (km)^2 rather than k(m^2)
+        assertEquals(NaturalUnit(mapOf("length" to 2), SciNumber.Real(1000000)), parseUnit("km²").value)
+        assertEquals(NaturalUnit(mapOf("length" to 2), SciNumber.Real(1000000)), parseUnit("km2").value)
+    }
+
+    @Test
     fun negativeExponentUnits() {
         assertEquals(-u("g"), parseUnit("g⁻¹").value)
         assertEquals(u("g") * -99, parseUnit("g⁻⁹⁹").value)
 
         assertEquals(-u("m"), parseUnit("m⁻¹").value)
 
-        // Old test, but I think this shouldn't parse at all anymore. It's more clearly g minus 1
-//        assertEquals(-u("g"), parseUnit("g-1").value)
-//        assertEquals(u("g") * -99, parseUnit("g-99").value)
-//        assertEquals(-u("m"), parseUnit("m-1").value)
     }
 
     private fun parseUnit(input: String) : ParseResult<NaturalUnit> =

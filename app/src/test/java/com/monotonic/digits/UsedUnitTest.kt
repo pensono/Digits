@@ -1,11 +1,7 @@
 package com.monotonic.digits
 
-import com.monotonic.digits.evaluator.Quantity
-import com.monotonic.digits.evaluator.SciNumber
-import com.monotonic.digits.evaluator.evaluateExpression
-import com.monotonic.digits.evaluator.usedUnits
+import com.monotonic.digits.human.usedUnits
 import com.monotonic.digits.human.HumanUnit
-import org.antlr.v4.runtime.misc.Interval
 import org.junit.Assert
 import org.junit.Test
 

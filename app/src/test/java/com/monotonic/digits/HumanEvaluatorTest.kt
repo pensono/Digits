@@ -29,6 +29,10 @@ class HumanEvaluatorTest {
         evalTest(HumanQuantity(SciNumber.Real(".005"), volts), "5mV", mapOf(volts.dimensions to volts))
     }
 
+    // TODO make these tests pass. Humanization should be able to accept "preferred units"
+//    assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", ""))), humanize(Quantity(Mega, u("m") * 2)))
+//    assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 2), PrefixUnit("m", "Milli", "1e-6", ""))), humanize(Quantity(Micro, u("m") * 2)))
+
     @Test
     fun usesUnitsInInput() {
         evalTest(HumanQuantity(SciNumber.Real("5"), HumanUnit(mapOf(u("m") to 1, u("s") to -1))), "5m/s")

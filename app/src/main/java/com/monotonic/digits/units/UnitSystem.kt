@@ -41,19 +41,20 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("ly", "Light Years", "9.46ᴇ12km", length, SciNumber.Real("9460730472580800")),
 
             AtomicHumanUnit("L", "Liters", "1000cm³", volume, SciNumber.Real(1000).reciprocal()),
-//            AtomicHumanUnit("L", "floz", "2Tbsp", weight, SciNumber.Real(1000).reciprocal()),
-
-            //            AtomicHumanUnit("L", "oz", "¹⁄₁₆lb", weight, SciNumber.Real(1000).reciprocal()),
 
             AtomicHumanUnit("rad", "Radians", "m/m", angle),
             AtomicHumanUnit("°", "Degrees", "m/m", angle, SciNumber.Real(Math.PI / 180.0)),
             AtomicHumanUnit("sr", "Steradian", "m²/m²", solid_angle),
 
-//             AtomicHumanUnit("acre", "acres", "4840yd²", area, Real("4046.86")),
+            AtomicHumanUnit("ac", "Acre", "4840yd²", area, SciNumber.Real("4046.86")),
+            AtomicHumanUnit("a", "Are", "100m²", area, SciNumber.Real(100)),
+            AtomicHumanUnit("ha", "Hectare", "10,000m²", area, SciNumber.Real(10000)),
 
             AtomicHumanUnit("s", "Seconds", null, time),
-            AtomicHumanUnit("min", "Minutes", "60s", time, SciNumber.Real(60).reciprocal()),
-            AtomicHumanUnit("hr", "Hours", "60min", time, SciNumber.Real(60 * 60).reciprocal()),
+            AtomicHumanUnit("min", "Minutes", "60s", time, SciNumber.Real(60)),
+            AtomicHumanUnit("hr", "Hours", "60min", time, SciNumber.Real(60 * 60)),
+            AtomicHumanUnit("day", "Days", "24hr", time, SciNumber.Real(60 * 60 * 24)),
+            AtomicHumanUnit("yr", "Julian Years", "365.25day", time, SciNumber.Real(60 * 60 * 24 * (365 * 4 + 1) / 4)),
 
             AtomicHumanUnit("Hz", "Hertz", "s⁻¹", frequency),
             AtomicHumanUnit("g", "Grams", null, mass),
@@ -84,7 +85,14 @@ object UnitSystem { // Preferred Units?
             //AtomicHumanUnit("eV", "Electronvolts", null, mass), // The abbreviation should be eV/c2, and we can't parse that night now
             AtomicHumanUnit("u", "Unified Atomic Mass Units", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
             AtomicHumanUnit("Da", "Dalton", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
-            AtomicHumanUnit("lb", "Pound", null, mass, SciNumber.Real("0.4535924"))
+            AtomicHumanUnit("lb", "Pound", null, mass, SciNumber.Real("0.4535924")),
+
+            AtomicHumanUnit("tsp", "US Teaspoon", "¹⁄₂floz", volume, SciNumber.Real("0.00000492892")),
+            AtomicHumanUnit("tbsp", "US Tablespoon", "3tsp", volume, SciNumber.Real("0.0000147868")),
+            AtomicHumanUnit("floz", "US Fluid Ounce", "¹⁄₁₂₈gal", volume, SciNumber.Real("0.00002957344")),
+            AtomicHumanUnit("qt", "US Quart", "2pt³", volume, SciNumber.Real("0.000946353")),
+            AtomicHumanUnit("pt", "US Pint", "16floz", volume, SciNumber.Real("0.0004731765")),
+            AtomicHumanUnit("gal", "US Gallon", "231in³", volume, SciNumber.Real("0.003785411784"))
     )
 
     val prefixMagStart = -24
