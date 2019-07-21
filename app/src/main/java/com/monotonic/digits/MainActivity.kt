@@ -115,7 +115,8 @@ class MainActivity : Activity() {
         val skinName = getPreferences(Context.MODE_PRIVATE)
                 .getString(getString(R.string.pref_skin), resources.getResourceName(R.array.skin_default_light))
         val skinId = resources.getIdentifier(skinName, "id", packageName)
-        applySkin(skinFromResource(this, skinId))
+        val validatedSkinId = if (skinId == 0) R.array.skin_default_light else skinId // Might happen if a skin is no longer available
+        applySkin(skinFromResource(this, validatedSkinId))
 
         number_format_switcher.isChecked = numberFormat == NumberFormat.ENGINEERING
 

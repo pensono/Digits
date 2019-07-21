@@ -8,148 +8,192 @@
         <item>@array/skin_default_light</item>
         <item>@array/skin_blue_grey</item>
         <item>@array/skin_light_blue</item>
+        <item>@array/skin_leather</item>
     </array>
 
     <array name="themes_pro">
-        <item>@array/skin_purple</item>
-        <item>@array/skin_red</item>
-        <item>@array/skin_green</item>
-        <item>@array/skin_brown</item>
-        <item>@array/skin_orange</item>
-        <item>@array/skin_all_blue</item>
-        <item>@array/skin_dark_blue</item>
         <item>@array/skin_pink</item>
+        <item>@array/skin_red</item>
+        <item>@array/skin_orange</item>
+        <item>@array/skin_green</item>
+        <item>@array/skin_blue</item>
+        <item>@array/skin_dark_blue</item>
+        <item>@array/skin_purple</item>
         <item>@array/skin_all_pink</item>
-        <!--<item>@array/skin_leather</item>-->
+        <item>@array/skin_all_green</item>
+        <item>@array/skin_all_blue</item>
+        <item>@array/skin_all_purple</item>
+        <item>@array/skin_brown</item>
+        <item>@array/skin_black</item>
     </array>
 
     <array name="skin_default_light">
-        <item>#212121</item>
-        <item>#26a69a</item>
-        <item>#00897B</item>
-        <item>#00796B</item>
-        <item>#B2DFDB</item>
-        <item>#FFC107</item>
+        <item>#212121</item> <!-- fill -->
+        <item>#26a69a</item> <!-- primary -->
+        <item>#00897B</item> <!-- primary dim -->
+        <item>#00796B</item> <!-- primary dark -->
+        <item>#B2DFDB</item> <!-- primary light -->
+        <item>#FFC107</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_blue_grey">
-        <item>#263238</item>
-        <item>#607D8B</item>
-        <item>#546E7A</item>
-        <item>#455A64</item>
-        <item>#455A64</item>
-        <item>#BBDEFB</item>
+        <item>#263238</item> <!-- fill -->
+        <item>#607D8B</item> <!-- primary -->
+        <item>#546E7A</item> <!-- primary dim -->
+        <item>#455A64</item> <!-- primary dark -->
+        <item>#455A64</item> <!-- primary light -->
+        <item>#BBDEFB</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_purple">
-        <item>#6A1B9A</item>
-        <item>#9C27B0</item>
-        <item>#8E24AA</item>
-        <item>#7B1FA2</item>
-        <item>#BA68C8</item>
-        <item>#A5D6A7</item>
+        <item>#212121</item> <!-- fill -->
+        <item>#9C27B0</item> <!-- primary -->
+        <item>#8E24AA</item> <!-- primary dim -->
+        <item>#7B1FA2</item> <!-- primary dark -->
+        <item>#BA68C8</item> <!-- primary light -->
+        <item>#A5D6A7</item> <!-- accent -->
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_all_purple">
+        <item>#6A1B9A</item> <!-- fill -->
+        <item>#9C27B0</item> <!-- primary -->
+        <item>#8E24AA</item> <!-- primary dim -->
+        <item>#7B1FA2</item> <!-- primary dark -->
+        <item>#BA68C8</item> <!-- primary light -->
+        <item>#A5D6A7</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_red">
-        <item>#263238</item>
-        <item>#f44336</item>
-        <item>#d32f2f</item>
-        <item>#c62828</item>
-        <item>#e57373</item>
-        <item>#FFC107</item>
+        <item>#263238</item> <!-- fill -->
+        <item>#f44336</item> <!-- primary -->
+        <item>#d32f2f</item> <!-- primary dim -->
+        <item>#c62828</item> <!-- primary dark -->
+        <item>#e57373</item> <!-- primary light -->
+        <item>#FFC107</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_green">
-        <item>#263238</item>
-        <item>#8BC34A</item>
-        <item>#7CB342</item>
-        <item>#689F38</item>
-        <item>#AED581</item>
-        <item>#B3E5FC</item>
+        <item>#263238</item> <!-- fill -->
+        <item>#8BC34A</item> <!-- primary -->
+        <item>#7CB342</item> <!-- primary dim -->
+        <item>#689F38</item> <!-- primary dark -->
+        <item>#AED581</item> <!-- primary light -->
+        <item>#B3E5FC</item> <!-- accent -->
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_all_green">
+        <item>#407C26</item> <!-- fill -->
+        <item>#8BC34A</item> <!-- primary -->
+        <item>#7CB342</item> <!-- primary dim -->
+        <item>#689F38</item> <!-- primary dark -->
+        <item>#9CCC65</item> <!-- primary light -->
+        <item>#B3E5FC</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_orange">
-        <item>#263238</item>
-        <item>#FB8C00</item>
-        <item>#F57C00</item>
-        <item>#EF6C00</item>
-        <item>#FFB74D</item>
-        <item>#9FA8DA</item>
+        <item>#263238</item> <!-- fill -->
+        <item>#FB8C00</item> <!-- primary -->
+        <item>#F57C00</item> <!-- primary dim -->
+        <item>#EF6C00</item> <!-- primary dark -->
+        <item>#FFB74D</item> <!-- primary light -->
+        <item>#9FA8DA</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_light_blue">
-        <item>#263238</item>
-        <item>#03A9F4</item>
-        <item>#039BE5</item>
-        <item>#0288D1</item>
-        <item>#64B5F6</item>
-        <item>#80CBC4</item>
+        <item>#263238</item> <!-- fill -->
+        <item>#03A9F4</item> <!-- primary -->
+        <item>#039BE5</item> <!-- primary dim -->
+        <item>#0288D1</item> <!-- primary dark -->
+        <item>#64B5F6</item> <!-- primary light -->
+        <item>#80CBC4</item> <!-- accent -->
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_blue">
+        <item>#212121</item> <!-- fill -->
+        <item>#1E88E5</item> <!-- primary -->
+        <item>#1976D2</item> <!-- primary dim -->
+        <item>#1565C0</item> <!-- primary dark -->
+        <item>#64B5F6</item> <!-- primary light -->
+        <item>#B2DFDB</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_dark_blue">
-        <item>#212121</item>
-        <item>#3949AB</item>
-        <item>#283593</item>
-        <item>#1A237E</item>
-        <item>#5C6BC0</item>
-        <item>#A5D6A7</item>
+        <item>#212121</item> <!-- fill -->
+        <item>#3949AB</item> <!-- primary -->
+        <item>#283593</item> <!-- primary dim -->
+        <item>#1A237E</item> <!-- primary dark -->
+        <item>#5C6BC0</item> <!-- primary light -->
+        <item>#A5D6A7</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_all_blue">
-        <item>#1A237E</item>
-        <item>#5C6BC0</item>
-        <item>#3949AB</item>
-        <item>#303F9F</item>
-        <item>#5C6BC0</item>
-        <item>#4DB6AC</item>
+        <item>#1A237E</item> <!-- fill -->
+        <item>#5C6BC0</item> <!-- primary -->
+        <item>#3949AB</item> <!-- primary dim -->
+        <item>#303F9F</item> <!-- primary dark -->
+        <item>#5C6BC0</item> <!-- primary light -->
+        <item>#4DB6AC</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_pink">
-        <item>#212121</item>
-        <item>#EC407A</item>
-        <item>#E91E63</item>
-        <item>#D81B60</item>
-        <item>#F48FB1</item>
-        <item>#3949AB</item>
+        <item>#212121</item> <!-- fill -->
+        <item>#EC407A</item> <!-- primary -->
+        <item>#E91E63</item> <!-- primary dim -->
+        <item>#D81B60</item> <!-- primary dark -->
+        <item>#F48FB1</item> <!-- primary light -->
+        <item>#3949AB</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_all_pink">
-        <item>#AD1457</item>
-        <item>#EC407A</item>
-        <item>#E91E63</item>
-        <item>#D81B60</item>
-        <item>#F48FB1</item>
-        <item>#3949AB</item>
+        <item>#AD1457</item> <!-- fill -->
+        <item>#EC407A</item> <!-- primary -->
+        <item>#E91E63</item> <!-- primary dim -->
+        <item>#D81B60</item> <!-- primary dark -->
+        <item>#F48FB1</item> <!-- primary light -->
+        <item>#3949AB</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_leather">
-        <item>#3E2723</item>
-        <item>#795548</item>
-        <item>#6D4C41</item>
-        <item>#4E342E</item>
-        <item>#8D6E63</item>
-        <item>#90A4AE</item>
+        <item>#3E2723</item> <!-- fill -->
+        <item>#795548</item> <!-- primary -->
+        <item>#6D4C41</item> <!-- primary dim -->
+        <item>#4E342E</item> <!-- primary dark -->
+        <item>#8D6E63</item> <!-- primary light -->
+        <item>#90A4AE</item> <!-- accent -->
         <item>text_light</item>
     </array>
 
     <array name="skin_brown">
-        <item>#212121</item>
-        <item>#795548</item>
-        <item>#6D4C41</item>
-        <item>#3E2723</item>
-        <item>#8D6E63</item>
-        <item>#90A4AE</item>
+        <item>#212121</item> <!-- fill -->
+        <item>#795548</item> <!-- primary -->
+        <item>#6D4C41</item> <!-- primary dim -->
+        <item>#3E2723</item> <!-- primary dark -->
+        <item>#8D6E63</item> <!-- primary light -->
+        <item>#90A4AE</item> <!-- accent -->
+        <item>text_light</item>
+    </array>
+
+    <array name="skin_black">
+        <item>#212121</item> <!-- fill -->
+        <item>#212121</item> <!-- primary -->
+        <item>#212121</item> <!-- primary dim -->
+        <item>#212121</item> <!-- primary dark -->
+        <item>#212121</item> <!-- primary light -->
+        <item>#616161</item> <!-- accent -->
         <item>text_light</item>
     </array>
 </resources>
