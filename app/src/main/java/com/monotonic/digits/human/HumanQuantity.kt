@@ -2,6 +2,7 @@ package com.monotonic.digits.human
 
 import com.monotonic.digits.evaluator.Precision
 import com.monotonic.digits.evaluator.SciNumber
+import com.monotonic.digits.parseNumber
 import kotlin.math.max
 import kotlin.math.min
 
@@ -61,21 +62,27 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
      * A string which represents the value of the quantity. It should be parseable and yield the same
      * quantity. Numbers with infinite precision will be capped at 12 digits
      */
-    fun valueString(round: RoundingMode): String {
+    fun valueString(roundingMode: RoundingMode): String {
         // TODO refactor this so it makes more sense
         val precision = value.precision
-        val figures = when(precision) {
+        val figures = when (precision) {
             is Precision.Infinite -> 12
             is Precision.SigFigs -> precision.amount
+        }
+
+        val roundingPrecision = when (roundingMode) {
+            is RoundingMode.SigFig -> value.precision
+            is RoundingMode.RemoveTrailing -> Precision.Infinite
+            is RoundingMode.Digits -> Precision.SigFigs(roundingMode.amount)
         }
 
         val baseString = value.valueString(SeparatorType.NONE)
         val decimalLocation = baseString.string.indexOf('.')
 
         val sized = if (baseString.insigfigStart >= decimalLocation && decimalLocation != -1) {
-            when (round) {
-                RoundingMode.REMOVE_TRAILING -> baseString.string.trimEnd('0')
-                RoundingMode.SIGFIG -> {
+            when (roundingPrecision) {
+                is Precision.Infinite -> baseString.string.trimEnd('0')
+                is Precision.SigFigs -> {
                     val paddingSize =
                             if (baseString.string[0] == '0')
                                 "0.".length + baseString.string.substring(decimalLocation + 1).indexOfFirst { c -> c != '0' }
@@ -91,8 +98,8 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
             }
         } else {
             when (round) {
-                RoundingMode.REMOVE_TRAILING -> baseString.string
-                RoundingMode.SIGFIG -> {
+                is RoundingMode.RemoveTrailing -> baseString.string
+                is RoundingMode.SigFig -> {
                     val removedInsigfigs = round(baseString.string, baseString.insigfigStart) + "0".repeat(baseString.string.length - baseString.insigfigStart)
                     // potentially add more digits
                     if (figures - removedInsigfigs.length > 0) {
@@ -149,16 +156,39 @@ private fun round(input: String, index: Int) : String {
     return String(result.toCharArray())
 }
 
-enum class RoundingMode {
+sealed class RoundingMode {
+    abstract val settingsString : String
+    abstract val displayString : String
+
+    class Digits(val amount: Int) : RoundingMode() {
+        override val settingsString: String = amount.toString()
+        override val displayString: String = amount.toString()
+    }
+
     /**
      * Round to the last significant figure
      */
-    SIGFIG,
+    class SigFig : RoundingMode() {
+        override val settingsString: String = "sigfig"
+        override val displayString: String = "Sig Fig"
+    }
 
     /**
      * Remove all trailing zeroes and let the word have a max length of 12
      */
-    REMOVE_TRAILING
+    class RemoveTrailing : RoundingMode() {
+        override val settingsString: String = "float"
+        override val displayString: String = "Float"
+    }
+
+    companion object {
+        fun fromSettingsString(string: String) : RoundingMode =
+            when (string) {
+                "sigfig" -> SigFig()
+                "float" -> RemoveTrailing()
+                else -> Digits(Integer.parseInt(string))
+            }
+    }
 }
 
 enum class SeparatorType(val separator: String) {

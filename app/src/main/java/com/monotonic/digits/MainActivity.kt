@@ -107,6 +107,10 @@ class MainActivity : Activity() {
             }
         }
 
+        round
+        val rounding_modes
+        rounding_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
+
         input.showSoftInputOnFocus = false
         unit_input.showSoftInputOnFocus = false
 

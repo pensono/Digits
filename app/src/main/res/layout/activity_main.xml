@@ -41,12 +41,19 @@
                     android:textOff="@string/option_text_sci"
                     android:textOn="@string/option_text_eng" />
 
+                <xdroid.widget.HorizontalSpinner
+                    android:id="@+id/rounding_dropdown"
+                    style="@style/AppTheme.InlineSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/number_format_switcher" />
+
                 <Spinner
                     android:id="@+id/discipline_dropdown"
                     style="@style/AppTheme.InlineSetting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/number_format_switcher"
+                    android:layout_toEndOf="@id/rounding_dropdown"
                     android:spinnerMode="dropdown" />
 
                 <ImageButton
