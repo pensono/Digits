@@ -100,7 +100,7 @@ class HumanQuantityTest {
         testHumanString("123.4…ᴇ6", "123456789", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
         testHumanString("12.34…ᴇ6", "12345678.0", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
         testHumanString("1.234…ᴇ6", "1234567.00", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
-        testHumanString("123.4…ᴇ3", "123456.000", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("123456.…", "123456.000", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
 
         testHumanString("123.45…ᴇ-6", ".000123456", 10, SeparatorType.NONE, NumberFormat.ENGINEERING)
         testHumanString("12.345…ᴇ-6", ".0000123456", 10, SeparatorType.NONE, NumberFormat.ENGINEERING)
@@ -191,6 +191,13 @@ class HumanQuantityTest {
     }
 
     @Test
+    fun dontUseSciNotationWhenSmallExponent() {
+        testHumanString("0.003333…", ".003333333", 9, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("0.033333…", ".033333333", 9, SeparatorType.NONE, NumberFormat.ENGINEERING)
+        testHumanString("3.333333…", "3.33333333", 9, SeparatorType.NONE, NumberFormat.ENGINEERING)
+    }
+
+    @Test
     fun basicValueString() {
         testValueString("1.234", "1.234", sf(4), RoundingMode.SIGFIG)
         testValueString("1.2", "1.234", sf(2), RoundingMode.SIGFIG)
@@ -214,8 +221,8 @@ class HumanQuantityTest {
     fun valueStringUsesScientificWhenTooLong() {
         testValueString("3.33333333333ᴇ19", "33333333333333333333", Precision.Infinite, RoundingMode.SIGFIG)
         testValueString("3.333ᴇ-17", ".00000000000000003333", sf(4), RoundingMode.SIGFIG)
-        testValueString("3.33333333333ᴇ-3", ".0033333333333333333333", Precision.Infinite, RoundingMode.SIGFIG)
-        testValueString("3.33300000000ᴇ-3", ".003333", Precision.Infinite, RoundingMode.SIGFIG)
+        testValueString("3.33333333333ᴇ-6", ".0000033333333333333333333", Precision.Infinite, RoundingMode.SIGFIG)
+        testValueString("3.33300000000ᴇ-6", ".000003333", Precision.Infinite, RoundingMode.SIGFIG)
     }
 
     @Test

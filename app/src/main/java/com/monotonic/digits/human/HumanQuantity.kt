@@ -2,6 +2,8 @@ package com.monotonic.digits.human
 
 import com.monotonic.digits.evaluator.Precision
 import com.monotonic.digits.evaluator.SciNumber
+import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
@@ -42,9 +44,10 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
         } else {
             val ellipsis = if (includeEllipsis) "…" else ""
             val rawMagnitude = value.magnitude - 1.0
-            val roundedMagnitude = Math.floor(rawMagnitude / numberFormat.exponentGranularity).toInt() * numberFormat.exponentGranularity
-            val eNotation = if (roundedMagnitude == 0) ellipsis else "${ellipsis}ᴇ$roundedMagnitude"
-            val normalizedValue = value / SciNumber.Real(10).pow(roundedMagnitude)
+            val roundedMagnitude = floor(rawMagnitude / numberFormat.exponentGranularity).toInt() * numberFormat.exponentGranularity
+            val exponent = if (abs(roundedMagnitude) >= numberFormat.minimumExponent) roundedMagnitude else 0  // Could this be made into a setting?
+            val eNotation = if (exponent == 0) ellipsis else "${ellipsis}ᴇ$exponent"
+            val normalizedValue = value / SciNumber.Real(10).pow(exponent)
             val normalizedString = normalizedValue.valueString(separatorType)
             val sizedString = normalizedString.string.substring(0, max(0, min(normalizedString.string.length, maxValueChars - eNotation.length)))
                     .trimEnd { !(it.isDigit() || it == '.') } // Remove trailing non-numeric characters like separators
