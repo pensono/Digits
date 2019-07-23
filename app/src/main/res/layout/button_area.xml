@@ -8,11 +8,12 @@
 
     <!-- saveEnabled lets us switch between HorizontalScrollView and ScrollView -->
     <HorizontalScrollView
+        android:id="@+id/prefix_selector_container"
         style="@style/AppTheme.UnitSelector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:saveEnabled="false"
-        android:id="@+id/prefix_selector_container">
+        android:requiresFadingEdge="horizontal"
+        android:saveEnabled="false">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,6 +24,7 @@
 
     <HorizontalScrollView
         style="@style/AppTheme.UnitSelector"
+        android:requiresFadingEdge="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout

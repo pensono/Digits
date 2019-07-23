@@ -75,6 +75,7 @@
     <style name="AppTheme.UnitSelector">
         <item name="android:background">@color/primary</item>
         <item name="android:tag">primary</item>
+        <item name="android:fadingEdgeLength">16dp</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Floating">

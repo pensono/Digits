@@ -73,16 +73,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.25"
-     inkscape:cx="482.683"
-     inkscape:cy="849.3823"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="666.83346"
+     inkscape:cy="912.31575"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      showgrid="false"
      units="px"
      inkscape:window-width="1920"
-     inkscape:window-height="1057"
-     inkscape:window-x="1912"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
@@ -93,7 +93,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -103,36 +103,57 @@
      inkscape:label="Background"
      style="display:inline"
      transform="translate(0,1280)">
-    <rect
-       style="display:inline;opacity:1;fill:#009281;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4708"
-       width="1152"
-       height="1152"
-       x="0"
-       y="-128" />
-    <rect
-       mask="none"
+    <g
+       id="g47"
        clip-path="none"
-       style="display:inline;opacity:1;fill:#00a291;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4708-5"
-       width="1152"
-       height="1152"
-       x="0"
-       y="-1280" />
+       transform="matrix(1.1034483,0,0,1.1034483,-119.17241,13.24138)"
+       inkscape:export-xdpi="38.400002"
+       inkscape:export-ydpi="38.400002">
+      <rect
+         y="-128"
+         x="0"
+         height="1152"
+         width="1152"
+         id="rect4708"
+         style="display:inline;opacity:1;fill:#009281;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <rect
+         y="-1280"
+         x="0"
+         height="1152"
+         width="1152"
+         id="rect4708-5"
+         style="display:inline;opacity:1;fill:#00a291;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         clip-path="none"
+         mask="none" />
+      <rect
+         y="-1280"
+         x="1152"
+         height="1152"
+         width="1152"
+         id="rect4708-5-4"
+         style="display:inline;opacity:1;fill:#008272;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <rect
+         y="-128"
+         x="1152"
+         height="1152"
+         width="1152"
+         id="rect4708-5-4-4"
+         style="display:inline;opacity:1;fill:#00aea0;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Play Store Clip"
+     style="display:none">
     <rect
-       style="display:inline;opacity:1;fill:#008272;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4708-5-4"
-       width="1152"
-       height="1152"
-       x="1152"
-       y="-1280" />
-    <rect
-       style="display:inline;opacity:1;fill:#00aea0;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4708-5-4-4"
-       width="1152"
-       height="1152"
-       x="1152"
-       y="-128" />
+       style="display:inline;opacity:1;fill:#e8f5e9;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:13.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect51"
+       width="1408"
+       height="1408"
+       x="448"
+       y="448"
+       ry="228.98114" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -176,80 +197,70 @@
        id="g4614"
        transform="matrix(0.96852771,0,0,0.99816578,582.25667,-57.007875)"
        style="filter:url(#filter4645)">
-		<rect
-   id="rect4594"
-   height="160"
-   width="32"
-   y="176"
-   x="112"
-   style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
-
-		<rect
-   id="rect4596"
-   height="128"
-   width="32"
-   y="176"
-   x="240"
-   style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
-
-		<rect
-   id="rect4598"
-   height="255.52849"
-   width="32"
-   y="48.471615"
-   x="368"
-   style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-width:1.03184402;stroke-linejoin:round" />
-
-		<rect
-   id="rect4600"
-   height="60.522968"
-   width="32"
-   y="51.477032"
-   x="176"
-   style="fill:#ffffff;fill-opacity:1;stroke-width:1.12289596;stroke-linejoin:round" />
-
-		<path
-   id="path4602"
-   d="m 368,400 h -96 l -16,80 h 128 z"
-   inkscape:connector-curvature="0"
-   style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
-
-		<path
-   id="path4604"
-   d="m 96,336 h 64 l -32,48 z"
-   inkscape:connector-curvature="0"
-   style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
-
-		<rect
-   id="rect4606"
-   height="32"
-   width="448"
-   y="32"
-   x="32"
-   style="fill:#f8fcf8;fill-opacity:0.99607801;stroke-linejoin:round" />
-
-		<circle
-   id="ellipse4608"
-   cy="176"
-   cx="192"
-   r="64"
-   style="fill:none;stroke:#f8fcf8;stroke-width:32;stroke-linejoin:round;stroke-opacity:0.99607843" />
-
-		<circle
-   id="ellipse4610"
-   cy="304"
-   cx="320"
-   r="64"
-   style="fill:none;stroke:#f8fcf8;stroke-width:32;stroke-linejoin:round;stroke-opacity:0.99607843" />
-
-		<rect
-   id="rect4612"
-   height="48"
-   width="32"
-   y="368"
-   x="304"
-   style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
-
-	</g>
+      <rect
+         id="rect4594"
+         height="160"
+         width="32"
+         y="176"
+         x="112"
+         style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
+      <rect
+         id="rect4596"
+         height="128"
+         width="32"
+         y="176"
+         x="240"
+         style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
+      <rect
+         id="rect4598"
+         height="255.52849"
+         width="32"
+         y="48.471615"
+         x="368"
+         style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-width:1.03184402;stroke-linejoin:round" />
+      <rect
+         id="rect4600"
+         height="60.522968"
+         width="32"
+         y="51.477032"
+         x="176"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:1.12289596;stroke-linejoin:round" />
+      <path
+         id="path4602"
+         d="m 368,400 h -96 l -16,80 h 128 z"
+         inkscape:connector-curvature="0"
+         style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
+      <path
+         id="path4604"
+         d="m 96,336 h 64 l -32,48 z"
+         inkscape:connector-curvature="0"
+         style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
+      <rect
+         id="rect4606"
+         height="32"
+         width="448"
+         y="32"
+         x="32"
+         style="fill:#f8fcf8;fill-opacity:0.99607801;stroke-linejoin:round" />
+      <circle
+         id="ellipse4608"
+         cy="176"
+         cx="192"
+         r="64"
+         style="fill:none;stroke:#f8fcf8;stroke-width:32;stroke-linejoin:round;stroke-opacity:0.99607843" />
+      <circle
+         id="ellipse4610"
+         cy="304"
+         cx="320"
+         r="64"
+         style="fill:none;stroke:#f8fcf8;stroke-width:32;stroke-linejoin:round;stroke-opacity:0.99607843" />
+      <rect
+         id="rect4612"
+         height="48"
+         width="32"
+         y="368"
+         x="304"
+         style="fill:#f8fcf8;fill-opacity:0.99607843;stroke-linejoin:round" />
+    </g>
   </g>
 </svg>
