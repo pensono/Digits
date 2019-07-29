@@ -1,3 +1,7 @@
+Bugs:
+- Degrees not intrepreted correctly: sin(60deg)
+- Freezes when pressing equals for the input: 542e1000
+
 Post-release:
 - Calculation History
 - Button to control number of digits in preview
