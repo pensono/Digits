@@ -65,6 +65,11 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
      * quantity. Numbers with infinite precision will be capped at 12 digits
      */
     fun valueString(round: RoundingMode): String {
+        // Abort if the number is huge
+        if (value.magnitude == Int.MIN_VALUE) {
+            return "Overflow"
+        }
+
         // TODO refactor this so it makes more sense
         val precision = value.precision
         val figures = when(precision) {

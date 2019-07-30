@@ -293,6 +293,13 @@ class HumanQuantityTest {
         testSigfigString(SigfigString("",0), "-1234.56789", 10, 0, SeparatorType.NONE)
     }
 
+    @Test
+    fun largeExponentFailsGracefully() {
+        // It would be cool (but also unnecessary) to support math with numbers this extreme
+        HumanQuantity(SciNumber.Real("1e1000")).valueString(RoundingMode.REMOVE_TRAILING)
+        HumanQuantity(SciNumber.Real("1e-1000")).valueString(RoundingMode.REMOVE_TRAILING)
+    }
+
     private fun testInsigfigStart(expectedPos: Int, value: String, sigFigs: Int, separatorType: SeparatorType) {
         assertEquals(expectedPos, HumanQuantity(SciNumber.Real(value, sf(sigFigs)), HumanUnit(mapOf())).humanString(separatorType).insigfigStart)
     }
