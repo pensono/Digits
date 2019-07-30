@@ -18,9 +18,10 @@ object UnitSystem { // Preferred Units?
     val conductance = mapOf("mass" to -1, "length" to -2, "time" to 3, "current" to 2)
     val capacitance = mapOf("mass" to -1, "length" to -2, "time" to 4, "current" to 2)
     val power = mapOf("mass" to 1, "length" to 2, "time" to -3)
+    val energy = mapOf("mass" to 1, "length" to 2, "time" to -2)
     val magnetic_flux = mapOf("mass" to 1, "length" to 2, "time" to 2, "current" to -3)
     val magnetic_flux_density = mapOf("mass" to 1, "time" to 2, "current" to -3)
-    val inductance = mapOf("mass" to 1, "length" to 2, "time" to -3)
+    val inductance = mapOf("mass" to 1, "length" to 2, "time" to -2, "current" to -2)
     val force = mapOf("mass" to 1, "length" to 1, "time" to -2)
     val charge = mapOf("current" to 1, "time" to 1)
     val pressure = mapOf("mass" to 1, "time" to -2, "length" to 1)
@@ -81,6 +82,11 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("at", "Technical Atmospheres", "98.0665 kPa", pressure, SciNumber.Real("98.0665")),
             AtomicHumanUnit("Torr", "Torres (mmHg)", "¹⁄₇₆₀ atm", pressure, SciNumber.Real("0.007500638")),
             AtomicHumanUnit("bar", "Bar", "100 kPa", pressure, SciNumber.Real("0.007500638")),
+
+            AtomicHumanUnit("J", "Joule", "Nm", energy),
+            AtomicHumanUnit("eV", "Electron Volt", "1V×e", energy, SciNumber.Real("1.602176634e-19")),
+            AtomicHumanUnit("cal", "Calorie", "4.184 J", energy, SciNumber.Real("4.184")),
+            AtomicHumanUnit("BTU", "ISO British Thermal Units", "11055.06 J", energy, SciNumber.Real("1055.06")),
 
             //AtomicHumanUnit("eV", "Electronvolts", null, mass), // The abbreviation should be eV/c2, and we can't parse that night now
             AtomicHumanUnit("u", "Unified Atomic Mass Units", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
