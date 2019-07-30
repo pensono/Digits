@@ -61,6 +61,9 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     fun csc() = Quantity(value.csc(), unit)
     fun cot() = Quantity(value.cot(), unit)
 
+    // Designed for use in nonlinear operations
+    fun normalized() = Quantity(value * unit.factor, NaturalUnit(unit.dimensions))
+
     override fun equals(other: Any?): Boolean =
         other is Quantity
                 && unit.dimensionallyEqual(other.unit)

@@ -211,6 +211,13 @@ class EvaluatorTest {
     }
 
     @Test
+    fun nonlinearFunctionsCollapseInput() {
+        evalTest(Quantity(SciNumber.Real("1")), "sin(90°)")
+        evalTest(Quantity(SciNumber.Real("-1")), "cos(180°)")
+        evalTest(Quantity(SciNumber.Real("1")), "tan(45°)")
+    }
+
+    @Test
     fun functionWithNoArgErrors() {
         errorTest(Interval(3, 4), "sin()")
         errorTest(Interval(4, 5), "4sin()")

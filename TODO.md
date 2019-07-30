@@ -1,8 +1,18 @@
 Bugs:
-- Degrees not intrepreted correctly: sin(60deg)
 - Freezes when pressing equals for the input: 542e1000
+- Error for input "4.."
 
-Post-release:
+Next Release:
+- Cooking: cups and pounds
+- Make sure cooking units are multiples of eachother
+- Mechanical: add mm, specific heat, specific volume, gage pressure, watts, joules, seconds, grams, kilograms.
+
+Horizon:
+- When converting units with powers, it feels clunky to have to add the same power to your new unit. For example if I have 100m^2 and want it in ft^2, I have to press "convert to" , then ft, then ^2.
+  Prefill power when converting to squared units
+- More themes
+
+Backlog:
 - Calculation History
 - Button to control number of digits in preview
 - Ripple color for color schemes

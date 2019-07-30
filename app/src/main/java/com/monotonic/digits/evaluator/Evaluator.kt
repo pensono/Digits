@@ -67,7 +67,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
             ParseResult(quantity.sqrt(), interval, ErrorMessage("Unit is not even", interval))
 
     fun wrapQuantityOperation(operation: (Quantity) -> Quantity) : (Quantity, Interval) -> ParseResult<Quantity> =
-            { quantity, interval ->  ParseResult(operation(quantity), interval) }
+            { quantity, interval ->  ParseResult(operation(quantity.normalized()), interval) }
 
     override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity> {
         val argument = ctx.argument?.accept(this) ?: ParseResult(Quantity.Zero, ctx.sourceInterval, "Inferred lhs in unary -")
@@ -112,7 +112,6 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
 
         var value = ParseResult(Quantity.One, ctx.sourceInterval)
 
-        val parseablePrefixes = UnitSystem.prefixAbbreviations.filterValues { it.abbreviation != "" }
         val doubleUnits = UnitSystem.prefixAbbreviations.keys.intersect(UnitSystem.unitAbbreviations.keys)
         val allAbbreviations = UnitSystem.unitAbbreviations.toMutableMap()
         for ((k, v) in UnitSystem.prefixAbbreviations) {

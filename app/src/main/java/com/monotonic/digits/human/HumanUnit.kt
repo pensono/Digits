@@ -73,7 +73,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     }
 
     val prefixMagnitude =
-        if (quantity.normalizedValue.valueEqual(SciNumber.Zero))
+        if (quantity.value.valueEqual(SciNumber.Zero))
             quantity.unit.factor.magnitude
         else
             quantity.normalizedValue.magnitude

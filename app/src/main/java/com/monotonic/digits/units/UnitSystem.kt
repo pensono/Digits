@@ -9,8 +9,8 @@ object UnitSystem { // Preferred Units?
     val volume = mapOf("length" to 3)
     val time = mapOf("time" to 1)
     val frequency = mapOf("time" to -1)
-    val angle = mapOf("length" to 1, "circular" to 1) // Circular is orthogonal to length
-    val solid_angle = mapOf("length" to 1, "circular" to 1) // Circular is orthogonal to length
+    val angle = mapOf("angle" to 1)
+    val solid_angle = mapOf("angle" to 2)
     val mass = mapOf("mass" to 1)
     val current = mapOf("current" to 1)
     val emf = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -1)
