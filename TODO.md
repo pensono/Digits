@@ -1,11 +1,6 @@
 Bugs:
 - Error for input "4.."
 
-Next Release:
-- Cooking: cups and pounds
-- Make sure cooking units are multiples of eachother
-- Mechanical: add mm, specific heat, specific volume, gage pressure, watts, joules, seconds, grams, kilograms.
-
 Horizon:
 - When converting units with powers, it feels clunky to have to add the same power to your new unit. For example if I have 100m^2 and want it in ft^2, I have to press "convert to" , then ft, then ^2.
   Prefill power when converting to squared units
@@ -17,6 +12,8 @@ Backlog:
 - Button to control number of digits in preview
 - Ripple color for color schemes
 - European locale (commas and periods where they shouldn't be)
+- Support for affine units (temperature, gage pressure)
+- Support for unit presets (for stuff like specific heat/temperature)
 - Unit corrections
 - Animate secondary button appearing
 - Better job of showing sigfigs in input
@@ -25,8 +22,6 @@ Backlog:
 - Nonintegral powers
 - Unparenthesized functions
 - Undo button (undo in history?)
-- Support for affine units (temperature)
-- Support for area units (like the acre)
 - Support for logarithmic units
 - Make the unit exponent too large error only highlight the number which is too large instead of the entire unit
 - Abbreviation alias (for degree, abbreviated deg)
