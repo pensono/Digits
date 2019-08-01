@@ -34,7 +34,14 @@ class MainActivity : Activity() {
 
     private var floating : View? = null
     private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
-    private var editingUnit = false
+    private var editingUnit : Boolean = false
+        set(value) {
+            field = value
+            if (field) {
+
+            }
+            updatePreview()
+        }
 
     private lateinit var billingManager : BillingManager
 
@@ -77,7 +84,6 @@ class MainActivity : Activity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 editingUnit = false
-                updatePreview()
             }
         })
 
@@ -88,11 +94,7 @@ class MainActivity : Activity() {
                 tryUnitConversion()
             }
         })
-        unit_input.onFocusChangeListener = object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                tryUnitConversion()
-            }
-        }
+        unit_input.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus -> tryUnitConversion() }
 
         discipline_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
         discipline_dropdown.setSelection(getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.pref_discipline), 0))
@@ -255,7 +257,6 @@ class MainActivity : Activity() {
     // It would be pretty schweet if this was in the CalculatorButton class itself
     fun calculatorButtonLongClick(button: CalculatorButton) {
         if (button.primaryCommand == "DEL") {
-            editingUnit = false
             doClearAnimation()
             return
         }
@@ -478,7 +479,9 @@ class MainActivity : Activity() {
             }
         })
         circleAnimation.peakCallback = {
-            editingInput.text.clear()
+            editingUnit = false
+            unit_input.text.clear()
+            input.text.clear()
             preferredUnits.clear()
         }
         editor_area.foreground = circleAnimation

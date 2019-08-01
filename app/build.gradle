@@ -7,10 +7,10 @@ android {
     buildToolsVersion '29.0.0'
     defaultConfig {
         applicationId "com.monotonic.digits"
-        minSdkVersion 24
+        minSdkVersion 15
         targetSdkVersion 28
-        versionCode 8
-        versionName "1.0.2"
+        versionCode 9
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
