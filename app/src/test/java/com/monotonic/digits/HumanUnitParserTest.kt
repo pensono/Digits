@@ -80,7 +80,7 @@ class HumanUnitParserTest {
 
     @Test
     fun prefixedSingleExponentUnit() {
-        assertEquals(HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", "1e6", "")), parseHumanUnit("km2"))
+        assertEquals(HumanUnit(mapOf(u("m") to 2), PrefixUnit("k", "Kilo", 6, "")), parseHumanUnit("km2"))
     }
 
     @Test

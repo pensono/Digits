@@ -105,24 +105,24 @@ object UnitSystem { // Preferred Units?
 
     val prefixMagStart = -24
     val prefixes = listOf(
-            PrefixUnit("y", "Yocto", "1e-24", "Septillionth"),
-            PrefixUnit("z", "Zepto", "1e-21", "Sextillionth"),
-            PrefixUnit("a", "Atto", "1e-18", "Quintillionth"),
-            PrefixUnit("f", "Femto", "1e-15", "Quadrillionth"),
-            PrefixUnit("p", "Pico", "1e-12", "Billionth"),
-            PrefixUnit("n", "Nano", "1e-9", "Trillionth"),
-            PrefixUnit("μ", "Micro", "1e-6", "Millionth"),
-            PrefixUnit("m", "Milli", "1e-3", "Thousandth"),
-            PrefixUnit("c", "Centi", "1e-2", "Hundredth"),
+            PrefixUnit("Y", "Yotta", 24, "Septillion"),
+            PrefixUnit("Z", "Zetta", 21, "Sextillion"),
+            PrefixUnit("E", "Exa", 18, "Quintillion"),
+            PrefixUnit("P", "Peta", 15, "Quadrillion"),
+            PrefixUnit("T", "Tera", 12, "Trillion"),
+            PrefixUnit("G", "Giga", 9, "Billion"),
+            PrefixUnit("M", "Mega", 6, "Million"),
+            PrefixUnit("k", "Kilo", 3, "Thousand"),
             PrefixUnit.One,
-            PrefixUnit("k", "Kilo", "1e3", "Thousand"),
-            PrefixUnit("M", "Mega", "1e6", "Million"),
-            PrefixUnit("G", "Giga", "1e9", "Billion"),
-            PrefixUnit("T", "Tera", "1e12", "Trillion"),
-            PrefixUnit("P", "Peta", "1e15", "Quadrillion"),
-            PrefixUnit("E", "Exa", "1e18", "Quintillion"),
-            PrefixUnit("Z", "Zetta", "1e21", "Sextillion"),
-            PrefixUnit("Y", "Yotta", "1e24", "Septillion")
+            PrefixUnit("c", "Centi", -2, "Hundredth"),
+            PrefixUnit("m", "Milli", -3, "Thousandth"),
+            PrefixUnit("μ", "Micro", -6, "Millionth"),
+            PrefixUnit("n", "Nano", -9, "Trillionth"),
+            PrefixUnit("p", "Pico", -12, "Billionth"),
+            PrefixUnit("f", "Femto", -15, "Quadrillionth"),
+            PrefixUnit("a", "Atto", -18, "Quintillionth"),
+            PrefixUnit("z", "Zepto", -21, "Sextillionth"),
+            PrefixUnit("y", "Yocto", -24, "Septillionth")
     )
 
     val unitAbbreviations = units.associateBy(AtomicHumanUnit::abbreviation)

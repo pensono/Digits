@@ -115,17 +115,15 @@ fun humanize(quantity: Quantity) : HumanQuantity {
 
 private fun applyPrefix(quantity: Quantity, unit: HumanUnit, prefixMagnitude: Int): HumanQuantity {
     // Use the one to round up and avoid 0 digits in the front (like in .123m)
-    val index = (prefixMagnitude - UnitSystem.prefixMagStart - 1) / 3
-    val exponent = (index * 3) + UnitSystem.prefixMagStart
-    val factor = SciNumber.Real(10).pow(exponent)
-    val unscaledPrefix = UnitSystem.prefixes[index]
+    // Also ignore the centi- prefix
+    val unscaledPrefix = UnitSystem.prefixes.first { p -> p.exponent <= prefixMagnitude - 1 && p.exponent % 3 == 0}
+    val factor = SciNumber.Real(10).pow(unscaledPrefix.exponent)
 
     val prefix =
             if (unit.components.size == 1) {
                 val nameScale = unit.components.values.first() // So that we can fake (km)2 rather than k(m^2)
-                val scaledIndex = (((prefixMagnitude - 1) / nameScale) - UnitSystem.prefixMagStart) / 3
-                val scaledUnit = UnitSystem.prefixes[scaledIndex]
-                PrefixUnit(scaledUnit.abbreviation, scaledUnit.name, unscaledPrefix.factor, "")
+                val scaledUnit = UnitSystem.prefixes.first { p -> p.exponent <= ((prefixMagnitude - 1) / nameScale) && p.exponent % 3 == 0}
+                PrefixUnit(scaledUnit.abbreviation, scaledUnit.name, unscaledPrefix.exponent, "")
             } else {
                 unscaledPrefix
             }

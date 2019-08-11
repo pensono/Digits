@@ -123,7 +123,7 @@ class MainActivity : Activity() {
         number_format_switcher.isChecked = numberFormat == NumberFormat.ENGINEERING
 
         populateUnitSelector(UnitSystem.unitAbbreviations.values, unit_selector)
-        populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }, prefix_selector)
+        populateUnitSelector(UnitSystem.prefixAbbreviations.values.filter { it.abbreviation != "" }.reversed(), prefix_selector)
         prefix_selector_container.post { centerScroll(prefix_selector_container) }
 
         billingManager = BillingManager(this)

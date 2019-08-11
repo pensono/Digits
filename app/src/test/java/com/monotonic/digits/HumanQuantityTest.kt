@@ -23,10 +23,15 @@ class HumanQuantityTest {
         assertEquals("123", humanize(evaluateExpression("123").value).humanString(SeparatorType.NONE).string)
 
         assertEquals("1m", humanize(evaluateExpression("1m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("123.000km", humanize(evaluateExpression("123000m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("12.300km", humanize(evaluateExpression("12300m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("1.230km", humanize(evaluateExpression("1230m").value).humanString(SeparatorType.NONE).string)
         assertEquals("123m", humanize(evaluateExpression("123m").value).humanString(SeparatorType.NONE).string)
         assertEquals("12.3m", humanize(evaluateExpression("12.3m").value).humanString(SeparatorType.NONE).string)
         assertEquals("1.23m", humanize(evaluateExpression("1.23m").value).humanString(SeparatorType.NONE).string)
         assertEquals("123mm", humanize(evaluateExpression(".123m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("12.3mm", humanize(evaluateExpression(".0123m").value).humanString(SeparatorType.NONE).string)
+        assertEquals("1.23mm", humanize(evaluateExpression(".00123m").value).humanString(SeparatorType.NONE).string)
     }
 
     @Test

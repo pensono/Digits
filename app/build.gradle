@@ -7,7 +7,7 @@ android {
     buildToolsVersion '29.0.0'
     defaultConfig {
         applicationId "com.monotonic.digits"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 9
         versionName "1.0.3"
