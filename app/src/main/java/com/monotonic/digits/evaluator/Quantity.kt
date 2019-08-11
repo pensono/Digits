@@ -71,7 +71,7 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
 
     override fun hashCode(): Int = value.hashCode() xor unit.hashCode()
 
-    override fun toString(): String = value.toString() + " " + unit.toString()
+    override fun toString(): String = "$value $unit"
 
     companion object {
         val One = Quantity(SciNumber.One)
