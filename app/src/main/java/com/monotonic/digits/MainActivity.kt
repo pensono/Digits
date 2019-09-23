@@ -363,8 +363,11 @@ class MainActivity : Activity() {
             unit_input.visibility = View.VISIBLE
             unit_input.requestFocus()
 
-            val hexColor = hexStringForColor(R.color.detail_text)
-            val previewText = "<font color='$hexColor'>Convert </font>${humanizedQuantity.unitString()}<font color='$hexColor'> to:</font>"
+            val detailColorHex = hexStringForColor(R.color.detail_text)
+            val fullConvertPrompt = "<font color='$detailColorHex'>Convert </font>${humanizedQuantity.unitString()}<font color='$detailColorHex'> to:</font>"
+            val abbreviatedConvertPrompt = "${humanizedQuantity.unitString()}<font color='$detailColorHex'> to:</font>"
+            val previewText = if (stringFits("Convert ${humanizedQuantity.unitString()} to:", result_preview)) fullConvertPrompt else abbreviatedConvertPrompt
+
             result_preview.setText(htmlToSpannable(previewText), TextView.BufferType.SPANNABLE)
         } else {
             unit_input.visibility = View.GONE
@@ -434,8 +437,7 @@ class MainActivity : Activity() {
         // This loop may potentially run quite a few times if the starting number is very
         // long, but it should be quick enough
         var humanString = humanQuantity.humanString(resultSeparator)
-        val availableSpacePx = result_preview.width - result_preview.paddingRight - result_preview.paddingLeft
-        while (result_preview.paint.measureText(humanString.string) >= availableSpacePx && humanString.string.length > 0) {
+        while (!stringFits(humanString.string, result_preview) && humanString.string.isNotEmpty()) {
             humanString = humanQuantity.humanString(humanString.string.length - 1, resultSeparator, numberFormat)
         }
 
@@ -448,6 +450,12 @@ class MainActivity : Activity() {
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
         return htmlToSpannable(coloredText)
+    }
+
+    private fun stringFits(input: String, view: TextView) : Boolean {
+        val availableSpacePx = view.width - view.paddingRight - view.paddingLeft
+        val textSize : Float = view.paint.measureText(input)
+        return textSize <= availableSpacePx
     }
 
     private fun hexStringForColor(colorResourceId: Int) =

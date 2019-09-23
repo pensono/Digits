@@ -2,7 +2,6 @@ Bugs:
 - Error for input "4.."
 
 Horizon:
-- When the unit conversion mode thing is active, don't display "Convert" if it means that the text takes up two lines
 - Add Hz to other disciplines
 - When converting units with powers, it feels clunky to have to add the same power to your new unit. For example if I have 100m^2 and want it in ft^2, I have to press "convert to" , then ft, then ^2.
   Prefill power when converting to squared units
