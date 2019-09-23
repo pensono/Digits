@@ -1,13 +1,9 @@
 package com.monotonic.digits
 
-import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
-import com.monotonic.digits.evaluator.evaluateExpression
 import com.monotonic.digits.human.HumanQuantity
 import com.monotonic.digits.human.HumanUnit
 import com.monotonic.digits.human.evaluateHumanized
-import com.monotonic.digits.units.PrefixUnit
-import org.antlr.v4.runtime.misc.Interval
 import org.junit.Assert
 import org.junit.Test
 
@@ -28,6 +24,12 @@ class HumanEvaluatorTest {
         val volts = HumanUnit(mapOf(u("V") to 1))
         evalTest(HumanQuantity(SciNumber.Real("5000"), milliVolts), "5V", mapOf(volts.dimensions to milliVolts))
         evalTest(HumanQuantity(SciNumber.Real(".005"), volts), "5mV", mapOf(volts.dimensions to volts))
+    }
+
+    @Test
+    fun inverseIsntUsed() {
+        val nanoSeconds = HumanUnit(mapOf(u("s") to 1), p("n"))
+        evalTest(HumanQuantity(SciNumber.Real("20"), nanoSeconds), "1/50MHz")
     }
 
     @Test

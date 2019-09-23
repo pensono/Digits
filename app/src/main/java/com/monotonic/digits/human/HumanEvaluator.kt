@@ -13,12 +13,13 @@ fun evaluateHumanized(input: String, preferredUnits: Map<Map<String, Int>, Human
 
     return parseResult.invoke {
         val dimensions = it.unit.dimensions
-        val preferredUnit = preferredUnits[dimensions] ?: usedUnits[dimensions] ?: bestMultipleOf(usedUnits, it.unit)
+        val preferredUnit = preferredUnits[dimensions] ?: usedUnits[dimensions] ?: bestPositiveMultipleOf(usedUnits, it.unit)
         if (preferredUnit == null) humanize(it) else convert(it, preferredUnit)
     }
 }
 
-private fun bestMultipleOf(usedUnits: Map<Map<String, Int>, HumanUnit>, unit: NaturalUnit): HumanUnit? {
-    val factor = usedUnits.values.firstOrNull { it.isMultiple(unit) } ?: return null
-    return factor * (unit / factor)
+private fun bestPositiveMultipleOf(usedUnits: Map<Map<String, Int>, HumanUnit>, unit: NaturalUnit): HumanUnit? {
+    // Make sure it's a multiple, and it's a positive multiple
+    val factorUnit = usedUnits.values.firstOrNull { it.isMultiple(unit) && unit / it > 0 } ?: return null
+    return factorUnit * (unit / factorUnit)
 }
