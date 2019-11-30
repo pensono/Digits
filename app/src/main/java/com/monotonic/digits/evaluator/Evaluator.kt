@@ -192,16 +192,20 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                         value = value.invoke { v -> v * literal }
                         nextExponentBase = literal
                     } else {
-                        val exponentMag = parseNumber(term.text)
-
-                        if (abs(exponentMag) >= 100){
-                            value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
+                        if (term.text.contains(".")) {
+                            value = value.error(ErrorMessage("Non-integral exponents are not supported", term.sourceInterval))
                         } else {
-                            val prevTerm = nextExponentBase // Scoot around kotlin's type system
-                            value = value.invoke { it * prevTerm.pow(exponentMag - 1) * nextExponentPrefix.pow(exponentMag - 1) }
-                        }
+                            val exponentMag = parseNumber(term.text)
 
-                        nextExponentBase = null
+                            if (abs(exponentMag) >= 100) {
+                                value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
+                            } else {
+                                val prevTerm = nextExponentBase // Scoot around kotlin's type system
+                                value = value.invoke { it * prevTerm.pow(exponentMag - 1) * nextExponentPrefix.pow(exponentMag - 1) }
+                            }
+
+                            nextExponentBase = null
+                        }
                     }
                 }
                 is DigitsParser.ParenthesizedExpressionContext -> {

@@ -325,6 +325,18 @@ class EvaluatorTest {
         evalTest(Quantity(SciNumber.Real(1/Math.E)), "exp(-1)")
     }
 
+    @Test
+    fun twoDots() {
+        errorTest(Interval.of(2, 2), "5..")
+        errorTest(Interval.of(5, 9), "5.313.2031")
+        errorTest(Interval.of(5, 8), "24+5..+25") // 5 to 5 would be nice, but 5 to 8 works too
+    }
+
+    @Test
+    fun fractionalExponent() {
+        errorTest(Interval.of(2, 4), "2e.25")
+    }
+
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
         Assert.assertTrue(result.errors.isEmpty())
