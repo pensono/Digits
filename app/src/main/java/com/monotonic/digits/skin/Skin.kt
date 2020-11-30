@@ -1,7 +1,7 @@
 package com.monotonic.digits.skin
 
 import android.content.Context
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 /**
  * @author Ethan

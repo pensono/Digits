@@ -1,5 +1,5 @@
 Bugs:
-- Error for input "4.."
+- Converting lb to kg does not work
 
 Horizon:
 - When converting units with powers, it feels clunky to have to add the same power to your new unit. For example if I have 100m^2 and want it in ft^2, I have to press "convert to" , then ft, then ^2.

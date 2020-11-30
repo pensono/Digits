@@ -13,7 +13,7 @@ import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import android.util.Log
 import android.view.View
 

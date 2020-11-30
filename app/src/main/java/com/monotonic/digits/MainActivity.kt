@@ -5,8 +5,8 @@ import android.content.Context
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.preference.PreferenceManager
+import androidx.core.content.res.ResourcesCompat
+import androidx.preference.PreferenceManager
 import android.text.Editable
 import android.text.Html
 import android.text.Spanned

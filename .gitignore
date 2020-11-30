@@ -30,7 +30,9 @@ graphics/*.png
 
 # Generated files
 bin/
-gen/
+
+# ANTLR gradle plugin cannot be used with android builds. Allow it's generated files to be checked in.
+# gen/
 out/
 
 # Gradle files

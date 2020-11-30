@@ -1,6 +1,5 @@
 package com.monotonic.digits.evaluator
 
-import com.monotonic.digits.human.AtomicHumanUnit
 import com.monotonic.digits.parseNumber
 import com.monotonic.digits.parser.DigitsLexer
 import com.monotonic.digits.parser.DigitsParser
