@@ -27,6 +27,7 @@ class HumanUnitTest {
         testCoversion(SciNumber.Real(1), HumanUnit(mapOf(u("ft") to 1)), Quantity(SciNumber.Real(1), u("ft")))
         testCoversion(SciNumber.Real("0.30479999025"), HumanUnit(mapOf(u("m") to 1)), Quantity(SciNumber.Real(1), u("ft")))
         testCoversion(SciNumber.Real("3.28084"), HumanUnit(mapOf(u("ft") to 1)), Quantity(SciNumber.Real(1), u("m")))
+        testCoversion(SciNumber.Real("0.002204623"), HumanUnit(mapOf(u("lb") to 1)), Quantity(SciNumber.Real(1), u("g")))
     }
 
     @Test

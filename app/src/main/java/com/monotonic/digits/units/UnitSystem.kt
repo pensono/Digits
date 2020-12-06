@@ -91,7 +91,7 @@ object UnitSystem { // Preferred Units?
             //AtomicHumanUnit("eV", "Electronvolts", null, mass), // The abbreviation should be eV/c2, and we can't parse that night now
             AtomicHumanUnit("u", "Unified Atomic Mass Units", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
             AtomicHumanUnit("Da", "Dalton", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
-            AtomicHumanUnit("lb", "Pound", null, mass, SciNumber.Real("0.4535924")),
+            AtomicHumanUnit("lb", "Pound", null, mass, SciNumber.Real("453.5924")),
 
             AtomicHumanUnit("c", "US Customary Cup", "¹⁄₂pt", volume,    SciNumber.Real("0.0002365882365")),
             AtomicHumanUnit("cup", "US Customary Cup", "¹⁄₂pt", volume,  SciNumber.Real("0.0002365882365")),
