@@ -69,7 +69,8 @@ class ErrorInput: EditText, TextWatcher {
         val left = layout.getLineLeft(0)
 
         for (error in errors) {
-            val start = paint.measureText(text, 0, error.location.a)
+            // Ideally no min/max is needed, but it prevents crashes
+            val start = paint.measureText(text, 0, max(error.location.a, 0))
             val end = paint.measureText(text, 0, min(error.location.b + 1, text.length))
             canvas.drawLine(left + start, underlineY, left + end, underlineY, underlinePaint)
         }
