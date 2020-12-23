@@ -57,6 +57,7 @@ sealed class SciNumber {
     abstract operator fun div(other: SciNumber) : SciNumber
     abstract operator fun unaryMinus() : SciNumber
 
+    abstract fun pow(n: Real): SciNumber
     abstract fun pow(n: Int): SciNumber
     abstract fun sqrt() : SciNumber
     abstract fun log(base: BigDecimal): SciNumber
@@ -84,7 +85,7 @@ sealed class SciNumber {
         val Zero = Real(0)
     }
 
-    class Real : SciNumber {
+    class Real : SciNumber, Comparable<Real> {
         private val backing: BigDecimal
 
         override val precision: Precision
@@ -153,36 +154,34 @@ sealed class SciNumber {
         }
 
         // Precision based on algorithm described in https://en.wikipedia.org/wiki/Significant_figures#Arithmetic
-        override operator fun plus(other: SciNumber) = additiveOperation(other, BigDecimal::add)
-        override operator fun minus(other: SciNumber) = additiveOperation(other, BigDecimal::minus)
-        override operator fun times(other: SciNumber) =
+        override operator fun plus(other: SciNumber) = operation(other, Real::plusReal)
+        override operator fun minus(other: SciNumber) = operation(other, Real::divReal)
+        override operator fun times(other: SciNumber) = operation(other, Real::timesReal)
+        override operator fun div(other: SciNumber) = operation(other, Real::divReal)
+
+        fun plusReal(other: Real) = additiveOperation(other, BigDecimal::add)
+        fun minusReal(other: Real) = additiveOperation(other, BigDecimal::minus)
+        fun timesReal(other: Real) = Real(backing * other.backing, minPrecision(other))
+        fun divReal(other: Real) = Real(backing.divide(other.backing, MathContext.DECIMAL128), minPrecision(other))
+
+        private fun operation(other: SciNumber, realOperation: (Real, Real) -> Real) =
                 when (other) {
-                    is SciNumber.Real -> Real(backing * other.backing, minPrecision(other))
-                    is SciNumber.Nan -> other
+                    is Nan -> Nan
+                    is Real -> realOperation(this, other)
                 }
 
-        override operator fun div(other: SciNumber) =
-                when (other) {
-                    is SciNumber.Real -> Real(backing.divide(other.backing, MathContext.DECIMAL128), minPrecision(other))
-                    is SciNumber.Nan -> other
-                }
+        private fun additiveOperation(other: Real, op: (BigDecimal, BigDecimal) -> BigDecimal) : Real {
+            val result = op(backing, other.backing)
 
-        private fun additiveOperation(other: SciNumber, op: (BigDecimal, BigDecimal) -> BigDecimal) : SciNumber =
-            when (other) {
-                is SciNumber.Nan -> other
-                is SciNumber.Real -> {
-                    val result = op(backing, other.backing)
+            val newLsd = minLsd(lsd, other.lsd)
+            val newMag = magnitudeOf(result.toDouble())
 
-                    val newLsd = minLsd(lsd, other.lsd)
-                    val newMag = magnitudeOf(result.toDouble())
-
-                    if (newLsd == null) {
-                        Real(result, Precision.Infinite)
-                    } else {
-                        Real(result, Precision.SigFigs(newMag + newLsd))
-                    }
-                }
+            return if (newLsd == null) {
+                Real(result, Precision.Infinite)
+            } else {
+                Real(result, Precision.SigFigs(newMag + newLsd))
             }
+        }
 
         private fun minLsd(lsdA: Int?, lsdB: Int?): Int? =
             if (lsdA == null) {
@@ -198,14 +197,15 @@ sealed class SciNumber {
         private fun minPrecision(other: Real) = minOf(precision, other.precision)
 
         override operator fun unaryMinus() = Real(-backing, precision)
-        operator fun compareTo(other: Real) = backing.compareTo(other.backing)
-        override fun pow(n: Int) = Real(backing.pow(n, MathContext.DECIMAL128), precision) // Context needed here?
+        override operator fun compareTo(other: Real) = backing.compareTo(other.backing)
+        override fun pow(n: Real) = Real(backing.pow(n.backing.toInt(), MathContext.DECIMAL128) * n.backing.rem(BigDecimal.ONE), precision) // Context needed here?
+        override fun pow(n: Int) = pow(Real(n))
         override fun sqrt() =
                 if (backing >= BigDecimal.ZERO)
                     Real(BigDecimal.valueOf(Math.sqrt(backing.toDouble())), precision)
                 else
                     Nan // Until imaginary numbers are implemented
-        fun abs() = Real(backing.abs())
+        fun abs() = Real(backing.abs(), precision)
 
         // Kinda a shitty calculation
         override fun log(base: BigDecimal) =
@@ -338,6 +338,7 @@ sealed class SciNumber {
         override operator fun div(other: SciNumber) = this
         override operator fun unaryMinus() = this
 
+        override fun pow(n: Real): SciNumber = this
         override fun pow(n: Int): SciNumber = this
         override fun sqrt(): SciNumber = this
         override fun log(base: BigDecimal): SciNumber = this

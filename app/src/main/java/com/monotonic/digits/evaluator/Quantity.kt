@@ -37,7 +37,8 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
         return Quantity(value / other.value, unit - other.unit)
     }
 
-    fun pow(exponent: Int) : Quantity {
+    // Ensure that all exponentiation is unitless
+    fun pow(exponent: SciNumber.Real) : Quantity {
         return Quantity(value.pow(exponent), unit.times(exponent))
     }
 
@@ -62,7 +63,7 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     fun cot() = Quantity(value.cot(), unit)
 
     // Designed for use in nonlinear operations
-    fun normalized() = Quantity(value * unit.factor, NaturalUnit(unit.dimensions))
+    fun normalized() = Quantity(value * unit.factor, NaturalUnit(unit.dimensions, SciNumber.One))
 
     override fun equals(other: Any?): Boolean =
         other is Quantity

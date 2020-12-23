@@ -80,12 +80,28 @@ class EvaluatorTest {
         evalTest(Quantity(SciNumber.Real("8")), "2^3")
         evalTest(Quantity(SciNumber.Real("8")), "2³")
         evalTest(Quantity(SciNumber.Real("1024")), "2^10")
+        evalTest(Quantity(SciNumber.Real("8")), "2^(3)")
     }
 
     @Test
     fun negativeExponentiation() {
         evalTest(Quantity(SciNumber.Real(".125")), "2^-3")
         evalTest(Quantity(SciNumber.Real(".125")), "2⁻³")
+    }
+
+    @Test
+    fun exponentExpressions() {
+        evalTest(Quantity(SciNumber.Real("2")), "4^(.5)")
+        evalTest(Quantity(SciNumber.Real("4")), "2^(1+1)")
+        evalTest(Quantity(SciNumber.Real(".5")), "4^(-.5)")
+        evalTest(Quantity(SciNumber.Real("4.17116751095")), "3^(1.3)")
+
+        // Should produce an error
+        evalTest(Quantity(SciNumber.Real(",7")), "4^(0/0)")
+        evalTest(Quantity(SciNumber.Real(",7")), "4^(1m)")
+
+        // TODO tests of sigfigs
+        // Tests of negative fractional exponents
     }
 
     @Test
@@ -339,7 +355,7 @@ class EvaluatorTest {
 
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
-        Assert.assertTrue(result.errors.isEmpty())
+        Assert.assertTrue("Error emitted: ${result.errors}", result.errors.isEmpty())
         Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
     }
 

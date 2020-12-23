@@ -9,36 +9,29 @@ import kotlin.math.absoluteValue
  * @param factor must be greater than zero
  * @author Ethan
  */
-open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open val factor: SciNumber.Real) {
-    constructor(dimensions: Map<String, Int> = mapOf(), factor: String = "1") : this(dimensions, SciNumber.Real(factor, Precision.Infinite))
-
-     val dimensionMagnitude : Int
-         get() = dimensions.map { it.value.absoluteValue }.sum()
+open class NaturalUnit constructor(open val dimensions: DimensionBag, open val factor: SciNumber.Real) {
+    constructor(dimensions: Map<String, SciNumber.Real> = mapOf(), factor: String = "1") : this(DimensionBag(dimensions), SciNumber.Real(factor, Precision.Infinite))
 
     operator fun plus(other: NaturalUnit) =
-            NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::plus), (factor * other.factor) as SciNumber.Real) // real * real always = real
+            NaturalUnit(dimensions.combine(other.dimensions) { a, b -> a.plusReal(b) }, (factor * other.factor) as SciNumber.Real) // real * real always = real
 
     operator fun minus(other: NaturalUnit) =
-            NaturalUnit(combineMapsDefault(dimensions, other.dimensions, Int::minus), (factor / other.factor) as SciNumber.Real)
+            NaturalUnit(dimensions.combine(other.dimensions) { a, b -> a.minusReal(b) }, (factor / other.factor) as SciNumber.Real)
 
-    open operator fun times(n: Int) : NaturalUnit =
-            NaturalUnit(dimensions.mapValues { entry -> entry.value * n }, factor.pow(n))
+    open operator fun times(n: SciNumber.Real) : NaturalUnit =
+            NaturalUnit(dimensions.map { it.timesReal(n) }, factor.pow(n))
 
     operator fun unaryMinus() =
-            NaturalUnit(dimensions.mapValues { e -> -e.value }, factor.reciprocal())
+            NaturalUnit(dimensions.map { -it }, factor.reciprocal())
 
     fun half() =
-            NaturalUnit(dimensions.mapValues { entry -> entry.value / 2 }, factor.sqrt() as SciNumber.Real)
+            NaturalUnit(dimensions.map { it.divReal(SciNumber.Real(2)) }, factor.sqrt() as SciNumber.Real)
 
     /**
      * Result only makes sense iff isMultiple(other)
      */
-    operator fun div(other: NaturalUnit) : Int =
-            dimensions.map { d -> d.value / other.dimensions.getOrDefault(d.key, 0) }.first()
-    /***
-     * @return true iff all unit exponents are even
-     */
-    fun isEven() = dimensions.all { it.value % 2 == 0 }
+    operator fun div(other: NaturalUnit) : SciNumber.Real =
+            dimensions.values.map { d -> d.value.divReal(other.dimensions.values.getOrDefault(d.key, SciNumber.Zero)) }.first()
 
     override fun equals(other: Any?) =
             other is NaturalUnit && representationEqual(other)
@@ -53,18 +46,4 @@ open class NaturalUnit constructor(open val dimensions: Map<String, Int>, open v
 
     override fun hashCode() = dimensions.hashCode() xor factor.hashCode()
     override fun toString() = "NaturalUnit(dimensions: $dimensions, factor: $factor)"
-
-    private fun combineMapsDefault(a: Map<String, Int>, b: Map<String, Int>, operation: (Int, Int) -> Int): Map<String, Int> {
-        val newMap = mutableMapOf<String, Int>()
-        newMap.putAll(a)
-        for (entry in b) {
-            val newValue = operation.invoke(newMap.getOrDefault(entry.key, 0), entry.value)
-            if (newValue == 0) { // Gross
-                newMap.remove(entry.key)
-            } else {
-                newMap[entry.key] = newValue
-            }
-        }
-        return newMap
-    }
 }

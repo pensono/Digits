@@ -3,6 +3,7 @@ package com.monotonic.digits.human
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.prettyExponent
+import com.monotonic.digits.units.DimensionBag
 import com.monotonic.digits.units.NaturalUnit
 import com.monotonic.digits.units.PrefixUnit
 import com.monotonic.digits.units.UnitSystem
@@ -13,13 +14,13 @@ import kotlin.math.absoluteValue
  * @author Ethan
  */
 
-class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUnit = PrefixUnit.One) : NaturalUnit() {
+class HumanUnit(val components: Map<AtomicHumanUnit, SciNumber.Real>, val prefix: PrefixUnit = PrefixUnit.One) : NaturalUnit() {
     companion object {
         val Void = HumanUnit(mapOf())
     }
 
     val underlyingUnit =
-            components.map { entry -> entry.key * entry.value }
+            components.map { (key, value) -> key * SciNumber.Real(value) }
                     .fold(UnitSystem.void, NaturalUnit::plus)
 
     override val dimensions = underlyingUnit.dimensions
@@ -44,7 +45,7 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
 
     operator fun plus(other: AtomicHumanUnit) = incorperateUnit(other, 1)
     operator fun minus(other: AtomicHumanUnit) = incorperateUnit(other, -1)
-    override operator fun times(n : Int) = HumanUnit(components.mapValues { e -> e.value * n }, prefix * n)
+    override operator fun times(n : SciNumber.Real) = HumanUnit(components.mapValues { e -> n.timesReal(e.value) }, prefix * n)
 
     fun withPrefix(prefix: PrefixUnit) = HumanUnit(components, prefix)
 
@@ -62,13 +63,13 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
     override fun toString(): String = "HumanUnit($components, $abbreviation)"
 }
 
-val humanizationCache = mutableMapOf<Map<String, Int>, HumanUnit>()
+val humanizationCache = mutableMapOf<DimensionBag, HumanUnit>()
 
 /**
  * Returns an inverse unit that can be used to normalize the result
  */
 fun humanize(quantity: Quantity) : HumanQuantity {
-    if (quantity.unit.dimensionallyEqual(UnitSystem.void) || quantity.unit.dimensionMagnitude >= 100) { // Just give up for huge units
+    if (quantity.unit.dimensionallyEqual(UnitSystem.void) || quantity.unit.dimensions.magnitude() >= SciNumber.Real(100)) { // Just give up for huge units
         return HumanQuantity(quantity.value * quantity.unit.factor, HumanUnit(mapOf()))
     }
 
@@ -84,8 +85,8 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     }
 
     val visitedUnits = mutableSetOf<HumanUnit>()
-    val comparator = compareBy<HumanUnit> { (it - quantity.unit).dimensionMagnitude }
-            .thenBy { it.dimensions.size }
+    val comparator = compareBy<HumanUnit> { (it - quantity.unit).dimensions.magnitude() }
+            .thenBy { it.dimensions.values.size }
             .thenBy(HumanUnit::exponentMagnitude)
     val visitQueue = PriorityQueue(comparator)
 

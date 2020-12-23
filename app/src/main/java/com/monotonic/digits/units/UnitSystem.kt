@@ -4,29 +4,29 @@ import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.human.AtomicHumanUnit
 
 object UnitSystem { // Preferred Units?
-    val length = mapOf("length" to 1)
-    val area = mapOf("length" to 2)
-    val volume = mapOf("length" to 3)
-    val time = mapOf("time" to 1)
-    val frequency = mapOf("time" to -1)
-    val angle = mapOf("angle" to 1)
-    val solid_angle = mapOf("angle" to 2)
-    val mass = mapOf("mass" to 1)
-    val current = mapOf("current" to 1)
-    val emf = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -1)
-    val impedance = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -2)
-    val conductance = mapOf("mass" to -1, "length" to -2, "time" to 3, "current" to 2)
-    val capacitance = mapOf("mass" to -1, "length" to -2, "time" to 4, "current" to 2)
-    val power = mapOf("mass" to 1, "length" to 2, "time" to -3)
-    val energy = mapOf("mass" to 1, "length" to 2, "time" to -2)
-    val magnetic_flux = mapOf("mass" to 1, "length" to 2, "time" to 2, "current" to -3)
-    val magnetic_flux_density = mapOf("mass" to 1, "time" to 2, "current" to -3)
-    val inductance = mapOf("mass" to 1, "length" to 2, "time" to -2, "current" to -2)
-    val force = mapOf("mass" to 1, "length" to 1, "time" to -2)
-    val charge = mapOf("current" to 1, "time" to 1)
-    val pressure = mapOf("mass" to 1, "time" to -2, "length" to 1)
-    val data = mapOf("data" to 1)
-    val molarity = mapOf("molarity" to 1)
+    val length = DimensionBag(mapOf("length" to SciNumber.Real(1)))
+    val area = DimensionBag(mapOf("length" to SciNumber.Real(2)))
+    val volume = DimensionBag(mapOf("length" to SciNumber.Real(3)))
+    val time = DimensionBag(mapOf("time" to SciNumber.Real(1)))
+    val frequency = DimensionBag(mapOf("time" to SciNumber.Real(-1)))
+    val angle = DimensionBag(mapOf("angle" to SciNumber.Real(1)))
+    val solid_angle = DimensionBag(mapOf("angle" to SciNumber.Real(2)))
+    val mass = DimensionBag(mapOf("mass" to SciNumber.Real(1)))
+    val current = DimensionBag(mapOf("current" to SciNumber.Real(1)))
+    val emf = DimensionBag(mapOf("mass" to SciNumber.Real(1), "length" to SciNumber.Real(2), "time" to SciNumber.Real(-3), "current" to SciNumber.Real(-1)))
+    val impedance = DimensionBag(mapOf("mass" to SciNumber.Real(1), "length" to SciNumber.Real(2), "time" to SciNumber.Real(-3), "current" to SciNumber.Real(-2)))
+    val conductance = DimensionBag(mapOf("mass" to SciNumber.Real(-1), "length" to SciNumber.Real(-2), "time" to SciNumber.Real(3), "current" to SciNumber.Real(2)))
+    val capacitance = DimensionBag(mapOf("mass" to SciNumber.Real(-1), "length" to SciNumber.Real(-2), "time" to SciNumber.Real(4), "current" to SciNumber.Real(2)))
+    val power = DimensionBag(mapOf("mass" to SciNumber.Real(1), "length" to SciNumber.Real(2), "time" to SciNumber.Real(-3)))
+    val energy = DimensionBag(mapOf("mass" to SciNumber.Real(1), "length" to SciNumber.Real(2), "time" to SciNumber.Real(-2)))
+    val magnetic_flux = DimensionBag(mapOf("mass" to SciNumber.Real(1), "length" to SciNumber.Real(2), "time" to SciNumber.Real(2), "current" to SciNumber.Real(-3)))
+    val magnetic_flux_density = DimensionBag(mapOf("mass" to SciNumber.Real(1), "time" to SciNumber.Real(2), "current" to SciNumber.Real(-3)))
+    val inductance = DimensionBag(mapOf("mass" to SciNumber.Real(1), "length" to SciNumber.Real(2), "time" to SciNumber.Real(-2), "current" to SciNumber.Real(-2)))
+    val force = DimensionBag(mapOf("mass" to SciNumber.Real(1), "length" to SciNumber.Real(1), "time" to SciNumber.Real(-2)))
+    val charge = DimensionBag(mapOf("current" to SciNumber.Real(1), "time" to SciNumber.Real(1)))
+    val pressure = DimensionBag(mapOf("mass" to SciNumber.Real(1), "time" to SciNumber.Real(-2), "length" to SciNumber.Real(1)))
+    val data = DimensionBag(mapOf("data" to SciNumber.Real(1)))
+    val molarity = DimensionBag(mapOf("molarity" to SciNumber.Real(1)))
 
     val tt = mapOf<String, Int>()
 
@@ -38,7 +38,7 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("ft", "Feet", "12in", length, SciNumber.Real(0.3048)),
             AtomicHumanUnit("mi", "Miles", "5280ft", length, SciNumber.Real(1609.344)),
             AtomicHumanUnit("au", "Astronomical Units", "149,597,870,700m", length, SciNumber.Real("149597870700")),
-            AtomicHumanUnit("pc", "Parsecs", "648,000/π au", length, (SciNumber.Real("3.08567758149137") * SciNumber.Real(10).pow(16)) as SciNumber.Real),
+            AtomicHumanUnit("pc", "Parsecs", "648,000/π au", length, (SciNumber.Real("3.08567758149137").timesReal(SciNumber.Real(10).pow(16)))),
             AtomicHumanUnit("ly", "Light Years", "9.46ᴇ12km", length, SciNumber.Real("9460730472580800")),
 
             AtomicHumanUnit("L", "Liters", "1000cm³", volume, SciNumber.Real(1000).reciprocal()),
