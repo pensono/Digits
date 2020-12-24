@@ -10,6 +10,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.util.TypedValue
 import java.lang.Math.max
 import java.lang.Math.min
@@ -19,6 +20,10 @@ import java.lang.Math.min
  * @author Ethan
  */
 class ErrorInput: EditText, TextWatcher {
+    companion object {
+        val TAG = "Digits_ErrorInput"
+    }
+
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
@@ -69,9 +74,19 @@ class ErrorInput: EditText, TextWatcher {
         val left = layout.getLineLeft(0)
 
         for (error in errors) {
-            // Ideally no min/max is needed, but it prevents crashes
-            val start = paint.measureText(text, 0, max(error.location.a, 0))
-            val end = paint.measureText(text, 0, min(error.location.b + 1, text.length))
+            // Ideally no min/max is needed
+            if (error.location.a < 0) {
+                Log.w(TAG, "Error location is ${error.location} for input ${this.text}. Snapping a to 0")
+                error.location.a = 0
+            }
+
+            if (error.location.b + 1 > text.length) {
+                Log.w(TAG, "Error location is ${error.location} for input ${this.text}. Snapping b to ${text.length - 1}")
+                error.location.b = text.length - 1
+            }
+
+            val start = paint.measureText(text, 0, error.location.a)
+            val end = paint.measureText(text, 0, error.location.b + 1)
             canvas.drawLine(left + start, underlineY, left + end, underlineY, underlinePaint)
         }
 
