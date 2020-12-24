@@ -33,7 +33,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'com.android.billingclient:billing:2.0.1'
     implementation 'com.google.guava:guava:28.0-android'
-    implementation 'org.antlr:antlr4-runtime:4.8'
+    implementation 'org.antlr:antlr4-runtime:4.9'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
