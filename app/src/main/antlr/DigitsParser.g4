@@ -4,9 +4,9 @@ options { tokenVocab=DigitsLexer; }
 
 expression
     : MINUS argument=expression # UnaryMinus
+    | base=expression operator=CARET exponent=expression # ExponentExpression
     | lhs=expression operation=(TIMES | DIVIDE) rhs=expression # ProductExpression
     | lhs=expression operation=(PLUS | MINUS) rhs=expression # SumExpression
-    | base=expression operator=CARET exponent=expression # ExponentExpression
     | '+'? terms+=term+ # ValueExpression
     ;
 

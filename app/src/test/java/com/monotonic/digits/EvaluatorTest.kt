@@ -155,6 +155,9 @@ class EvaluatorTest {
         evalTest(Quantity(SciNumber.Real("14")), "(3+4)*2")
         evalTest(Quantity(SciNumber.Real("5")), "-(3-4*2)")
         evalTest(Quantity(SciNumber.Real("-11")), "-3-(4)*2")
+
+        evalTest(Quantity(SciNumber.Real("29")), "3^3+2")
+        evalTest(Quantity(SciNumber.Real("54")), "3^3*2")
     }
 
     @Test

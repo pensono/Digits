@@ -48,7 +48,7 @@
         <com.monotonic.digits.CalculatorButton app:primary="π" app:secondary="π;e;φ;τ" android:text="π" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary="⁻¹" android:text="¹/ₓ" app:secondary="⁻⁰;⁻¹;⁻²;⁻³;⁻⁴;⁻⁵;⁻⁶;⁻⁷;⁻⁸;⁻⁹" app:adaptPrimary="false" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary="²" app:secondary="⁰;¹;²;³;⁴;⁵;⁶;⁷;⁸;⁹" android:text="x²" app:adaptPrimary="false" style="@style/AppTheme.CalculatorButton.Advanced" />
-        <com.monotonic.digits.CalculatorButton app:primary="√(|)" app:secondary="^:^(|)" android:text="√" style="@style/AppTheme.CalculatorButton.Advanced" />
+        <com.monotonic.digits.CalculatorButton app:primary="√(|)" app:secondary="√:√(|);^:^(|)" android:text="√" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary="(" app:secondary="(;{;[" android:text="(" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary=")" app:secondary=");};]" android:text=")" style="@style/AppTheme.CalculatorButton.Advanced" />
         <com.monotonic.digits.CalculatorButton app:primary="DEL" android:text="DEL" style="@style/AppTheme.CalculatorButton.Advanced" />

@@ -324,12 +324,25 @@ public class DigitsParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 					case 1:
 						{
-						_localctx = new ProductExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((ProductExpressionContext)_localctx).lhs = _prevctx;
+						_localctx = new ExponentExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((ExponentExpressionContext)_localctx).base = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(23);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(24);
+						((ExponentExpressionContext)_localctx).operator = match(CARET);
+						setState(25);
+						((ExponentExpressionContext)_localctx).exponent = expression(5);
+						}
+						break;
+					case 2:
+						{
+						_localctx = new ProductExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((ProductExpressionContext)_localctx).lhs = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(26);
+						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+						setState(27);
 						((ProductExpressionContext)_localctx).operation = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==TIMES || _la==DIVIDE) ) {
@@ -340,18 +353,18 @@ public class DigitsParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(25);
-						((ProductExpressionContext)_localctx).rhs = expression(5);
+						setState(28);
+						((ProductExpressionContext)_localctx).rhs = expression(4);
 						}
 						break;
-					case 2:
+					case 3:
 						{
 						_localctx = new SumExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						((SumExpressionContext)_localctx).lhs = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(26);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(27);
+						setState(29);
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						setState(30);
 						((SumExpressionContext)_localctx).operation = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==PLUS || _la==MINUS) ) {
@@ -362,21 +375,8 @@ public class DigitsParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(28);
-						((SumExpressionContext)_localctx).rhs = expression(4);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new ExponentExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((ExponentExpressionContext)_localctx).base = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(29);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(30);
-						((ExponentExpressionContext)_localctx).operator = match(CARET);
 						setState(31);
-						((ExponentExpressionContext)_localctx).exponent = expression(3);
+						((SumExpressionContext)_localctx).rhs = expression(3);
 						}
 						break;
 					}
@@ -1062,8 +1062,8 @@ public class DigitsParser extends Parser {
 		"\2\2\2\f\r\b\2\1\2\r\16\7\7\2\2\16\30\5\2\2\7\17\21\7\6\2\2\20\17\3\2"+
 		"\2\2\20\21\3\2\2\2\21\23\3\2\2\2\22\24\5\4\3\2\23\22\3\2\2\2\24\25\3\2"+
 		"\2\2\25\23\3\2\2\2\25\26\3\2\2\2\26\30\3\2\2\2\27\f\3\2\2\2\27\20\3\2"+
-		"\2\2\30$\3\2\2\2\31\32\f\6\2\2\32\33\t\2\2\2\33#\5\2\2\7\34\35\f\5\2\2"+
-		"\35\36\t\3\2\2\36#\5\2\2\6\37 \f\4\2\2 !\7\b\2\2!#\5\2\2\5\"\31\3\2\2"+
+		"\2\2\30$\3\2\2\2\31\32\f\6\2\2\32\33\7\b\2\2\33#\5\2\2\7\34\35\f\5\2\2"+
+		"\35\36\t\2\2\2\36#\5\2\2\6\37 \f\4\2\2 !\t\3\2\2!#\5\2\2\5\"\31\3\2\2"+
 		"\2\"\34\3\2\2\2\"\37\3\2\2\2#&\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%\3\3\2\2\2"+
 		"&$\3\2\2\2\')\7\20\2\2(\'\3\2\2\2)*\3\2\2\2*(\3\2\2\2*+\3\2\2\2+C\3\2"+
 		"\2\2,.\7\n\2\2-/\7\7\2\2.-\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60\62\7\r\2\2"+
