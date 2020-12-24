@@ -37,8 +37,19 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
         return Quantity(value / other.value, unit - other.unit)
     }
 
-    fun pow(exponent: Int) : Quantity {
-        return Quantity(value.pow(exponent), unit.times(exponent))
+    fun pow(other: Quantity) : Quantity {
+        if (other.normalizedValue !is SciNumber.Real) throw RuntimeException("Exponentiation is only allowed if the power is real")
+        if (!other.unit.dimensionallyEqual(UnitSystem.void)) throw RuntimeException("Exponentiation is only allowed if the power is dimensionless")
+
+        return if (unit.dimensionallyEqual(UnitSystem.void)) {
+            Quantity(value.pow(other.value), unit)
+        } else {
+            if (!other.normalizedValue.isIntegral()) throw RuntimeException("Exponentiation of a base with units is only allowed if the power is integral")
+
+            val integralExponent = other.normalizedValue.toInt()
+
+            Quantity(value.pow(other.value), unit * integralExponent)
+        }
     }
 
     fun sqrt() = Quantity(value.sqrt(), unit.half())
@@ -62,7 +73,7 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     fun cot() = Quantity(value.cot(), unit)
 
     // Designed for use in nonlinear operations
-    fun normalized() = Quantity(value * unit.factor, NaturalUnit(unit.dimensions))
+    fun normalized() = Quantity(value * unit.factor, NaturalUnit(unit.dimensions, SciNumber.One))
 
     override fun equals(other: Any?): Boolean =
         other is Quantity

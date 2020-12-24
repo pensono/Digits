@@ -4,6 +4,7 @@ import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.human.HumanQuantity
 import com.monotonic.digits.human.HumanUnit
 import com.monotonic.digits.human.evaluateHumanized
+import com.monotonic.digits.units.DimensionBag
 import org.junit.Assert
 import org.junit.Test
 
@@ -46,7 +47,7 @@ class HumanEvaluatorTest {
         evalTest(HumanQuantity(SciNumber.Real("5"), HumanUnit(mapOf(u("m") to 1, u("s") to -1))), "5m/s")
     }
 
-    private fun evalTest(expected: HumanQuantity, input: String, preferredUnits: Map<Map<String, Int>, HumanUnit> = mapOf()) {
+    private fun evalTest(expected: HumanQuantity, input: String, preferredUnits: Map<DimensionBag, HumanUnit> = mapOf()) {
         val result = evaluateHumanized(input, preferredUnits)
         Assert.assertTrue(result.errors.isEmpty())
         Assert.assertEquals(expected, result.value)

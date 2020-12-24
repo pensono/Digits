@@ -100,7 +100,11 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
         val exponentMag = if (ctx.Digit().isEmpty()) 1 else parseNumber(ctx.Digit().joinToString("") { it.text })
         val sign = if (ctx.sign == null) 1 else -1
 
-        return baseResult.invoke { base -> base.pow(sign * exponentMag) }
+        // Will need to be changed for expressions in the exponent
+        // Make sure to verify the base and exponent units
+        val exponent = Quantity(SciNumber.Real(sign * exponentMag))
+
+        return baseResult.invoke { base -> base.pow(exponent) }
     }
 
     // TODO try and factor this
@@ -182,7 +186,8 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                         value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
                     } else {
                         val prevTerm = nextExponentBase // Scoot around kotlin's type system
-                        value = value.invoke { it * prevTerm.pow(exponent - 1) * nextExponentPrefix.pow(exponent - 1) } // -1 since we've already incorporated it once
+                        val exponentQuantity = Quantity(SciNumber.Real(exponent - 1)) // -1 since we've already incorporated it once
+                        value = value.invoke { it * prevTerm.pow(exponentQuantity) * nextExponentPrefix.pow(exponentQuantity) }
                     }
                 }
                 is DigitsParser.NumericLiteralContext -> {
@@ -200,7 +205,8 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                                 value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
                             } else {
                                 val prevTerm = nextExponentBase // Scoot around kotlin's type system
-                                value = value.invoke { it * prevTerm.pow(exponentMag - 1) * nextExponentPrefix.pow(exponentMag - 1) }
+                                val exponentQuantity = Quantity(SciNumber.Real(exponentMag - 1)) // -1 since we've already incorporated it once
+                                value = value.invoke { it * prevTerm.pow(exponentQuantity) * nextExponentPrefix.pow(exponentQuantity) }
                             }
 
                             nextExponentBase = null
@@ -236,7 +242,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                     } else {
                         val sign = if (term.sign == null) 1 else -1
                         val exponent = if (term.Digit().isEmpty()) 0 else parseNumber(term.Digit().joinToString("") { it.text }) * sign
-                        value = value.invoke { it * Quantity(SciNumber.Real(10).pow(exponent)) }
+                        value = value.invoke { it * Quantity(SciNumber.Real(10).pow(SciNumber.Real(exponent))) }
                     }
                 }
             }

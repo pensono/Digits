@@ -1,6 +1,3 @@
-Bugs:
-- Converting lb to kg does not work
-
 Horizon:
 - When converting units with powers, it feels clunky to have to add the same power to your new unit. For example if I have 100m^2 and want it in ft^2, I have to press "convert to" , then ft, then ^2.
   Prefill power when converting to squared units
@@ -8,6 +5,8 @@ Horizon:
 - Run calculations in the background so they never block the UI
 
 Backlog:
+- TODO in NaturalUnit.div and NaturalUnit.isMultiple
+- Format the whole project, automate somehow
 - Calculation History
 - Button to control number of digits in preview
 - Ripple color for color schemes
@@ -42,6 +41,7 @@ Backlog:
   + Also have an option to always use a plus sign in the exponent
 - Make the ErrorInput not show underlines when using swiftkey
 - log(1e3) isn't quite equal to 3
+- Evaluate mismatched parentheses
 
 Pro Mode:
 - Unlock all skins

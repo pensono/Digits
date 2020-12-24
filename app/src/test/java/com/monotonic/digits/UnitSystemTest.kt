@@ -1,5 +1,6 @@
 package com.monotonic.digits
 
+import com.monotonic.digits.units.DimensionBag
 import com.monotonic.digits.units.NaturalUnit
 import org.junit.Assert.*
 import org.junit.Test
@@ -18,7 +19,7 @@ class UnitSystemTest {
 
     @Test
     fun subtract() {
-        assertEquals(NaturalUnit(mapOf("length" to 1), Kilo), NaturalUnit(mapOf("length" to 2), Kilo) - NaturalUnit(mapOf("length" to 1)))
-        assertEquals(NaturalUnit(mapOf("length" to 1), Milli), NaturalUnit(mapOf("length" to 2)) - NaturalUnit(mapOf("length" to 1), Kilo))
+        assertEquals(NaturalUnit(DimensionBag("length" to 1), Kilo), NaturalUnit(DimensionBag("length" to 2), Kilo) - NaturalUnit(mapOf("length" to 1)))
+        assertEquals(NaturalUnit(DimensionBag("length" to 1), Milli), NaturalUnit(mapOf("length" to 2)) - NaturalUnit(DimensionBag("length" to 1), Kilo))
     }
 }

@@ -3,6 +3,7 @@ package com.monotonic.digits
 import com.monotonic.digits.evaluator.ParseResult
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
+import com.monotonic.digits.units.DimensionBag
 import com.monotonic.digits.units.NaturalUnit
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
@@ -81,8 +82,8 @@ class UnitParserTest {
     @Test
     fun prefixedExponentUnits() {
         // Should parse as (km)^2 rather than k(m^2)
-        assertEquals(NaturalUnit(mapOf("length" to 2), SciNumber.Real(1000000)), parseUnit("km²").value)
-        assertEquals(NaturalUnit(mapOf("length" to 2), SciNumber.Real(1000000)), parseUnit("km2").value)
+        assertEquals(NaturalUnit(DimensionBag("length" to 2), SciNumber.Real(1000000)), parseUnit("km²").value)
+        assertEquals(NaturalUnit(DimensionBag("length" to 2), SciNumber.Real(1000000)), parseUnit("km2").value)
     }
 
     @Test

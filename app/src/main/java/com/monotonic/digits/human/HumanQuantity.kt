@@ -47,7 +47,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
             val roundedMagnitude = floor(rawMagnitude / numberFormat.exponentGranularity).toInt() * numberFormat.exponentGranularity
             val exponent = if (abs(roundedMagnitude) >= numberFormat.minimumExponent) roundedMagnitude else 0  // Could this be made into a setting?
             val eNotation = if (exponent == 0) ellipsis else "${ellipsis}ᴇ$exponent"
-            val normalizedValue = value / SciNumber.Real(10).pow(exponent)
+            val normalizedValue = value / SciNumber.Real(10).pow(SciNumber.Real(exponent))
             val normalizedString = normalizedValue.valueString(separatorType)
             val sizedString = normalizedString.string.substring(0, max(0, min(normalizedString.string.length, maxValueChars - eNotation.length)))
                     .trimEnd { !(it.isDigit() || it == '.') } // Remove trailing non-numeric characters like separators
@@ -124,7 +124,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
             if (roundedMagnitude == 0) {
                 sized.substring(0, maxLength) + unitString()
             } else {
-                val normalizedValue = value / SciNumber.Real(10).pow(roundedMagnitude)
+                val normalizedValue = value / SciNumber.Real(10).pow(SciNumber.Real(roundedMagnitude))
                 HumanQuantity(normalizedValue, HumanUnit(mapOf())).valueString(round) + "ᴇ$roundedMagnitude" + unitString()
             }
         } else {

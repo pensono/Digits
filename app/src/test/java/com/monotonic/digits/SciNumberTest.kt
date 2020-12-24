@@ -1,6 +1,7 @@
 package com.monotonic.digits
 
 import com.monotonic.digits.evaluator.Precision
+import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
@@ -204,7 +205,18 @@ class SciNumberTest {
     @Test
     fun powPrecision() {
         // May not be correct https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions
-        assertEquals(Precision.Infinite, SciNumber.Real(10).pow(5).precision)
-        assertEquals(sf(2), SciNumber.Real("10").pow(5).precision)
+        assertEquals(Precision.Infinite, SciNumber.Real(10).pow(SciNumber.Real(5)).precision)
+        assertEquals(sf(2), SciNumber.Real("10").pow(SciNumber.Real(5)).precision)
+    }
+
+    @Test
+    fun powComputation() {
+        assertEquals(SciNumber.Real("4"), SciNumber.Real("2").pow(SciNumber.Real("2")))
+        assertEquals(SciNumber.Real("2"), SciNumber.Real("4").pow(SciNumber.Real(".5")))
+        assertEquals(SciNumber.Real("4.171167510947727752323999084183014929294586181640625", sf(1)), SciNumber.Real("3").pow(SciNumber.Real("1.3")))
+
+        assertEquals(SciNumber.Nan, SciNumber.Nan.pow(SciNumber.Real("2")))
+        assertEquals(SciNumber.Nan, SciNumber.Real("2").pow(SciNumber.Nan))
+        assertEquals(SciNumber.Nan, SciNumber.Nan.pow(SciNumber.Nan))
     }
 }

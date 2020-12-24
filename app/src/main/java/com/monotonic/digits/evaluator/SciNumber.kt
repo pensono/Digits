@@ -6,6 +6,7 @@ import java.lang.Integer.*
 import java.math.BigDecimal
 import java.math.MathContext
 import kotlin.math.abs
+import kotlin.math.pow
 
 sealed class Precision : Comparable<Precision> {
     abstract operator fun plus(value: Int) : Precision
@@ -57,7 +58,7 @@ sealed class SciNumber {
     abstract operator fun div(other: SciNumber) : SciNumber
     abstract operator fun unaryMinus() : SciNumber
 
-    abstract fun pow(n: Int): SciNumber
+    abstract fun pow(n: SciNumber): SciNumber
     abstract fun sqrt() : SciNumber
     abstract fun log(base: BigDecimal): SciNumber
     abstract fun exp(): SciNumber // Base e
@@ -78,6 +79,7 @@ sealed class SciNumber {
     abstract fun valueString(separatorType: SeparatorType) : SigfigString
     abstract fun valueEqual(other: SciNumber) : Boolean
     abstract fun toDouble() : Double
+    abstract fun isIntegral(): Boolean
 
     companion object {
         val One = Real(1)
@@ -153,36 +155,41 @@ sealed class SciNumber {
         }
 
         // Precision based on algorithm described in https://en.wikipedia.org/wiki/Significant_figures#Arithmetic
-        override operator fun plus(other: SciNumber) = additiveOperation(other, BigDecimal::add)
-        override operator fun minus(other: SciNumber) = additiveOperation(other, BigDecimal::minus)
-        override operator fun times(other: SciNumber) =
+        override operator fun plus(other: SciNumber) = operation(other, Real::plusReal)
+        override operator fun minus(other: SciNumber) = operation(other, Real::minusReal)
+        override operator fun times(other: SciNumber) = operation(other, Real::timesReal)
+        override operator fun div(other: SciNumber) = operation(other, Real::divReal)
+        override fun pow(other: SciNumber) = operation(other, Real::powReal)
+
+        fun plusReal(other: Real) = additiveOperation(other, BigDecimal::add)
+        fun minusReal(other: Real) = additiveOperation(other, BigDecimal::minus)
+        fun timesReal(other: Real) = Real(backing * other.backing, minPrecision(other))
+        fun divReal(other: Real) = Real(backing.divide(other.backing, MathContext.DECIMAL128), minPrecision(other))
+        fun powReal(other: Real): Real {
+            val integralPower = backing.pow(other.backing.toInt(), MathContext.DECIMAL128)
+            val fractionalPower = BigDecimal(backing.toDouble().pow(other.backing.rem(BigDecimal.ONE).toDouble()))
+
+            return Real(integralPower * fractionalPower, minPrecision(other)) // Context needed here?
+        }
+
+        private fun operation(other: SciNumber, realOperation: (Real, Real) -> Real) =
                 when (other) {
-                    is SciNumber.Real -> Real(backing * other.backing, minPrecision(other))
-                    is SciNumber.Nan -> other
+                    is Nan -> Nan
+                    is Real -> realOperation(this, other)
                 }
 
-        override operator fun div(other: SciNumber) =
-                when (other) {
-                    is SciNumber.Real -> Real(backing.divide(other.backing, MathContext.DECIMAL128), minPrecision(other))
-                    is SciNumber.Nan -> other
-                }
+        private fun additiveOperation(other: Real, op: (BigDecimal, BigDecimal) -> BigDecimal) : Real {
+            val result = op(backing, other.backing)
 
-        private fun additiveOperation(other: SciNumber, op: (BigDecimal, BigDecimal) -> BigDecimal) : SciNumber =
-            when (other) {
-                is SciNumber.Nan -> other
-                is SciNumber.Real -> {
-                    val result = op(backing, other.backing)
+            val newLsd = minLsd(lsd, other.lsd)
+            val newMag = magnitudeOf(result.toDouble())
 
-                    val newLsd = minLsd(lsd, other.lsd)
-                    val newMag = magnitudeOf(result.toDouble())
-
-                    if (newLsd == null) {
-                        Real(result, Precision.Infinite)
-                    } else {
-                        Real(result, Precision.SigFigs(newMag + newLsd))
-                    }
-                }
+            return if (newLsd == null) {
+                Real(result, Precision.Infinite)
+            } else {
+                Real(result, Precision.SigFigs(newMag + newLsd))
             }
+        }
 
         private fun minLsd(lsdA: Int?, lsdB: Int?): Int? =
             if (lsdA == null) {
@@ -199,13 +206,12 @@ sealed class SciNumber {
 
         override operator fun unaryMinus() = Real(-backing, precision)
         operator fun compareTo(other: Real) = backing.compareTo(other.backing)
-        override fun pow(n: Int) = Real(backing.pow(n, MathContext.DECIMAL128), precision) // Context needed here?
         override fun sqrt() =
                 if (backing >= BigDecimal.ZERO)
                     Real(BigDecimal.valueOf(Math.sqrt(backing.toDouble())), precision)
                 else
                     Nan // Until imaginary numbers are implemented
-        fun abs() = Real(backing.abs())
+        fun abs() = Real(backing.abs(), precision)
 
         // Kinda a shitty calculation
         override fun log(base: BigDecimal) =
@@ -249,7 +255,11 @@ sealed class SciNumber {
 
         fun reciprocal() = Real(BigDecimal.ONE.divide(backing, MathContext.DECIMAL128), precision)
         override fun toDouble(): Double = backing.toDouble()
+
         override fun valueEqual(other: SciNumber): Boolean = other is Real && backing.compareTo(other.backing) == 0
+
+        override fun isIntegral(): Boolean = backing % BigDecimal.ONE == BigDecimal.ZERO
+        fun toInt(): Int = backing.intValueExact()
 
         // TODO move this into humanization
         override fun valueString(separatorType: SeparatorType): SigfigString {
@@ -338,7 +348,7 @@ sealed class SciNumber {
         override operator fun div(other: SciNumber) = this
         override operator fun unaryMinus() = this
 
-        override fun pow(n: Int): SciNumber = this
+        override fun pow(n: SciNumber): SciNumber = this
         override fun sqrt(): SciNumber = this
         override fun log(base: BigDecimal): SciNumber = this
         override fun exp(): SciNumber = this
@@ -359,5 +369,6 @@ sealed class SciNumber {
         override fun valueString(separatorType: SeparatorType) = SigfigString("NaN",3)
         override fun valueEqual(other: SciNumber): Boolean = other === Nan
         override fun toDouble(): Double = Double.NaN
+        override fun isIntegral(): Boolean = false
     }
 }

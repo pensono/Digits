@@ -3,6 +3,7 @@ package com.monotonic.digits.human
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.prettyExponent
+import com.monotonic.digits.units.DimensionBag
 import com.monotonic.digits.units.NaturalUnit
 import com.monotonic.digits.units.PrefixUnit
 import com.monotonic.digits.units.UnitSystem
@@ -19,8 +20,8 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
     }
 
     val underlyingUnit =
-            components.map { entry -> entry.key * entry.value }
-                    .fold(UnitSystem.void, NaturalUnit::plus)
+            components.map { (key, value) -> key * value }
+                .fold(UnitSystem.void, NaturalUnit::plus)
 
     override val dimensions = underlyingUnit.dimensions
     override val factor = underlyingUnit.factor
@@ -62,13 +63,13 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
     override fun toString(): String = "HumanUnit($components, $abbreviation)"
 }
 
-val humanizationCache = mutableMapOf<Map<String, Int>, HumanUnit>()
+val humanizationCache = mutableMapOf<DimensionBag, HumanUnit>()
 
 /**
  * Returns an inverse unit that can be used to normalize the result
  */
 fun humanize(quantity: Quantity) : HumanQuantity {
-    if (quantity.unit.dimensionallyEqual(UnitSystem.void) || quantity.unit.dimensionMagnitude >= 100) { // Just give up for huge units
+    if (quantity.unit.dimensionallyEqual(UnitSystem.void) || quantity.unit.dimensions.magnitude() >= 100) { // Just give up for huge units
         return HumanQuantity(quantity.value * quantity.unit.factor, HumanUnit(mapOf()))
     }
 
@@ -84,8 +85,8 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     }
 
     val visitedUnits = mutableSetOf<HumanUnit>()
-    val comparator = compareBy<HumanUnit> { (it - quantity.unit).dimensionMagnitude }
-            .thenBy { it.dimensions.size }
+    val comparator = compareBy<HumanUnit> { (it - quantity.unit).dimensions.magnitude() }
+            .thenBy { it.dimensions.values.size }
             .thenBy(HumanUnit::exponentMagnitude)
     val visitQueue = PriorityQueue(comparator)
 
@@ -117,7 +118,7 @@ private fun applyPrefix(quantity: Quantity, unit: HumanUnit, prefixMagnitude: In
     // Use the one to round up and avoid 0 digits in the front (like in .123m)
     // Also ignore the centi- prefix
     val unscaledPrefix = UnitSystem.prefixes.first { p -> p.exponent <= prefixMagnitude - 1 && p.exponent % 3 == 0}
-    val factor = SciNumber.Real(10).pow(unscaledPrefix.exponent)
+    val factor = SciNumber.Real(10).pow(SciNumber.Real(unscaledPrefix.exponent))
 
     val prefix =
             if (unit.components.size == 1) {

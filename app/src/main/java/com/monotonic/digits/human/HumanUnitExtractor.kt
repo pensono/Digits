@@ -5,6 +5,7 @@ import com.monotonic.digits.evaluator.parse
 import com.monotonic.digits.parser.DigitsLexer
 import com.monotonic.digits.parser.DigitsParser
 import com.monotonic.digits.parser.DigitsParserBaseVisitor
+import com.monotonic.digits.units.DimensionBag
 import org.antlr.v4.runtime.misc.Interval
 
 /**
@@ -16,7 +17,7 @@ fun usedUnits(input: String) : Set<HumanUnit> = parse(input, UsedUnitsExtractor,
 /***
  * @return Map of dimension to the largest prefixed unit which used it
  */
-fun largestUsedUnits(input: String) : Map<Map<String, Int>, HumanUnit> {
+fun largestUsedUnits(input: String) : Map<DimensionBag, HumanUnit> {
     val usedUnits = usedUnits(input)
     return usedUnits.groupBy { it.dimensions }
             .mapValues { (_, values) -> values.maxBy { it.exponentMagnitude }!! }

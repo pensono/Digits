@@ -27,19 +27,16 @@ import android.graphics.drawable.*
 
 class MainActivity : Activity() {
     companion object {
-        public val TAG = "Digits_MainActivity"
+        val TAG = "Digits_MainActivity"
     }
     private val history = mutableListOf<HistoryItem>()
-    private val preferredUnits = mutableMapOf<Map<String, Int>, HumanUnit>()
+    private val preferredUnits = mutableMapOf<DimensionBag, HumanUnit>()
 
     private var floating : View? = null
     private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
     private var editingUnit : Boolean = false
         set(value) {
             field = value
-            if (field) {
-
-            }
             updatePreview()
         }
 

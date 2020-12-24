@@ -2,6 +2,7 @@ package com.monotonic.digits
 
 import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
+import com.monotonic.digits.units.DimensionBag
 import com.monotonic.digits.units.NaturalUnit
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -11,7 +12,7 @@ import org.junit.Test
  */
 class QuantityTest {
     val meters = NaturalUnit(mapOf("length" to 1))
-    val kilometers = NaturalUnit(mapOf("length" to 1), Kilo)
+    val kilometers = NaturalUnit(DimensionBag("length" to 1), Kilo)
 
     @Test
     fun plus() {

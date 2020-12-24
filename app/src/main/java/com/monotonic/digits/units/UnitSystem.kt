@@ -4,32 +4,33 @@ import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.human.AtomicHumanUnit
 
 object UnitSystem { // Preferred Units?
-    val length = mapOf("length" to 1)
-    val area = mapOf("length" to 2)
-    val volume = mapOf("length" to 3)
-    val time = mapOf("time" to 1)
-    val frequency = mapOf("time" to -1)
-    val angle = mapOf("angle" to 1)
-    val solid_angle = mapOf("angle" to 2)
-    val mass = mapOf("mass" to 1)
-    val current = mapOf("current" to 1)
-    val emf = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -1)
-    val impedance = mapOf("mass" to 1, "length" to 2, "time" to -3, "current" to -2)
-    val conductance = mapOf("mass" to -1, "length" to -2, "time" to 3, "current" to 2)
-    val capacitance = mapOf("mass" to -1, "length" to -2, "time" to 4, "current" to 2)
-    val power = mapOf("mass" to 1, "length" to 2, "time" to -3)
-    val energy = mapOf("mass" to 1, "length" to 2, "time" to -2)
-    val magnetic_flux = mapOf("mass" to 1, "length" to 2, "time" to 2, "current" to -3)
-    val magnetic_flux_density = mapOf("mass" to 1, "time" to 2, "current" to -3)
-    val inductance = mapOf("mass" to 1, "length" to 2, "time" to -2, "current" to -2)
-    val force = mapOf("mass" to 1, "length" to 1, "time" to -2)
-    val charge = mapOf("current" to 1, "time" to 1)
-    val pressure = mapOf("mass" to 1, "time" to -2, "length" to 1)
-    val data = mapOf("data" to 1)
-    val molarity = mapOf("molarity" to 1)
+    val length = DimensionBag("length" to 1)
+    val area = DimensionBag("length" to 2)
+    val volume = DimensionBag("length" to 3)
+    val time = DimensionBag("time" to 1)
+    val frequency = DimensionBag("time" to -1)
+    val angle = DimensionBag("angle" to 1)
+    val solid_angle = DimensionBag("angle" to 2)
+    val mass = DimensionBag("mass" to 1)
+    val current = DimensionBag("current" to 1)
+    val emf = DimensionBag("mass" to 1, "length" to 2, "time" to -3, "current" to -1)
+    val impedance = DimensionBag("mass" to 1, "length" to 2, "time" to -3, "current" to -2)
+    val conductance = DimensionBag("mass" to -1, "length" to -2, "time" to 3, "current" to 2)
+    val capacitance = DimensionBag("mass" to -1, "length" to -2, "time" to 4, "current" to 2)
+    val power = DimensionBag("mass" to 1, "length" to 2, "time" to -3)
+    val energy = DimensionBag("mass" to 1, "length" to 2, "time" to -2)
+    val magnetic_flux = DimensionBag("mass" to 1, "length" to 2, "time" to 2, "current" to -3)
+    val magnetic_flux_density = DimensionBag("mass" to 1, "time" to 2, "current" to -3)
+    val inductance = DimensionBag("mass" to 1, "length" to 2, "time" to -2, "current" to -2)
+    val force = DimensionBag("mass" to 1, "length" to 1, "time" to -2)
+    val charge = DimensionBag("current" to 1, "time" to 1)
+    val pressure = DimensionBag("mass" to 1, "time" to -2, "length" to 1)
+    val data = DimensionBag("data" to 1)
+    val molarity = DimensionBag("molarity" to 1)
 
     val tt = mapOf<String, Int>()
 
+    // Not 100% sure about the fact that this lives here. Should it be NaturalUnit.Void?
     val void = NaturalUnit(mapOf()) // Called this to avoid confusion with "unit", the intended name
 
     val units = listOf(
@@ -38,7 +39,7 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("ft", "Feet", "12in", length, SciNumber.Real(0.3048)),
             AtomicHumanUnit("mi", "Miles", "5280ft", length, SciNumber.Real(1609.344)),
             AtomicHumanUnit("au", "Astronomical Units", "149,597,870,700m", length, SciNumber.Real("149597870700")),
-            AtomicHumanUnit("pc", "Parsecs", "648,000/π au", length, (SciNumber.Real("3.08567758149137") * SciNumber.Real(10).pow(16)) as SciNumber.Real),
+            AtomicHumanUnit("pc", "Parsecs", "648,000/π au", length, (SciNumber.Real("3.08567758149137") * SciNumber.Real(10).pow(SciNumber.Real(16))) as SciNumber.Real),
             AtomicHumanUnit("ly", "Light Years", "9.46ᴇ12km", length, SciNumber.Real("9460730472580800")),
 
             AtomicHumanUnit("L", "Liters", "1000cm³", volume, SciNumber.Real(1000).reciprocal()),
@@ -89,8 +90,8 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("BTU", "ISO British Thermal Units", "11055.06 J", energy, SciNumber.Real("1055.06")),
 
             //AtomicHumanUnit("eV", "Electronvolts", null, mass), // The abbreviation should be eV/c2, and we can't parse that night now
-            AtomicHumanUnit("u", "Unified Atomic Mass Units", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
-            AtomicHumanUnit("Da", "Dalton", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(-27)) as SciNumber.Real),
+            AtomicHumanUnit("u", "Unified Atomic Mass Units", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(SciNumber.Real(-27))) as SciNumber.Real),
+            AtomicHumanUnit("Da", "Dalton", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(SciNumber.Real(-27))) as SciNumber.Real),
             AtomicHumanUnit("lb", "Pound", null, mass, SciNumber.Real("453.5924")),
 
             AtomicHumanUnit("c", "US Customary Cup", "¹⁄₂pt", volume,    SciNumber.Real("0.0002365882365")),
