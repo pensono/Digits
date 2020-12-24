@@ -1,4 +1,4 @@
-// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.8
+// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.9
 package com.monotonic.digits.parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -17,14 +17,14 @@ public class DigitsParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProductExpression(DigitsParser.ProductExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitExponentExpression(DigitsParser.ExponentExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExponent(DigitsParser.ExponentContext ctx) { return visitChildren(ctx); }
+	@Override public T visitProductExpression(DigitsParser.ProductExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -42,6 +42,8 @@ Backlog:
 - Make the ErrorInput not show underlines when using swiftkey
 - log(1e3) isn't quite equal to 3
 - Evaluate mismatched parentheses
+- Error for just a superscript minus
+- Underline sigfigs option
 
 Pro Mode:
 - Unlock all skins

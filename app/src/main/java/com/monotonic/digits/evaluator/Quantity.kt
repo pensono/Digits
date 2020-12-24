@@ -38,13 +38,12 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     }
 
     fun pow(other: Quantity) : Quantity {
-        if (other.normalizedValue !is SciNumber.Real) throw RuntimeException("Exponentiation is only allowed if the power is real")
         if (!other.unit.dimensionallyEqual(UnitSystem.void)) throw RuntimeException("Exponentiation is only allowed if the power is dimensionless")
 
         return if (unit.dimensionallyEqual(UnitSystem.void)) {
             Quantity(value.pow(other.value), unit)
         } else {
-            if (!other.normalizedValue.isIntegral()) throw RuntimeException("Exponentiation of a base with units is only allowed if the power is integral")
+            if (other.normalizedValue !is SciNumber.Real || !other.normalizedValue.isIntegral()) throw RuntimeException("Exponentiation of a base with units is only allowed if the power is integral")
 
             val integralExponent = other.normalizedValue.toInt()
 

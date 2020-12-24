@@ -1,4 +1,4 @@
-// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.8
+// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.9
 package com.monotonic.digits.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class DigitsParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.9", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -104,6 +104,32 @@ public class DigitsParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
+	public static class ExponentExpressionContext extends ExpressionContext {
+		public ExpressionContext base;
+		public Token operator;
+		public ExpressionContext exponent;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode CARET() { return getToken(DigitsParser.CARET, 0); }
+		public ExponentExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof DigitsParserListener ) ((DigitsParserListener)listener).enterExponentExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof DigitsParserListener ) ((DigitsParserListener)listener).exitExponentExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof DigitsParserVisitor ) return ((DigitsParserVisitor<? extends T>)visitor).visitExponentExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class ProductExpressionContext extends ExpressionContext {
 		public ExpressionContext lhs;
 		public Token operation;
@@ -128,33 +154,6 @@ public class DigitsParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof DigitsParserVisitor ) return ((DigitsParserVisitor<? extends T>)visitor).visitProductExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class ExponentContext extends ExpressionContext {
-		public ExpressionContext base;
-		public Token sign;
-		public TerminalNode CARET() { return getToken(DigitsParser.CARET, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public List<TerminalNode> Digit() { return getTokens(DigitsParser.Digit); }
-		public TerminalNode Digit(int i) {
-			return getToken(DigitsParser.Digit, i);
-		}
-		public TerminalNode MINUS() { return getToken(DigitsParser.MINUS, 0); }
-		public ExponentContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof DigitsParserListener ) ((DigitsParserListener)listener).enterExponent(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof DigitsParserListener ) ((DigitsParserListener)listener).exitExponent(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof DigitsParserVisitor ) return ((DigitsParserVisitor<? extends T>)visitor).visitExponent(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -312,17 +311,17 @@ public class DigitsParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(41);
+			setState(34);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(39);
+					setState(32);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ProductExpressionContext(new ExpressionContext(_parentctx, _parentState));
@@ -369,51 +368,23 @@ public class DigitsParser extends Parser {
 						break;
 					case 3:
 						{
-						_localctx = new ExponentContext(new ExpressionContext(_parentctx, _parentState));
-						((ExponentContext)_localctx).base = _prevctx;
+						_localctx = new ExponentExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((ExponentExpressionContext)_localctx).base = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(29);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 						setState(30);
-						match(CARET);
-						setState(32);
-						_errHandler.sync(this);
-						_la = _input.LA(1);
-						if (_la==MINUS) {
-							{
-							setState(31);
-							((ExponentContext)_localctx).sign = match(MINUS);
-							}
-						}
-
-						setState(35); 
-						_errHandler.sync(this);
-						_alt = 1;
-						do {
-							switch (_alt) {
-							case 1:
-								{
-								{
-								setState(34);
-								match(Digit);
-								}
-								}
-								break;
-							default:
-								throw new NoViableAltException(this);
-							}
-							setState(37); 
-							_errHandler.sync(this);
-							_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
-						} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
+						((ExponentExpressionContext)_localctx).operator = match(CARET);
+						setState(31);
+						((ExponentExpressionContext)_localctx).exponent = expression(3);
 						}
 						break;
 					}
 					} 
 				}
-				setState(43);
+				setState(36);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			}
 			}
 		}
@@ -551,14 +522,14 @@ public class DigitsParser extends Parser {
 		int _la;
 		try {
 			int _alt;
-			setState(71);
+			setState(64);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Letter:
 				_localctx = new AlphabeticContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(45); 
+				setState(38); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -566,7 +537,7 @@ public class DigitsParser extends Parser {
 					case 1:
 						{
 						{
-						setState(44);
+						setState(37);
 						match(Letter);
 						}
 						}
@@ -574,9 +545,9 @@ public class DigitsParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(47); 
+					setState(40); 
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				}
 				break;
@@ -584,19 +555,19 @@ public class DigitsParser extends Parser {
 				_localctx = new ScientificNotationContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(49);
+				setState(42);
 				match(SCI_E);
-				setState(51);
+				setState(44);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==MINUS) {
 					{
-					setState(50);
+					setState(43);
 					((ScientificNotationContext)_localctx).sign = match(MINUS);
 					}
 				}
 
-				setState(54); 
+				setState(47); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -604,7 +575,7 @@ public class DigitsParser extends Parser {
 					case 1:
 						{
 						{
-						setState(53);
+						setState(46);
 						match(Digit);
 						}
 						}
@@ -612,9 +583,9 @@ public class DigitsParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(56); 
+					setState(49); 
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				}
 				break;
@@ -622,11 +593,11 @@ public class DigitsParser extends Parser {
 				_localctx = new ParenthesizedExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(58);
+				setState(51);
 				match(LPAREN);
-				setState(59);
+				setState(52);
 				((ParenthesizedExpressionContext)_localctx).inner = expression(0);
-				setState(60);
+				setState(53);
 				match(RPAREN);
 				}
 				break;
@@ -635,7 +606,7 @@ public class DigitsParser extends Parser {
 				_localctx = new NumericLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(62);
+				setState(55);
 				value();
 				}
 				break;
@@ -644,17 +615,17 @@ public class DigitsParser extends Parser {
 				_localctx = new TermExponentContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(64);
+				setState(57);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==SUPERSCRIPT_MINUS) {
 					{
-					setState(63);
+					setState(56);
 					match(SUPERSCRIPT_MINUS);
 					}
 				}
 
-				setState(67); 
+				setState(60); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -662,7 +633,7 @@ public class DigitsParser extends Parser {
 					case 1:
 						{
 						{
-						setState(66);
+						setState(59);
 						match(Superscript);
 						}
 						}
@@ -670,9 +641,9 @@ public class DigitsParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(69); 
+					setState(62); 
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				}
 				break;
@@ -721,13 +692,13 @@ public class DigitsParser extends Parser {
 		enterRule(_localctx, 4, RULE_value);
 		try {
 			int _alt;
-			setState(93);
+			setState(86);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Digit:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(74); 
+				setState(67); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -735,7 +706,7 @@ public class DigitsParser extends Parser {
 					case 1:
 						{
 						{
-						setState(73);
+						setState(66);
 						match(Digit);
 						}
 						}
@@ -743,32 +714,32 @@ public class DigitsParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(76); 
+					setState(69); 
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,13,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
-				setState(85);
+				setState(78);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
 				case 1:
 					{
-					setState(78);
+					setState(71);
 					match(DOT);
-					setState(82);
+					setState(75);
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 					while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 						if ( _alt==1 ) {
 							{
 							{
-							setState(79);
+							setState(72);
 							match(Digit);
 							}
 							} 
 						}
-						setState(84);
+						setState(77);
 						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 					}
 					}
 					break;
@@ -778,9 +749,9 @@ public class DigitsParser extends Parser {
 			case DOT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(87);
+				setState(80);
 				match(DOT);
-				setState(89); 
+				setState(82); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -788,7 +759,7 @@ public class DigitsParser extends Parser {
 					case 1:
 						{
 						{
-						setState(88);
+						setState(81);
 						match(Digit);
 						}
 						}
@@ -796,9 +767,9 @@ public class DigitsParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(91); 
+					setState(84); 
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				}
 				break;
@@ -857,30 +828,30 @@ public class DigitsParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(108); 
+			setState(101); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(95);
+				setState(88);
 				match(Letter);
-				setState(106);
+				setState(99);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case Digit:
 					{
-					setState(97); 
+					setState(90); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					do {
 						{
 						{
-						setState(96);
+						setState(89);
 						match(Digit);
 						}
 						}
-						setState(99); 
+						setState(92); 
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					} while ( _la==Digit );
@@ -888,17 +859,17 @@ public class DigitsParser extends Parser {
 					break;
 				case Superscript:
 					{
-					setState(102); 
+					setState(95); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					do {
 						{
 						{
-						setState(101);
+						setState(94);
 						match(Superscript);
 						}
 						}
-						setState(104); 
+						setState(97); 
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					} while ( _la==Superscript );
@@ -913,41 +884,41 @@ public class DigitsParser extends Parser {
 				}
 				}
 				}
-				setState(110); 
+				setState(103); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==Letter );
-			setState(130);
+			setState(123);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==DIVIDE) {
 				{
-				setState(112);
+				setState(105);
 				match(DIVIDE);
-				setState(126); 
+				setState(119); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(113);
+					setState(106);
 					match(Letter);
-					setState(124);
+					setState(117);
 					_errHandler.sync(this);
 					switch (_input.LA(1)) {
 					case Digit:
 						{
-						setState(115); 
+						setState(108); 
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 						do {
 							{
 							{
-							setState(114);
+							setState(107);
 							match(Digit);
 							}
 							}
-							setState(117); 
+							setState(110); 
 							_errHandler.sync(this);
 							_la = _input.LA(1);
 						} while ( _la==Digit );
@@ -955,17 +926,17 @@ public class DigitsParser extends Parser {
 						break;
 					case Superscript:
 						{
-						setState(120); 
+						setState(113); 
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 						do {
 							{
 							{
-							setState(119);
+							setState(112);
 							match(Superscript);
 							}
 							}
-							setState(122); 
+							setState(115); 
 							_errHandler.sync(this);
 							_la = _input.LA(1);
 						} while ( _la==Superscript );
@@ -979,7 +950,7 @@ public class DigitsParser extends Parser {
 					}
 					}
 					}
-					setState(128); 
+					setState(121); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==Letter );
@@ -1030,17 +1001,17 @@ public class DigitsParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(133); 
+			setState(126); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(132);
+				setState(125);
 				match(Letter);
 				}
 				}
-				setState(135); 
+				setState(128); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==Letter );
@@ -1077,47 +1048,43 @@ public class DigitsParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20\u008c\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20\u0085\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\2\3\2\5\2\21\n\2\3\2\6\2\24"+
-		"\n\2\r\2\16\2\25\5\2\30\n\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\5\2#\n"+
-		"\2\3\2\6\2&\n\2\r\2\16\2\'\7\2*\n\2\f\2\16\2-\13\2\3\3\6\3\60\n\3\r\3"+
-		"\16\3\61\3\3\3\3\5\3\66\n\3\3\3\6\39\n\3\r\3\16\3:\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\5\3C\n\3\3\3\6\3F\n\3\r\3\16\3G\5\3J\n\3\3\4\6\4M\n\4\r\4\16\4N\3"+
-		"\4\3\4\7\4S\n\4\f\4\16\4V\13\4\5\4X\n\4\3\4\3\4\6\4\\\n\4\r\4\16\4]\5"+
-		"\4`\n\4\3\5\3\5\6\5d\n\5\r\5\16\5e\3\5\6\5i\n\5\r\5\16\5j\5\5m\n\5\6\5"+
-		"o\n\5\r\5\16\5p\3\5\3\5\3\5\6\5v\n\5\r\5\16\5w\3\5\6\5{\n\5\r\5\16\5|"+
-		"\5\5\177\n\5\6\5\u0081\n\5\r\5\16\5\u0082\5\5\u0085\n\5\3\6\6\6\u0088"+
-		"\n\6\r\6\16\6\u0089\3\6\2\3\2\7\2\4\6\b\n\2\4\3\2\4\5\3\2\6\7\2\u00a8"+
-		"\2\27\3\2\2\2\4I\3\2\2\2\6_\3\2\2\2\bn\3\2\2\2\n\u0087\3\2\2\2\f\r\b\2"+
-		"\1\2\r\16\7\7\2\2\16\30\5\2\2\7\17\21\7\6\2\2\20\17\3\2\2\2\20\21\3\2"+
-		"\2\2\21\23\3\2\2\2\22\24\5\4\3\2\23\22\3\2\2\2\24\25\3\2\2\2\25\23\3\2"+
-		"\2\2\25\26\3\2\2\2\26\30\3\2\2\2\27\f\3\2\2\2\27\20\3\2\2\2\30+\3\2\2"+
-		"\2\31\32\f\6\2\2\32\33\t\2\2\2\33*\5\2\2\7\34\35\f\5\2\2\35\36\t\3\2\2"+
-		"\36*\5\2\2\6\37 \f\4\2\2 \"\7\b\2\2!#\7\7\2\2\"!\3\2\2\2\"#\3\2\2\2#%"+
-		"\3\2\2\2$&\7\r\2\2%$\3\2\2\2&\'\3\2\2\2\'%\3\2\2\2\'(\3\2\2\2(*\3\2\2"+
-		"\2)\31\3\2\2\2)\34\3\2\2\2)\37\3\2\2\2*-\3\2\2\2+)\3\2\2\2+,\3\2\2\2,"+
-		"\3\3\2\2\2-+\3\2\2\2.\60\7\20\2\2/.\3\2\2\2\60\61\3\2\2\2\61/\3\2\2\2"+
-		"\61\62\3\2\2\2\62J\3\2\2\2\63\65\7\n\2\2\64\66\7\7\2\2\65\64\3\2\2\2\65"+
-		"\66\3\2\2\2\668\3\2\2\2\679\7\r\2\28\67\3\2\2\29:\3\2\2\2:8\3\2\2\2:;"+
-		"\3\2\2\2;J\3\2\2\2<=\7\13\2\2=>\5\2\2\2>?\7\f\2\2?J\3\2\2\2@J\5\6\4\2"+
-		"AC\7\17\2\2BA\3\2\2\2BC\3\2\2\2CE\3\2\2\2DF\7\16\2\2ED\3\2\2\2FG\3\2\2"+
-		"\2GE\3\2\2\2GH\3\2\2\2HJ\3\2\2\2I/\3\2\2\2I\63\3\2\2\2I<\3\2\2\2I@\3\2"+
-		"\2\2IB\3\2\2\2J\5\3\2\2\2KM\7\r\2\2LK\3\2\2\2MN\3\2\2\2NL\3\2\2\2NO\3"+
-		"\2\2\2OW\3\2\2\2PT\7\t\2\2QS\7\r\2\2RQ\3\2\2\2SV\3\2\2\2TR\3\2\2\2TU\3"+
-		"\2\2\2UX\3\2\2\2VT\3\2\2\2WP\3\2\2\2WX\3\2\2\2X`\3\2\2\2Y[\7\t\2\2Z\\"+
-		"\7\r\2\2[Z\3\2\2\2\\]\3\2\2\2][\3\2\2\2]^\3\2\2\2^`\3\2\2\2_L\3\2\2\2"+
-		"_Y\3\2\2\2`\7\3\2\2\2al\7\20\2\2bd\7\r\2\2cb\3\2\2\2de\3\2\2\2ec\3\2\2"+
-		"\2ef\3\2\2\2fm\3\2\2\2gi\7\16\2\2hg\3\2\2\2ij\3\2\2\2jh\3\2\2\2jk\3\2"+
-		"\2\2km\3\2\2\2lc\3\2\2\2lh\3\2\2\2lm\3\2\2\2mo\3\2\2\2na\3\2\2\2op\3\2"+
-		"\2\2pn\3\2\2\2pq\3\2\2\2q\u0084\3\2\2\2r\u0080\7\5\2\2s~\7\20\2\2tv\7"+
-		"\r\2\2ut\3\2\2\2vw\3\2\2\2wu\3\2\2\2wx\3\2\2\2x\177\3\2\2\2y{\7\16\2\2"+
-		"zy\3\2\2\2{|\3\2\2\2|z\3\2\2\2|}\3\2\2\2}\177\3\2\2\2~u\3\2\2\2~z\3\2"+
-		"\2\2~\177\3\2\2\2\177\u0081\3\2\2\2\u0080s\3\2\2\2\u0081\u0082\3\2\2\2"+
-		"\u0082\u0080\3\2\2\2\u0082\u0083\3\2\2\2\u0083\u0085\3\2\2\2\u0084r\3"+
-		"\2\2\2\u0084\u0085\3\2\2\2\u0085\t\3\2\2\2\u0086\u0088\7\20\2\2\u0087"+
-		"\u0086\3\2\2\2\u0088\u0089\3\2\2\2\u0089\u0087\3\2\2\2\u0089\u008a\3\2"+
-		"\2\2\u008a\13\3\2\2\2\36\20\25\27\"\')+\61\65:BGINTW]_ejlpw|~\u0082\u0084"+
-		"\u0089";
+		"\n\2\r\2\16\2\25\5\2\30\n\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\7\2#\n"+
+		"\2\f\2\16\2&\13\2\3\3\6\3)\n\3\r\3\16\3*\3\3\3\3\5\3/\n\3\3\3\6\3\62\n"+
+		"\3\r\3\16\3\63\3\3\3\3\3\3\3\3\3\3\3\3\5\3<\n\3\3\3\6\3?\n\3\r\3\16\3"+
+		"@\5\3C\n\3\3\4\6\4F\n\4\r\4\16\4G\3\4\3\4\7\4L\n\4\f\4\16\4O\13\4\5\4"+
+		"Q\n\4\3\4\3\4\6\4U\n\4\r\4\16\4V\5\4Y\n\4\3\5\3\5\6\5]\n\5\r\5\16\5^\3"+
+		"\5\6\5b\n\5\r\5\16\5c\5\5f\n\5\6\5h\n\5\r\5\16\5i\3\5\3\5\3\5\6\5o\n\5"+
+		"\r\5\16\5p\3\5\6\5t\n\5\r\5\16\5u\5\5x\n\5\6\5z\n\5\r\5\16\5{\5\5~\n\5"+
+		"\3\6\6\6\u0081\n\6\r\6\16\6\u0082\3\6\2\3\2\7\2\4\6\b\n\2\4\3\2\4\5\3"+
+		"\2\6\7\2\u009f\2\27\3\2\2\2\4B\3\2\2\2\6X\3\2\2\2\bg\3\2\2\2\n\u0080\3"+
+		"\2\2\2\f\r\b\2\1\2\r\16\7\7\2\2\16\30\5\2\2\7\17\21\7\6\2\2\20\17\3\2"+
+		"\2\2\20\21\3\2\2\2\21\23\3\2\2\2\22\24\5\4\3\2\23\22\3\2\2\2\24\25\3\2"+
+		"\2\2\25\23\3\2\2\2\25\26\3\2\2\2\26\30\3\2\2\2\27\f\3\2\2\2\27\20\3\2"+
+		"\2\2\30$\3\2\2\2\31\32\f\6\2\2\32\33\t\2\2\2\33#\5\2\2\7\34\35\f\5\2\2"+
+		"\35\36\t\3\2\2\36#\5\2\2\6\37 \f\4\2\2 !\7\b\2\2!#\5\2\2\5\"\31\3\2\2"+
+		"\2\"\34\3\2\2\2\"\37\3\2\2\2#&\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%\3\3\2\2\2"+
+		"&$\3\2\2\2\')\7\20\2\2(\'\3\2\2\2)*\3\2\2\2*(\3\2\2\2*+\3\2\2\2+C\3\2"+
+		"\2\2,.\7\n\2\2-/\7\7\2\2.-\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60\62\7\r\2\2"+
+		"\61\60\3\2\2\2\62\63\3\2\2\2\63\61\3\2\2\2\63\64\3\2\2\2\64C\3\2\2\2\65"+
+		"\66\7\13\2\2\66\67\5\2\2\2\678\7\f\2\28C\3\2\2\29C\5\6\4\2:<\7\17\2\2"+
+		";:\3\2\2\2;<\3\2\2\2<>\3\2\2\2=?\7\16\2\2>=\3\2\2\2?@\3\2\2\2@>\3\2\2"+
+		"\2@A\3\2\2\2AC\3\2\2\2B(\3\2\2\2B,\3\2\2\2B\65\3\2\2\2B9\3\2\2\2B;\3\2"+
+		"\2\2C\5\3\2\2\2DF\7\r\2\2ED\3\2\2\2FG\3\2\2\2GE\3\2\2\2GH\3\2\2\2HP\3"+
+		"\2\2\2IM\7\t\2\2JL\7\r\2\2KJ\3\2\2\2LO\3\2\2\2MK\3\2\2\2MN\3\2\2\2NQ\3"+
+		"\2\2\2OM\3\2\2\2PI\3\2\2\2PQ\3\2\2\2QY\3\2\2\2RT\7\t\2\2SU\7\r\2\2TS\3"+
+		"\2\2\2UV\3\2\2\2VT\3\2\2\2VW\3\2\2\2WY\3\2\2\2XE\3\2\2\2XR\3\2\2\2Y\7"+
+		"\3\2\2\2Ze\7\20\2\2[]\7\r\2\2\\[\3\2\2\2]^\3\2\2\2^\\\3\2\2\2^_\3\2\2"+
+		"\2_f\3\2\2\2`b\7\16\2\2a`\3\2\2\2bc\3\2\2\2ca\3\2\2\2cd\3\2\2\2df\3\2"+
+		"\2\2e\\\3\2\2\2ea\3\2\2\2ef\3\2\2\2fh\3\2\2\2gZ\3\2\2\2hi\3\2\2\2ig\3"+
+		"\2\2\2ij\3\2\2\2j}\3\2\2\2ky\7\5\2\2lw\7\20\2\2mo\7\r\2\2nm\3\2\2\2op"+
+		"\3\2\2\2pn\3\2\2\2pq\3\2\2\2qx\3\2\2\2rt\7\16\2\2sr\3\2\2\2tu\3\2\2\2"+
+		"us\3\2\2\2uv\3\2\2\2vx\3\2\2\2wn\3\2\2\2ws\3\2\2\2wx\3\2\2\2xz\3\2\2\2"+
+		"yl\3\2\2\2z{\3\2\2\2{y\3\2\2\2{|\3\2\2\2|~\3\2\2\2}k\3\2\2\2}~\3\2\2\2"+
+		"~\t\3\2\2\2\177\u0081\7\20\2\2\u0080\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082"+
+		"\u0080\3\2\2\2\u0082\u0083\3\2\2\2\u0083\13\3\2\2\2\34\20\25\27\"$*.\63"+
+		";@BGMPVX^ceipuw{}\u0082";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

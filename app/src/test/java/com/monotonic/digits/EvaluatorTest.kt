@@ -89,6 +89,25 @@ class EvaluatorTest {
     }
 
     @Test
+    fun exponentExpressions() {
+        evalTest(Quantity(SciNumber.Real("8")), "2^(3)")
+        evalTest(Quantity(SciNumber.Real("2")), "4^(.5)")
+        evalTest(Quantity(SciNumber.Real("4")), "2^(1+1)")
+        evalTest(Quantity(SciNumber.Real(".5")), "4^(-.5)")
+        evalTest(Quantity(SciNumber.Real("4.17116751095")), "3^(1.3)")
+        evalTest(Quantity(SciNumber.Real("0.23974103111")), "3^(-1.3)")
+        evalTest(Quantity(SciNumber.Nan), "4^(0/0)")
+
+        // Should produce an error
+        errorTest(Interval(1, 1), "4^(1m)")
+    }
+
+    @Test
+    fun exponentiationWithUnits() {
+        evalTest(Quantity(SciNumber.Real("4"), u("m") * 2), "(2m)^2")
+    }
+
+    @Test
     fun alternativeMultiplicationSign() {
         evalTest(Quantity(SciNumber.Real("8")), "4×2")
     }
@@ -154,6 +173,12 @@ class EvaluatorTest {
 
         // -4, 4 or 0 works here in that order of preference
         correctionTest(Quantity(SciNumber.Real("0")), "4*-") // It would be nice to get -4 here, but that's alot of work
+    }
+
+    @Test
+    fun partialExponentiation() {
+        correctionTest(Quantity(SciNumber.Real("4")), "4^")
+        correctionTest(Quantity(SciNumber.Real("4")), "^4") // Ideally is 1, but the parser gives 4 which is also reasonable
     }
 
     @Test
@@ -243,6 +268,13 @@ class EvaluatorTest {
     @Test
     fun startWithSuperscript() {
         errorTest(Interval(0, 0), "²2")
+    }
+
+    @Test
+    fun divideByZeroNans() {
+        evalTest(Quantity(SciNumber.Nan), "0/0")
+        evalTest(Quantity(SciNumber.Nan), "0/(1-1)")
+        evalTest(Quantity(SciNumber.Nan, u("m")), "1m/0")
     }
 
     @Test
@@ -339,7 +371,7 @@ class EvaluatorTest {
 
     private fun evalTest(expected: Quantity, input: String) {
         val result = evaluateExpression(input)
-        Assert.assertTrue(result.errors.isEmpty())
+        Assert.assertTrue("Error emitted: ${result.errors}", result.errors.isEmpty())
         Assert.assertEquals(expected.value.toDouble(), result.value.value.toDouble(), 1e-6)
     }
 
@@ -349,9 +381,9 @@ class EvaluatorTest {
         Assert.assertTrue(result.errors.isNotEmpty())
     }
 
-    private fun errorTest(errorLocation: Interval, input: String) {
+    private fun errorTest(expectedErrorLocation: Interval, input: String) {
         val result = evaluateExpression(input)
-        Assert.assertTrue(result.errors.any { err -> err.location == errorLocation })
+        Assert.assertTrue("No error found at $expectedErrorLocation. Errors: ${result.errors}", result.errors.any { err -> err.location == expectedErrorLocation })
     }
 
     private fun anyErrorTest(input: String) {

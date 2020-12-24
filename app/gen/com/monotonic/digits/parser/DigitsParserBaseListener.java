@@ -1,4 +1,4 @@
-// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.8
+// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.9
 package com.monotonic.digits.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -16,6 +16,18 @@ public class DigitsParserBaseListener implements DigitsParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExponentExpression(DigitsParser.ExponentExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExponentExpression(DigitsParser.ExponentExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterProductExpression(DigitsParser.ProductExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -23,18 +35,6 @@ public class DigitsParserBaseListener implements DigitsParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitProductExpression(DigitsParser.ProductExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExponent(DigitsParser.ExponentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExponent(DigitsParser.ExponentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

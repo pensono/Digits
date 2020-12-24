@@ -95,16 +95,19 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
         return lhsResult.combine(rhsResult, ctx.sourceInterval, operation)
     }
 
-    override fun visitExponent(ctx: DigitsParser.ExponentContext): ParseResult<Quantity> {
+    override fun visitExponentExpression(ctx: DigitsParser.ExponentExpressionContext): ParseResult<Quantity> {
         val baseResult = ctx.base?.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", ctx.base.sourceInterval))
-        val exponentMag = if (ctx.Digit().isEmpty()) 1 else parseNumber(ctx.Digit().joinToString("") { it.text })
-        val sign = if (ctx.sign == null) 1 else -1
+        var exponentResult = ctx.exponent?.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred exponent in ^", ctx.exponent.sourceInterval))
 
-        // Will need to be changed for expressions in the exponent
-        // Make sure to verify the base and exponent units
-        val exponent = Quantity(SciNumber.Real(sign * exponentMag))
+        if (!exponentResult.value.unit.dimensionallyEqual(UnitSystem.void)) {
+            exponentResult = exponentResult.copy(Quantity(exponentResult.value.value, UnitSystem.void)).error(ErrorMessage("Exponent has a unit", intervalOf(ctx.operator)))
+        }
 
-        return baseResult.invoke { base -> base.pow(exponent) }
+        if (!baseResult.value.unit.dimensionallyEqual(UnitSystem.void) && (exponentResult.value.normalizedValue is SciNumber.Real && !exponentResult.value.normalizedValue.isIntegral())) {
+            exponentResult = exponentResult.copy(Quantity(SciNumber.One, exponentResult.value.unit)).error(ErrorMessage("Exponent of a number with a unit is not integral", intervalOf(ctx.operator)))
+        }
+
+        return baseResult.combine(exponentResult, ctx.sourceInterval, Quantity::pow)
     }
 
     // TODO try and factor this

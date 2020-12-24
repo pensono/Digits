@@ -196,6 +196,12 @@ class SciNumberTest {
     }
 
     @Test
+    fun divideByZeroProducesNan() {
+        assertEquals(SciNumber.Nan, SciNumber.Zero / SciNumber.Zero)
+        assertEquals(SciNumber.Nan, SciNumber.One / SciNumber.Zero)
+    }
+
+    @Test
     fun logPrecision() {
         // Not actually how it should work. For now, just keep the original precision
         assertEquals(SciNumber.Real("2", sf(2)), SciNumber.Real("100", sf(2)).log(BigDecimal.TEN))

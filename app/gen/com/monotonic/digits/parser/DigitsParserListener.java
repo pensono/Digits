@@ -1,4 +1,4 @@
-// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.8
+// Generated from F:/Data/Code/Android/Digits/app/src/main/antlr\DigitsParser.g4 by ANTLR 4.9
 package com.monotonic.digits.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -7,6 +7,18 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  * {@link DigitsParser}.
  */
 public interface DigitsParserListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by the {@code ExponentExpression}
+	 * labeled alternative in {@link DigitsParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExponentExpression(DigitsParser.ExponentExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ExponentExpression}
+	 * labeled alternative in {@link DigitsParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExponentExpression(DigitsParser.ExponentExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ProductExpression}
 	 * labeled alternative in {@link DigitsParser#expression}.
@@ -19,18 +31,6 @@ public interface DigitsParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProductExpression(DigitsParser.ProductExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code Exponent}
-	 * labeled alternative in {@link DigitsParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExponent(DigitsParser.ExponentContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code Exponent}
-	 * labeled alternative in {@link DigitsParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExponent(DigitsParser.ExponentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ValueExpression}
 	 * labeled alternative in {@link DigitsParser#expression}.

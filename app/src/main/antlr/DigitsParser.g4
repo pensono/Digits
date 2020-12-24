@@ -6,7 +6,7 @@ expression
     : MINUS argument=expression # UnaryMinus
     | lhs=expression operation=(TIMES | DIVIDE) rhs=expression # ProductExpression
     | lhs=expression operation=(PLUS | MINUS) rhs=expression # SumExpression
-    | base=expression CARET sign=MINUS? Digit+ # Exponent
+    | base=expression operator=CARET exponent=expression # ExponentExpression
     | '+'? terms+=term+ # ValueExpression
     ;
 

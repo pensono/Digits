@@ -158,13 +158,18 @@ sealed class SciNumber {
         override operator fun plus(other: SciNumber) = operation(other, Real::plusReal)
         override operator fun minus(other: SciNumber) = operation(other, Real::minusReal)
         override operator fun times(other: SciNumber) = operation(other, Real::timesReal)
-        override operator fun div(other: SciNumber) = operation(other, Real::divReal)
+        override operator fun div(other: SciNumber) = if (other == Zero) Nan else operation(other, Real::divReal)
         override fun pow(other: SciNumber) = operation(other, Real::powReal)
 
         fun plusReal(other: Real) = additiveOperation(other, BigDecimal::add)
         fun minusReal(other: Real) = additiveOperation(other, BigDecimal::minus)
         fun timesReal(other: Real) = Real(backing * other.backing, minPrecision(other))
+
+        /**
+         * Other cannot be zero
+         */
         fun divReal(other: Real) = Real(backing.divide(other.backing, MathContext.DECIMAL128), minPrecision(other))
+
         fun powReal(other: Real): Real {
             val integralPower = backing.pow(other.backing.toInt(), MathContext.DECIMAL128)
             val fractionalPower = BigDecimal(backing.toDouble().pow(other.backing.rem(BigDecimal.ONE).toDouble()))
