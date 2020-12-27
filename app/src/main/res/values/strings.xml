@@ -11,6 +11,8 @@
     <string name="discipline_physics">Physics</string>
     <string name="discipline_carpentry">Carpentry</string>
     <string name="discipline_fluids">Fluids</string>
+    <string name="discipline_basic_us">US Basic</string>
+    <string name="discipline_cooking">Cooking</string>
 
     <string name="custom_discipline">Add custom</string>
     <string name="report_bug">Report an issue</string>
@@ -21,8 +23,6 @@
     <string name="get_pro">Get pro</string>
     <string name="feedback">Feedback</string>
     <string name="skin_dialog_title">Choose Theme</string>
-    <string name="system_metric">Metric</string>
-    <string name="system_us">US Customary</string>
 
     <string name="pref_skin">pref_skin</string>
     <string name="pref_discipline">pref_discipline</string>
@@ -42,6 +42,4 @@
         - Custom skins\n
         - Calculation History\n
     </string>
-    <string name="discipline_basic_us">US Basic</string>
-    <string name="discipline_cooking">Cooking</string>
 </resources>
