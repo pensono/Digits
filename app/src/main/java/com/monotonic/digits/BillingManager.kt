@@ -1,7 +1,9 @@
 package com.monotonic.digits
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.nfc.Tag
 import android.util.Log
 import com.android.billingclient.api.*
 
@@ -18,7 +20,7 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
     // SKU to its details
     private var skuDetails: Map<String, SkuDetails> = mapOf()
 
-    public var hasPro : Boolean = false
+    var hasPro : Boolean = false
         private set
 
     init {
@@ -41,8 +43,7 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
     }
 
     fun refreshPurchases() {
-        val purchasesResult: Purchase.PurchasesResult =
-                billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+        val purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
         purchasesResult.purchasesList?.onEach { handlePurchase(it) }
     }
 
@@ -62,6 +63,7 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
             // Not quite purchased yet. We can't grant anything
             // We're supposed to inform the user that this has occurred but that's not
             // necessary since there's no situation when this would occur
+            Log.w(MainActivity.TAG, "Purchase state is pending.")
         }
     }
 
@@ -69,7 +71,7 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
         val params = SkuDetailsParams.newBuilder()
         params.setSkusList(listOf(PRO_SKU)).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
                 skuDetails = skuDetailsList.associateBy { it.sku }
             } else {
                 logError(billingResult)
@@ -79,31 +81,40 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
     }
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
-        when {
-            billingResult.responseCode == BillingClient.BillingResponseCode.OK -> purchases?.onEach { handlePurchase(it) }
-            billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED -> {
+        when (billingResult.responseCode) {
+            BillingClient.BillingResponseCode.OK -> purchases?.onEach { handlePurchase(it) }
+            BillingClient.BillingResponseCode.USER_CANCELED -> {
                 // Handle an error caused by a user cancelling the purchase flow.
             }
-            else -> // Handle any other error codes.
-                logError(billingResult)
+            else -> logError(billingResult)
         }
     }
 
-    override fun onAcknowledgePurchaseResponse(billingResult: BillingResult?) {
+    override fun onAcknowledgePurchaseResponse(billingResult: BillingResult) {
         // Not sure what to do here
         Log.i(MainActivity.TAG, "Purchase acknowledged")
     }
 
     fun doProPurchase(activity: Activity) {
-        // What if skuDetails does not contain an entry for the PRO SKU?
+        val proSku = skuDetails[PRO_SKU]
+
+        if (proSku == null) {
+            refreshSkuDetails()
+
+            AlertDialog.Builder(activity)
+                    .setMessage("The purchase cannot be started at this time.")
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            return
+        }
+
         val flowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(skuDetails[PRO_SKU])
+                .setSkuDetails(proSku)
                 .build()
         val responseCode = billingClient.launchBillingFlow(activity, flowParams)
 
         Log.i(MainActivity.TAG, "Billing complete. Response code: $responseCode")
     }
-
 }
 
 private fun logError(billingResult: BillingResult?) {

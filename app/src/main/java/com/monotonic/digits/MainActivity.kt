@@ -3,12 +3,10 @@ package com.monotonic.digits
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
 import android.text.Editable
-import android.text.Html
 import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
