@@ -100,6 +100,8 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
                 .setSkuDetails(skuDetails[PRO_SKU])
                 .build()
         val responseCode = billingClient.launchBillingFlow(activity, flowParams)
+
+        Log.i(MainActivity.TAG, "Billing complete. Response code: $responseCode")
     }
 
 }

@@ -58,7 +58,7 @@ sealed class SciNumber {
     abstract operator fun div(other: SciNumber) : SciNumber
     abstract operator fun unaryMinus() : SciNumber
 
-    abstract fun pow(n: SciNumber): SciNumber
+    abstract fun pow(other: SciNumber): SciNumber
     abstract fun sqrt() : SciNumber
     abstract fun log(base: BigDecimal): SciNumber
     abstract fun exp(): SciNumber // Base e
@@ -353,7 +353,7 @@ sealed class SciNumber {
         override operator fun div(other: SciNumber) = this
         override operator fun unaryMinus() = this
 
-        override fun pow(n: SciNumber): SciNumber = this
+        override fun pow(other: SciNumber): SciNumber = this
         override fun sqrt(): SciNumber = this
         override fun log(base: BigDecimal): SciNumber = this
         override fun exp(): SciNumber = this

@@ -93,7 +93,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
     visitQueue.add(HumanUnit(mapOf())) // No prefix
 
     while (visitQueue.isNotEmpty()) {
-        val currentUnit = visitQueue.poll()
+        val currentUnit = visitQueue.poll()!!
         visitedUnits.add(currentUnit)
 
         // I'm not 100% on the fact that this temporarily creates a human unit that has atomic units with degree 0

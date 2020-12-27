@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
 import android.content.Intent
 import android.graphics.drawable.*
+import androidx.core.text.HtmlCompat
 
 
 class MainActivity : Activity() {
@@ -91,7 +92,7 @@ class MainActivity : Activity() {
                 tryUnitConversion()
             }
         })
-        unit_input.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus -> tryUnitConversion() }
+        unit_input.onFocusChangeListener = View.OnFocusChangeListener { _, _ -> tryUnitConversion() }
 
         discipline_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
         discipline_dropdown.setSelection(getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.pref_discipline), 0))
@@ -141,7 +142,7 @@ class MainActivity : Activity() {
         billingManager.refreshPurchases()
     }
 
-    fun numberFormatToggled(view: View) {
+    fun numberFormatToggled(@Suppress("UNUSED_PARAMETER") view: View) {
         with (getPreferences(Context.MODE_PRIVATE).edit()) {
             putBoolean("use_engineering_format", number_format_switcher.isChecked)
             commit()
@@ -149,12 +150,12 @@ class MainActivity : Activity() {
         updatePreview()
     }
 
-    fun toggleUnitConversion(view: View) {
+    fun toggleUnitConversion(@Suppress("UNUSED_PARAMETER") view: View) {
         editingUnit = !editingUnit
         updatePreview()
     }
 
-    fun submitUnitConversion(view: View) {
+    fun submitUnitConversion(@Suppress("UNUSED_PARAMETER") view: View) {
         val unit = parseHumanUnit(unit_input.text.toString()) ?: return
         addPreferredUnit(unit)
     }
@@ -311,7 +312,7 @@ class MainActivity : Activity() {
         // Must use invisible instead of gone because gone won't lay it out (and width and height won't be calculated)
         layout.visibility = View.INVISIBLE
 
-        button.setOnTouchListener { view, motionEvent ->
+        button.setOnTouchListener { _, motionEvent ->
             val buttonRect = Rect()
             val xPos = motionEvent.rawX.toInt()
             val yPos = motionEvent.rawY.toInt()
@@ -364,8 +365,9 @@ class MainActivity : Activity() {
             val fullConvertPrompt = "<font color='$detailColorHex'>Convert </font>${humanizedQuantity.unitString()}<font color='$detailColorHex'> to:</font>"
             val abbreviatedConvertPrompt = "${humanizedQuantity.unitString()}<font color='$detailColorHex'> to:</font>"
             val previewText = if (stringFits("Convert ${humanizedQuantity.unitString()} to:", result_preview)) fullConvertPrompt else abbreviatedConvertPrompt
+            val textHtml = HtmlCompat.fromHtml(previewText, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-            result_preview.setText(htmlToSpannable(previewText), TextView.BufferType.SPANNABLE)
+            result_preview.setText(textHtml, TextView.BufferType.SPANNABLE)
         } else {
             unit_input.visibility = View.GONE
             try {
@@ -446,7 +448,7 @@ class MainActivity : Activity() {
                 else humanString.string
 
         // https://stackoverflow.com/questions/10140893/android-multi-color-in-one-textview
-        return htmlToSpannable(coloredText)
+        return HtmlCompat.fromHtml(coloredText, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     private fun stringFits(input: String, view: TextView) : Boolean {
@@ -473,7 +475,7 @@ class MainActivity : Activity() {
             "fill" to skin.fill
         )
 
-        updateSkinIn(mainRootLayout, colorMap)
+        updateSkinIn(viewGroup, colorMap)
     }
 
     private fun doClearAnimation() {
@@ -492,13 +494,5 @@ class MainActivity : Activity() {
         editor_area.foreground = circleAnimation
 
         circleAnimation.start()
-    }
-}
-
-private fun htmlToSpannable(coloredText: String): Spanned {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        Html.fromHtml(coloredText, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        Html.fromHtml(coloredText)
     }
 }

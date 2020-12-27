@@ -42,8 +42,6 @@ class ErrorInput: EditText, TextWatcher {
         get() = underlinePaint.strokeWidth
         set(value) { underlinePaint.strokeWidth = value }
 
-    private var selectionListeners : List<(Int, Int) -> Unit> = listOf()
-
     private var maxTextSizePx : Float = 0.0f
     private var minTextSizePx : Float = 0.0f
     private var textSizeStepPx : Float = 0.0f
@@ -91,16 +89,6 @@ class ErrorInput: EditText, TextWatcher {
         }
 
         super.onDraw(canvas)
-    }
-
-    fun addSelectionListener(listener: (Int, Int) -> Unit) {
-        selectionListeners += listener
-    }
-
-    override fun onSelectionChanged(selStart: Int, selEnd: Int) {
-        super.onSelectionChanged(selStart, selEnd)
-        // For whatever reason this event is called before the object is fully initialized. -_-
-        selectionListeners?.forEach { it.invoke(selStart, selEnd) }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
