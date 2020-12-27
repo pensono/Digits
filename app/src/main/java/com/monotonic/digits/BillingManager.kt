@@ -3,7 +3,6 @@ package com.monotonic.digits
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.nfc.Tag
 import android.util.Log
 import com.android.billingclient.api.*
 
@@ -12,7 +11,7 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
         const val PRO_SKU = "com.monotonic.digits.pro"
     }
 
-    private val billingClient : BillingClient = BillingClient.newBuilder(context)
+    private val billingClient: BillingClient = BillingClient.newBuilder(context)
             .setListener(this)
             .enablePendingPurchases() // GP requires this be called
             .build()
@@ -20,7 +19,7 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
     // SKU to its details
     private var skuDetails: Map<String, SkuDetails> = mapOf()
 
-    var hasPro : Boolean = false
+    var hasPro: Boolean = false
         private set
 
     init {
@@ -36,6 +35,7 @@ class BillingManager(val context: Context) : PurchasesUpdatedListener, Acknowled
                     Log.i(MainActivity.TAG, "Connected to billing service")
                 }
             }
+
             override fun onBillingServiceDisconnected() {
                 connectToBillingService()
             }

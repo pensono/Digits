@@ -13,7 +13,7 @@ import com.monotonic.digits.R
 /**
  * @author Ethan
  */
-fun createSkinPickerDialog(activity: Activity, billingManager: BillingManager, action: (Skin) -> Unit) : Dialog {
+fun createSkinPickerDialog(activity: Activity, billingManager: BillingManager, action: (Skin) -> Unit): Dialog {
     val builder = AlertDialog.Builder(activity)
     builder.setNegativeButton("Cancel") { d, _ -> d.cancel() }
 

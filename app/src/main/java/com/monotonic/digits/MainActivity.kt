@@ -2,70 +2,78 @@ package com.monotonic.digits
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
+import android.graphics.drawable.Animatable2
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import androidx.core.content.res.ResourcesCompat
-import androidx.preference.PreferenceManager
 import android.text.Editable
 import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
-import android.view.*
+import android.view.Gravity
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.HtmlCompat
+import androidx.preference.PreferenceManager
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.human.*
 import com.monotonic.digits.skin.*
-import com.monotonic.digits.units.*
+import com.monotonic.digits.units.DimensionBag
+import com.monotonic.digits.units.UnitSystem
+import com.monotonic.digits.units.disciplines
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_area.*
-import android.content.Intent
-import android.graphics.drawable.*
-import androidx.core.text.HtmlCompat
 
 
 class MainActivity : Activity() {
     companion object {
         val TAG = "Digits_MainActivity"
     }
+
     private val history = mutableListOf<HistoryItem>()
     private val preferredUnits = mutableMapOf<DimensionBag, HumanUnit>()
 
-    private var floating : View? = null
+    private var floating: View? = null
     private var humanizedQuantity = HumanQuantity(SciNumber.Zero, HumanUnit(mapOf())) // Default value that should be overwritten quickly
-    private var editingUnit : Boolean = false
+    private var editingUnit: Boolean = false
         set(value) {
             field = value
             updatePreview()
         }
 
-    private lateinit var billingManager : BillingManager
+    private lateinit var billingManager: BillingManager
 
     private val editingInput
         get() = if (editingUnit) unit_input else input
 
-    private val resultSeparator : SeparatorType
+    private val resultSeparator: SeparatorType
         get() {
             val spaceSeparate = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("space_grouping", true)
             return if (spaceSeparate) SeparatorType.SPACE else SeparatorType.NONE
         }
 
-    private val numberFormat : NumberFormat
+    private val numberFormat: NumberFormat
         get() {
             val useEngineering = getPreferences(Context.MODE_PRIVATE).getBoolean("use_engineering_format", true)
             return if (useEngineering) NumberFormat.ENGINEERING else NumberFormat.SCIENTIFIC
         }
 
-    private val roundingMode : RoundingMode
+    private val roundingMode: RoundingMode
         get() {
             val roundResults = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("round_results", false)
             return if (roundResults) RoundingMode.SIGFIG else RoundingMode.REMOVE_TRAILING
         }
 
-    private val sigfigHighlight : Boolean
+    private val sigfigHighlight: Boolean
         get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", false)
 
-    private lateinit var skin : Skin
+    private lateinit var skin: Skin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +92,7 @@ class MainActivity : Activity() {
         })
 
         unit_input.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) { }
+            override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 tryUnitConversion()
@@ -98,7 +106,7 @@ class MainActivity : Activity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 populateUnitSelector(disciplines[pos].units, unit_selector)
-                with (getPreferences(Context.MODE_PRIVATE).edit()) {
+                with(getPreferences(Context.MODE_PRIVATE).edit()) {
                     putInt(getString(R.string.pref_discipline), pos)
                     apply()
                 }
@@ -127,7 +135,7 @@ class MainActivity : Activity() {
 
     override fun onPause() {
         super.onPause()
-        with (getPreferences(Context.MODE_PRIVATE).edit()) {
+        with(getPreferences(Context.MODE_PRIVATE).edit()) {
             putString("input_value", input.text.toString())
             apply()
         }
@@ -141,7 +149,7 @@ class MainActivity : Activity() {
     }
 
     fun numberFormatToggled(@Suppress("UNUSED_PARAMETER") view: View) {
-        with (getPreferences(Context.MODE_PRIVATE).edit()) {
+        with(getPreferences(Context.MODE_PRIVATE).edit()) {
             putBoolean("use_engineering_format", number_format_switcher.isChecked)
             commit()
         }
@@ -196,7 +204,7 @@ class MainActivity : Activity() {
                 }
                 R.id.menu_customize -> {
                     val dialog = createSkinPickerDialog(this, billingManager) {
-                        with (getPreferences(Context.MODE_PRIVATE).edit()) {
+                        with(getPreferences(Context.MODE_PRIVATE).edit()) {
                             putString(getString(R.string.pref_skin), resources.getResourceName(it.id))
                             apply()
                         }
@@ -215,7 +223,7 @@ class MainActivity : Activity() {
         }
         popup.inflate(R.menu.popup_menu)
 
-        if (billingManager.hasPro){
+        if (billingManager.hasPro) {
             popup.menu.findItem(R.id.menu_get_pro).isVisible = false
         }
 
@@ -392,7 +400,7 @@ class MainActivity : Activity() {
         return result
     }
 
-    fun populateUnitSelector(units : Collection<AtomicHumanUnit>, container: ViewGroup) {
+    fun populateUnitSelector(units: Collection<AtomicHumanUnit>, container: ViewGroup) {
         container.removeAllViews()
         for (unit in units) {
             val newButton = layoutInflater.inflate(R.layout.button_unit, null) as CalculatorButton
@@ -427,7 +435,7 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun formatResultForDisplay(humanQuantity: HumanQuantity, colorResourceId: Int) : Spanned {
+    private fun formatResultForDisplay(humanQuantity: HumanQuantity, colorResourceId: Int): Spanned {
         val colorStr = hexStringForColor(colorResourceId)
 
         // Find something that fits
@@ -441,7 +449,7 @@ class MainActivity : Activity() {
         val coloredText =
                 if (sigfigHighlight)
                     humanString.string
-                            .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>" )
+                            .replaceRange(humanString.insigfigEnd, humanString.insigfigEnd, "</font>")
                             .replaceRange(humanString.insigfigStart, humanString.insigfigStart, "<font color='$colorStr'>")
                 else humanString.string
 
@@ -449,9 +457,9 @@ class MainActivity : Activity() {
         return HtmlCompat.fromHtml(coloredText, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
-    private fun stringFits(input: String, view: TextView) : Boolean {
+    private fun stringFits(input: String, view: TextView): Boolean {
         val availableSpacePx = view.width - view.paddingRight - view.paddingLeft
-        val textSize : Float = view.paint.measureText(input)
+        val textSize: Float = view.paint.measureText(input)
         return textSize <= availableSpacePx
     }
 
@@ -465,12 +473,12 @@ class MainActivity : Activity() {
 
     private fun applySkinIn(viewGroup: ViewGroup) {
         val colorMap = mapOf(
-            "primary" to skin.primary,
-            "primary_dim" to skin.primaryDim,
-            "primary_dark" to skin.primaryDark,
-            "primary_light" to skin.primaryLight,
-            "accent" to skin.accent,
-            "fill" to skin.fill
+                "primary" to skin.primary,
+                "primary_dim" to skin.primaryDim,
+                "primary_dark" to skin.primaryDark,
+                "primary_light" to skin.primaryLight,
+                "accent" to skin.accent,
+                "fill" to skin.fill
         )
 
         updateSkinIn(viewGroup, colorMap)

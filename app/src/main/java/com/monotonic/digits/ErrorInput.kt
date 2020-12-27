@@ -3,23 +3,22 @@ package com.monotonic.digits
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.util.AttributeSet
-import android.widget.EditText
-import com.monotonic.digits.evaluator.ErrorMessage
 import android.graphics.Paint
 import android.graphics.Rect
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
+import android.widget.EditText
+import com.monotonic.digits.evaluator.ErrorMessage
 import java.lang.Math.max
-import java.lang.Math.min
 
 
 /**
  * @author Ethan
  */
-class ErrorInput: EditText, TextWatcher {
+class ErrorInput : EditText, TextWatcher {
     companion object {
         val TAG = "Digits_ErrorInput"
     }
@@ -30,21 +29,25 @@ class ErrorInput: EditText, TextWatcher {
         init(context, attrs, defStyleAttr)
     }
 
-    var errors : Collection<ErrorMessage> = listOf()
+    var errors: Collection<ErrorMessage> = listOf()
     var underlinePaint: Paint = Paint()
-    var rect : Rect = Rect()
+    var rect: Rect = Rect()
 
     var underlineOffset: Float = 0.0f
     var underlineColor: Int
         get() = underlinePaint.color
-        set(value) { underlinePaint.color = value }
+        set(value) {
+            underlinePaint.color = value
+        }
     var underlineThickness: Float
         get() = underlinePaint.strokeWidth
-        set(value) { underlinePaint.strokeWidth = value }
+        set(value) {
+            underlinePaint.strokeWidth = value
+        }
 
-    private var maxTextSizePx : Float = 0.0f
-    private var minTextSizePx : Float = 0.0f
-    private var textSizeStepPx : Float = 0.0f
+    private var maxTextSizePx: Float = 0.0f
+    private var minTextSizePx: Float = 0.0f
+    private var textSizeStepPx: Float = 0.0f
 
     private fun init(context: Context?, attributeSet: AttributeSet?, defStyle: Int) {
         val density = context!!.resources.displayMetrics.density
@@ -96,9 +99,9 @@ class ErrorInput: EditText, TextWatcher {
         fitText(text)
     }
 
-    override fun afterTextChanged(s: Editable?) { }
+    override fun afterTextChanged(s: Editable?) {}
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         fitText(s)
@@ -113,7 +116,7 @@ class ErrorInput: EditText, TextWatcher {
         setTextSize(TypedValue.COMPLEX_UNIT_PX, maxTextSizePx)
 
         while (paint.measureText(s.toString()) > measuredWidth - paddingEnd && textSize > minTextSizePx) {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, max(textSize - textSizeStepPx, minTextSizePx)   )
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, max(textSize - textSizeStepPx, minTextSizePx))
         }
     }
 }

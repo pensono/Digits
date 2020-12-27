@@ -1,22 +1,19 @@
 package com.monotonic.digits
 
-/**
- * @author Ethan
- */
-
-import android.animation.TimeAnimator
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.drawable.Animatable2
-import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
-import androidx.annotation.ColorInt
-import android.util.Log
 import android.view.View
+import androidx.annotation.ColorInt
 
+
+/**
+ * @author Ethan
+ */
 class GrowingCircle(@ColorInt color: Int, private val parent: View) : Drawable(), Animatable2, Runnable {
     private val paint = Paint()
 
@@ -32,7 +29,7 @@ class GrowingCircle(@ColorInt color: Int, private val parent: View) : Drawable()
     private val endRadius = 1.2f // percent of the canvas width
 
     private val callbacks = mutableListOf<Animatable2.AnimationCallback>()
-    var peakCallback : () -> Unit = {}
+    var peakCallback: () -> Unit = {}
 
     init {
         paint.color = color
@@ -65,9 +62,9 @@ class GrowingCircle(@ColorInt color: Int, private val parent: View) : Drawable()
         paint.alpha = alpha
     }
 
-    override fun getOpacity(): Int { return PixelFormat.OPAQUE; }
+    override fun getOpacity() = PixelFormat.OPAQUE
 
-    override fun setColorFilter(colorFilter: ColorFilter?) { }
+    override fun setColorFilter(colorFilter: ColorFilter?) {}
 
     override fun isRunning(): Boolean {
         return SystemClock.uptimeMillis() < startTime + animationDuration

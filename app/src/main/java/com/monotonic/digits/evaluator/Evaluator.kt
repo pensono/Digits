@@ -14,7 +14,7 @@ import kotlin.math.abs
  * @author Ethan
  */
 
-fun evaluateExpression(input: String) : ParseResult<Quantity> {
+fun evaluateExpression(input: String): ParseResult<Quantity> {
     return parse(input, Evaluator, Quantity.Zero)
 }
 
@@ -60,13 +60,13 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
     )
 
     private fun sqrt(quantity: Quantity, interval: Interval) =
-        if (quantity.unit.isEven())
-            ParseResult(quantity.sqrt(), interval)
-        else
-            ParseResult(quantity.sqrt(), interval, ErrorMessage("Unit is not even", interval))
+            if (quantity.unit.isEven())
+                ParseResult(quantity.sqrt(), interval)
+            else
+                ParseResult(quantity.sqrt(), interval, ErrorMessage("Unit is not even", interval))
 
-    fun wrapQuantityOperation(operation: (Quantity) -> Quantity) : (Quantity, Interval) -> ParseResult<Quantity> =
-            { quantity, interval ->  ParseResult(operation(quantity.normalized()), interval) }
+    fun wrapQuantityOperation(operation: (Quantity) -> Quantity): (Quantity, Interval) -> ParseResult<Quantity> =
+            { quantity, interval -> ParseResult(operation(quantity.normalized()), interval) }
 
     override fun visitUnaryMinus(ctx: DigitsParser.UnaryMinusContext): ParseResult<Quantity> {
         val argument = ctx.argument?.accept(this) ?: ParseResult(Quantity.Zero, ctx.sourceInterval, "Inferred lhs in unary -")
@@ -75,8 +75,10 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
     }
 
     override fun visitSumExpression(ctx: DigitsParser.SumExpressionContext): ParseResult<Quantity> {
-        val lhsResult = ctx.lhs?.accept(this) ?: ParseResult(Quantity.Zero, ctx.lhs.sourceInterval, ErrorMessage("Inferred lhs in +", intervalOf(ctx.operation)))
-        val rhsResult = ctx.rhs?.accept(this) ?: ParseResult(Quantity.Zero, ctx.rhs.sourceInterval, ErrorMessage("Inferred rhs in +", intervalOf(ctx.operation)))
+        val lhsResult = ctx.lhs?.accept(this)
+                ?: ParseResult(Quantity.Zero, ctx.lhs.sourceInterval, ErrorMessage("Inferred lhs in +", intervalOf(ctx.operation)))
+        val rhsResult = ctx.rhs?.accept(this)
+                ?: ParseResult(Quantity.Zero, ctx.rhs.sourceInterval, ErrorMessage("Inferred rhs in +", intervalOf(ctx.operation)))
         val operation = if (ctx.operation.type == DigitsLexer.PLUS) Quantity::plus else Quantity::minus
 
         if (lhsResult.value.unit.dimensionallyEqual(rhsResult.value.unit)) {
@@ -88,16 +90,20 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
     }
 
     override fun visitProductExpression(ctx: DigitsParser.ProductExpressionContext): ParseResult<Quantity> {
-        val lhsResult = ctx.lhs?.accept(this) ?: ParseResult(Quantity.One, ctx.lhs.sourceInterval, ErrorMessage("Inferred lhs in *", intervalOf(ctx.operation)))
-        val rhsResult = ctx.rhs?.accept(this) ?: ParseResult(Quantity.One, ctx.rhs.sourceInterval, ErrorMessage("Inferred rhs in *", intervalOf(ctx.operation)))
+        val lhsResult = ctx.lhs?.accept(this)
+                ?: ParseResult(Quantity.One, ctx.lhs.sourceInterval, ErrorMessage("Inferred lhs in *", intervalOf(ctx.operation)))
+        val rhsResult = ctx.rhs?.accept(this)
+                ?: ParseResult(Quantity.One, ctx.rhs.sourceInterval, ErrorMessage("Inferred rhs in *", intervalOf(ctx.operation)))
         val operation = if (ctx.operation.type == DigitsLexer.TIMES) Quantity::times else Quantity::div
 
         return lhsResult.combine(rhsResult, ctx.sourceInterval, operation)
     }
 
     override fun visitExponentExpression(ctx: DigitsParser.ExponentExpressionContext): ParseResult<Quantity> {
-        val baseResult = ctx.base?.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", ctx.base.sourceInterval))
-        var exponentResult = ctx.exponent?.accept(this) ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred exponent in ^", ctx.exponent.sourceInterval))
+        val baseResult = ctx.base?.accept(this)
+                ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred base in ^", ctx.base.sourceInterval))
+        var exponentResult = ctx.exponent?.accept(this)
+                ?: ParseResult(Quantity.One, ctx.base.sourceInterval, ErrorMessage("Inferred exponent in ^", ctx.exponent.sourceInterval))
 
         if (!exponentResult.value.unit.dimensionallyEqual(UnitSystem.void)) {
             exponentResult = exponentResult.copy(Quantity(exponentResult.value.value, UnitSystem.void)).error(ErrorMessage("Exponent has a unit", intervalOf(ctx.operator)))
@@ -124,14 +130,14 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
             allAbbreviations[k] = v
         }
 
-        val unitQuantities = UnitSystem.unitAbbreviations.mapValues { Quantity(SciNumber.One, it.value)}
+        val unitQuantities = UnitSystem.unitAbbreviations.mapValues { Quantity(SciNumber.One, it.value) }
         val constantQuantities = constants.mapValues { Quantity(SciNumber.Real(it.value)) }
         val alphabeticQuantities = constantQuantities + unitQuantities
 
-        var nextExponentBase : Quantity? = null
+        var nextExponentBase: Quantity? = null
         var nextExponentPrefix = Quantity.One
-        var functionName : String? = null
-        var functionInterval : Interval? = null
+        var functionName: String? = null
+        var functionInterval: Interval? = null
         for (term in ctx.terms) {
             when (term) {
                 is DigitsParser.AlphabeticContext -> {
@@ -161,7 +167,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
                         }
                     }
 
-                    while(tokens.hasNext()) {
+                    while (tokens.hasNext()) {
                         // Functions must be at the end of a sequence of letters because their arguments will be in the next section
                         val rest = tokens.peekRest()
                         if (functions.containsKey(rest)) {
@@ -185,7 +191,7 @@ object Evaluator : DigitsParserBaseVisitor<ParseResult<Quantity>>() {
 
                     if (nextExponentBase == null) {
                         value = value.error(ErrorMessage("Exponent with no base", term.sourceInterval))
-                    } else if (abs(exponent) >= 100){
+                    } else if (abs(exponent) >= 100) {
                         value = value.error(ErrorMessage("Exponent too large", term.sourceInterval))
                     } else {
                         val prevTerm = nextExponentBase // Scoot around kotlin's type system

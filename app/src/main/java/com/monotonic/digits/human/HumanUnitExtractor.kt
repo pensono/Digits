@@ -12,12 +12,12 @@ import org.antlr.v4.runtime.misc.Interval
  * @author Ethan
  */
 
-fun usedUnits(input: String) : Set<HumanUnit> = parse(input, UsedUnitsExtractor, setOf()).value
+fun usedUnits(input: String): Set<HumanUnit> = parse(input, UsedUnitsExtractor, setOf()).value
 
 /***
  * @return Map of dimension to the largest prefixed unit which used it
  */
-fun largestUsedUnits(input: String) : Map<DimensionBag, HumanUnit> {
+fun largestUsedUnits(input: String): Map<DimensionBag, HumanUnit> {
     val usedUnits = usedUnits(input)
     return usedUnits.groupBy { it.dimensions }
             .mapValues { (_, values) -> values.maxBy { it.exponentMagnitude }!! }
@@ -32,7 +32,7 @@ object UsedUnitsExtractor : DigitsParserBaseVisitor<ParseResult<Set<HumanUnit>>>
     override fun defaultResult(): ParseResult<Set<HumanUnit>> = ParseResult(setOf(), Interval(0, 0))
 
     override fun aggregateResult(aggregate: ParseResult<Set<HumanUnit>>, nextResult: ParseResult<Set<HumanUnit>>): ParseResult<Set<HumanUnit>> =
-        aggregate.combine(nextResult, aggregate.location.union(nextResult.location)) { agg, next -> agg.union(next) }
+            aggregate.combine(nextResult, aggregate.location.union(nextResult.location)) { agg, next -> agg.union(next) }
 
     override fun visitProductExpression(ctx: DigitsParser.ProductExpressionContext): ParseResult<Set<HumanUnit>> {
         val rhs = ctx.rhs // Appease the mutability gods

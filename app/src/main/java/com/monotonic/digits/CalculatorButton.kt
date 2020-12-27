@@ -58,7 +58,7 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
                     // Assume the attribute is correct. We don't need to bother with error messages
                     val methodName = attributes.getString(attribute)!!
                     setOnLongClickListener(object : OnLongClickListener {
-                        var handler : Method? = null
+                        var handler: Method? = null
 
                         override fun onLongClick(view: View?): Boolean {
                             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
@@ -85,11 +85,6 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
         }
 
         attributes.recycle()
-    }
-
-    // Cuz intellij warns about this not being overridden
-    override fun performClick(): Boolean {
-        return super.performClick()
     }
 
     override fun getHitRect(outRect: Rect) {

@@ -1,7 +1,7 @@
 package com.monotonic.digits.human
 
-import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.Quantity
+import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.prettyExponent
 import com.monotonic.digits.units.DimensionBag
 import com.monotonic.digits.units.NaturalUnit
@@ -21,14 +21,14 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
 
     val underlyingUnit =
             components.map { (key, value) -> key * value }
-                .fold(UnitSystem.void, NaturalUnit::plus)
+                    .fold(UnitSystem.void, NaturalUnit::plus)
 
     override val dimensions = underlyingUnit.dimensions
     override val factor = underlyingUnit.factor
 
-    val exponentMagnitude = components.values.map{ it.absoluteValue }.sum()
+    val exponentMagnitude = components.values.map { it.absoluteValue }.sum()
 
-    val abbreviation : String
+    val abbreviation: String
         get() {
             val splitComponents = components.entries.partition { it.value > 0 }
             val numerator = splitComponents.first.map { entry -> entry.key.abbreviation + prettyExponent(entry.value) }.joinToString("")
@@ -45,7 +45,7 @@ class HumanUnit(val components: Map<AtomicHumanUnit, Int>, val prefix: PrefixUni
 
     operator fun plus(other: AtomicHumanUnit) = incorperateUnit(other, 1)
     operator fun minus(other: AtomicHumanUnit) = incorperateUnit(other, -1)
-    override operator fun times(n : Int) = HumanUnit(components.mapValues { e -> e.value * n }, prefix * n)
+    override operator fun times(n: Int) = HumanUnit(components.mapValues { e -> e.value * n }, prefix * n)
 
     fun withPrefix(prefix: PrefixUnit) = HumanUnit(components, prefix)
 
@@ -68,16 +68,16 @@ val humanizationCache = mutableMapOf<DimensionBag, HumanUnit>()
 /**
  * Returns an inverse unit that can be used to normalize the result
  */
-fun humanize(quantity: Quantity) : HumanQuantity {
+fun humanize(quantity: Quantity): HumanQuantity {
     if (quantity.unit.dimensionallyEqual(UnitSystem.void) || quantity.unit.dimensions.magnitude() >= 100) { // Just give up for huge units
         return HumanQuantity(quantity.value * quantity.unit.factor, HumanUnit(mapOf()))
     }
 
     val prefixMagnitude =
-        if (quantity.value.valueEqual(SciNumber.Zero))
-            quantity.unit.factor.magnitude
-        else
-            quantity.normalizedValue.magnitude
+            if (quantity.value.valueEqual(SciNumber.Zero))
+                quantity.unit.factor.magnitude
+            else
+                quantity.normalizedValue.magnitude
 
     val cacheLookup = humanizationCache[quantity.unit.dimensions]
     if (cacheLookup != null) {
@@ -98,7 +98,7 @@ fun humanize(quantity: Quantity) : HumanQuantity {
 
         // I'm not 100% on the fact that this temporarily creates a human unit that has atomic units with degree 0
         val possibleNewUnits = UnitSystem.units.map(currentUnit::plus) + UnitSystem.units.map(currentUnit::minus)
-        val newUnits = possibleNewUnits.filter{ !visitedUnits.contains(it) && !it.components.values.contains(0) }
+        val newUnits = possibleNewUnits.filter { !visitedUnits.contains(it) && !it.components.values.contains(0) }
 
         val correctUnit = newUnits.firstOrNull { unit -> unit.dimensionallyEqual(quantity.unit) }
         if (correctUnit != null) {
@@ -117,13 +117,13 @@ fun humanize(quantity: Quantity) : HumanQuantity {
 private fun applyPrefix(quantity: Quantity, unit: HumanUnit, prefixMagnitude: Int): HumanQuantity {
     // Use the one to round up and avoid 0 digits in the front (like in .123m)
     // Also ignore the centi- prefix
-    val unscaledPrefix = UnitSystem.prefixes.first { p -> p.exponent <= prefixMagnitude - 1 && p.exponent % 3 == 0}
+    val unscaledPrefix = UnitSystem.prefixes.first { p -> p.exponent <= prefixMagnitude - 1 && p.exponent % 3 == 0 }
     val factor = SciNumber.Real(10).pow(SciNumber.Real(unscaledPrefix.exponent))
 
     val prefix =
             if (unit.components.size == 1) {
                 val nameScale = unit.components.values.first() // So that we can fake (km)2 rather than k(m^2)
-                val scaledUnit = UnitSystem.prefixes.first { p -> p.exponent <= ((prefixMagnitude - 1) / nameScale) && p.exponent % 3 == 0}
+                val scaledUnit = UnitSystem.prefixes.first { p -> p.exponent <= ((prefixMagnitude - 1) / nameScale) && p.exponent % 3 == 0 }
                 PrefixUnit(scaledUnit.abbreviation, scaledUnit.name, unscaledPrefix.exponent, "")
             } else {
                 unscaledPrefix
@@ -138,5 +138,5 @@ private fun applyPrefix(quantity: Quantity, unit: HumanUnit, prefixMagnitude: In
  *
  * @param quantity must be dimensionally equal to unit
  */
-fun convert(quantity: Quantity, unit: HumanUnit) : HumanQuantity =
-    HumanQuantity(quantity.value * quantity.unit.factor / (unit.prefix.factor * unit.factor), unit)
+fun convert(quantity: Quantity, unit: HumanUnit): HumanQuantity =
+        HumanQuantity(quantity.value * quantity.unit.factor / (unit.prefix.factor * unit.factor), unit)

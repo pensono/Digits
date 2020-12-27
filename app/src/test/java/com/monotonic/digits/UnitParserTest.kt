@@ -74,7 +74,7 @@ class UnitParserTest {
         assertEquals(u("g") + u("g"), parseUnit("g2").value)
         assertEquals(u("g") * 99, parseUnit("g⁹⁹").value)
         assertEquals(u("g") * 99, parseUnit("g99").value)
-        
+
         assertEquals(u("m") + u("m"), parseUnit("m²").value)
         assertEquals(u("m") + u("m"), parseUnit("m2").value)
     }
@@ -95,7 +95,7 @@ class UnitParserTest {
 
     }
 
-    private fun parseUnit(input: String) : ParseResult<NaturalUnit> =
+    private fun parseUnit(input: String): ParseResult<NaturalUnit> =
             evaluateExpression("1$input").invoke { it.unit } // We don't care about the interval in this case
 
 }

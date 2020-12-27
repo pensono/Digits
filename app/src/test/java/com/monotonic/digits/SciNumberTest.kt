@@ -1,7 +1,6 @@
 package com.monotonic.digits
 
 import com.monotonic.digits.evaluator.Precision
-import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue

@@ -1,15 +1,14 @@
 package com.monotonic.digits
 
-import com.monotonic.digits.human.HumanQuantity
 import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.evaluator.evaluateExpression
+import com.monotonic.digits.human.HumanQuantity
 import com.monotonic.digits.human.HumanUnit
 import com.monotonic.digits.human.convert
 import com.monotonic.digits.human.humanize
 import com.monotonic.digits.units.PrefixUnit
 import org.junit.Assert.assertEquals
-import org.junit.Ignore
 import org.junit.Test
 
 /**
@@ -19,7 +18,7 @@ class HumanUnitTest {
     @Test
     fun convertBasic() {
         testCoversion(SciNumber.Real(4000), HumanUnit(mapOf(u("m") to 1)), Quantity(SciNumber.Real(4), u("m") + p("k")))
-        testCoversion(SciNumber.Real(4), HumanUnit(mapOf(u("m") to 1),  p("k")), Quantity(SciNumber.Real(4000), u("m")))
+        testCoversion(SciNumber.Real(4), HumanUnit(mapOf(u("m") to 1), p("k")), Quantity(SciNumber.Real(4000), u("m")))
     }
 
     @Test
@@ -114,7 +113,7 @@ class HumanUnitTest {
     fun largeUnitQuickCached() {
         for (i in 0..1000) {
             val components = humanize(evaluateExpression("4m99").value).unit.components
-                assertEquals(1, components.size)
+            assertEquals(1, components.size)
         }
     }
 

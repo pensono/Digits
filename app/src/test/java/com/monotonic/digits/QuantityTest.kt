@@ -17,7 +17,7 @@ class QuantityTest {
     @Test
     fun plus() {
         assertEquals(q("456.123", kilometers), q("123", meters) + q("456.000", kilometers))
-        assertEquals(q("123.456", kilometers),q("123.000", kilometers) + q("456", meters))
+        assertEquals(q("123.456", kilometers), q("123.000", kilometers) + q("456", meters))
     }
 
     @Test

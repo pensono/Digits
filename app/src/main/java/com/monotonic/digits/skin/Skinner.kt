@@ -1,10 +1,10 @@
 package com.monotonic.digits.skin
 
 import android.content.res.ColorStateList
-import android.graphics.drawable.*
+import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
 
-fun skinSecondaryBackground(drawable: GradientDrawable, skin : Skin) {
+fun skinSecondaryBackground(drawable: GradientDrawable, skin: Skin) {
     val color = ColorStateList(
             arrayOf(
                     intArrayOf(android.R.attr.state_hovered),

@@ -10,18 +10,18 @@ import kotlin.math.min
 
 data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.Void) {
     // TODO eventually make this accept a value for engineering or scientific mode
-    fun humanString(separatorType: SeparatorType) : SigfigString {
+    fun humanString(separatorType: SeparatorType): SigfigString {
         val valueString = value.valueString(separatorType)
 
         return SigfigString(valueString.string + unitString(), valueString.insigfigStart, valueString.string.length)
     }
 
-    fun unitString() : String = unit.abbreviation
+    fun unitString(): String = unit.abbreviation
 
     /**
      * @param maxChars must be non-negative
      */
-    fun humanString(maxChars: Int, separatorType: SeparatorType, numberFormat: NumberFormat) : SigfigString {
+    fun humanString(maxChars: Int, separatorType: SeparatorType, numberFormat: NumberFormat): SigfigString {
         return humanString(maxChars, separatorType, numberFormat, true)
     }
 
@@ -72,7 +72,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
 
         // TODO refactor this so it makes more sense
         val precision = value.precision
-        val figures = when(precision) {
+        val figures = when (precision) {
             is Precision.Infinite -> 12
             is Precision.SigFigs -> precision.amount
         }
@@ -136,7 +136,7 @@ data class HumanQuantity(val value: SciNumber, val unit: HumanUnit = HumanUnit.V
 /**
  * @param index The first index which shouldn't be rounded
  */
-private fun round(input: String, index: Int) : String {
+private fun round(input: String, index: Int): String {
     val trimmed = input.substring(0, index)
     val decimalPosition = trimmed.indexOf('.')
 

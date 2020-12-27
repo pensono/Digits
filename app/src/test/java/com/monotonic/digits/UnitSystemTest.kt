@@ -2,7 +2,7 @@ package com.monotonic.digits
 
 import com.monotonic.digits.units.DimensionBag
 import com.monotonic.digits.units.NaturalUnit
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**

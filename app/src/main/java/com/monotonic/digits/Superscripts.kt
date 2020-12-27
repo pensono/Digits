@@ -5,7 +5,7 @@ import kotlin.math.absoluteValue
 val superscriptMap = listOf('⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹')
 val superscriptMinus = '⁻'
 
-fun prettyExponent(number: Int) : String {
+fun prettyExponent(number: Int): String {
     if (number == 1) {
         return ""
     }
@@ -20,7 +20,7 @@ fun prettyExponent(number: Int) : String {
 /**
  * Turn any superscripts in the input into regular digits
  */
-fun unsuperscript(input: String) : String {
+fun unsuperscript(input: String): String {
     var result = input
     for (i in 0 until 10) {
         result = result.replace(superscriptMap[i], '0' + i)

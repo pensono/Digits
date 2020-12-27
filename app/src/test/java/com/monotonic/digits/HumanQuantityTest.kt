@@ -90,8 +90,8 @@ class HumanQuantityTest {
         testHumanString("-1.2…ᴇ-4", "-.00012345", 8, SeparatorType.SPACE)
         testHumanString("-1.234…ᴇ-4", "-.000123456", 11, SeparatorType.SPACE)
 
-        testHumanString("-12 345", "-12345",7, SeparatorType.SPACE)
-        testHumanString("-12 345", "-12345",11, SeparatorType.SPACE)
+        testHumanString("-12 345", "-12345", 7, SeparatorType.SPACE)
+        testHumanString("-12 345", "-12345", 11, SeparatorType.SPACE)
 
         testHumanString("-1.234…ᴇ8", "-123456789", 9, SeparatorType.SPACE)
         testHumanString("-1.234…ᴇ8", "-123456789", 10, SeparatorType.SPACE)
@@ -99,7 +99,7 @@ class HumanQuantityTest {
 
         // Untested is small maxChars values < 4
     }
-    
+
     @Test
     fun engineeringExponents() {
         testHumanString("123.4…ᴇ6", "123456789", 8, SeparatorType.NONE, NumberFormat.ENGINEERING)
@@ -177,7 +177,7 @@ class HumanQuantityTest {
         testInsigfigStart(5, "9999", 4, SeparatorType.SPACE)
         testInsigfigStart(1, "999900", 1, SeparatorType.SPACE)
         testInsigfigStart(3, "999900", 3, SeparatorType.SPACE)
-        testInsigfigStart( 4, "-999900", 3, SeparatorType.SPACE)
+        testInsigfigStart(4, "-999900", 3, SeparatorType.SPACE)
     }
 
 
@@ -295,7 +295,7 @@ class HumanQuantityTest {
 
     @Test
     fun zeroCharacters() {
-        testSigfigString(SigfigString("",0), "-1234.56789", 10, 0, SeparatorType.NONE)
+        testSigfigString(SigfigString("", 0), "-1234.56789", 10, 0, SeparatorType.NONE)
     }
 
     @Test

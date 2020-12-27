@@ -43,8 +43,8 @@ class EvaluatorTest {
 
     @Test
     fun scientificNotationWithoutMantissaFails() {
-        errorTest(Interval(0,1), "ᴇ5")
-        errorTest(Interval(0,2), "ᴇ-5")
+        errorTest(Interval(0, 1), "ᴇ5")
+        errorTest(Interval(0, 2), "ᴇ-5")
     }
 
     @Test
@@ -253,14 +253,14 @@ class EvaluatorTest {
 
     @Test
     fun unknownFunctionErrors() {
-        errorTest(Interval(3,17), "2π+notAFunction(4)") // It would be cool if the error just highlighted the function name
+        errorTest(Interval(3, 17), "2π+notAFunction(4)") // It would be cool if the error just highlighted the function name
     }
 
     @Test
     fun mismatchedUnits() {
-        errorTest(Interval(4,5), "10m+2A")
-        errorTest(Interval(4,10), "10m+(2A+3A)")
-        errorTest(Interval(5,11), "(10m+(2A+3A))/4")
+        errorTest(Interval(4, 5), "10m+2A")
+        errorTest(Interval(4, 10), "10m+(2A+3A)")
+        errorTest(Interval(5, 11), "(10m+(2A+3A))/4")
     }
 
     @Test
@@ -287,14 +287,14 @@ class EvaluatorTest {
 
     @Test
     fun justAnOperatorGivesError() {
-        errorTest(Interval(0,0), "+")
-        errorTest(Interval(0,0), "/")
-        errorTest(Interval(0,0), "*")
+        errorTest(Interval(0, 0), "+")
+        errorTest(Interval(0, 0), "/")
+        errorTest(Interval(0, 0), "*")
     }
 
     @Test
     fun justPrefixErrors() {
-        errorTest(Interval(0,0), "k")
+        errorTest(Interval(0, 0), "k")
     }
 
     @Test
@@ -304,8 +304,8 @@ class EvaluatorTest {
 
     @Test
     fun largeExponentError() {
-        errorTest(Interval(3,6), "4gm6666")
-        errorTest(Interval(2,5), "4m6666")
+        errorTest(Interval(3, 6), "4gm6666")
+        errorTest(Interval(2, 5), "4m6666")
     }
 
     @Test
@@ -327,9 +327,9 @@ class EvaluatorTest {
     @Test
     fun squareRootUnEvenUnitsFails() {
         // Unit is not even. This should fail until rational unit exponents are implemented
-        errorTest(Interval(2,3), "√(0m)")
-        errorTest(Interval(2,3), "√(4m)")
-        errorTest(Interval(2,4), "√(-4m)")
+        errorTest(Interval(2, 3), "√(0m)")
+        errorTest(Interval(2, 3), "√(4m)")
+        errorTest(Interval(2, 4), "√(-4m)")
     }
 
     @Test
@@ -357,7 +357,7 @@ class EvaluatorTest {
         evalTest(Quantity(SciNumber.Real(Math.E * Math.E)), "exp(2)")
 
         evalTest(Quantity(SciNumber.Real(1)), "exp(0)")
-        evalTest(Quantity(SciNumber.Real(1/Math.E)), "exp(-1)")
+        evalTest(Quantity(SciNumber.Real(1 / Math.E)), "exp(-1)")
     }
 
     @Test

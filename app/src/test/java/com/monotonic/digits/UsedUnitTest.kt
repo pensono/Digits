@@ -1,7 +1,7 @@
 package com.monotonic.digits
 
-import com.monotonic.digits.human.usedUnits
 import com.monotonic.digits.human.HumanUnit
+import com.monotonic.digits.human.usedUnits
 import org.junit.Assert
 import org.junit.Test
 

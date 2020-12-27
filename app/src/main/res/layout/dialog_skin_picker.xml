@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    android:layout_width="wrap_content"
+<ScrollView android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -9,31 +8,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/free_theme_title"
             android:theme="@style/AppTheme.InfoTextView"
-            android:paddingStart="16dp"/>
+            android:paddingStart="16dp" />
+
         <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:columnCount="3"
-            android:id="@+id/theme_picker_container"/>
+            android:id="@+id/theme_picker_container" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/pro_theme_title"
             android:theme="@style/AppTheme.InfoTextView"
-            android:paddingStart="16dp"/>
+            android:paddingStart="16dp" />
+
         <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:columnCount="3"
-            android:id="@+id/theme_picker_container_pro"/>
+            android:id="@+id/theme_picker_container_pro" />
     </LinearLayout>
 </ScrollView>

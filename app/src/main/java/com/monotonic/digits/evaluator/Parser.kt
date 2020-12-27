@@ -29,7 +29,7 @@ data class ParseResult<T>(val value: T, val location: Interval, val errors: Coll
  * @param defaultValue Value to be returned in the parse result in the case of catastrophic
  *      syntax errors (or an empty input)
  */
-fun <T> parse(input: String, visitor: DigitsParserBaseVisitor<ParseResult<T>>, defaultValue: T) : ParseResult<T>{
+fun <T> parse(input: String, visitor: DigitsParserBaseVisitor<ParseResult<T>>, defaultValue: T): ParseResult<T> {
     val lexer = DigitsLexer(CharStreams.fromString(input))
     lexer.removeErrorListener(ConsoleErrorListener.INSTANCE) // Error messages enabled by default -_-
     val tokens = CommonTokenStream(lexer)
@@ -39,7 +39,7 @@ fun <T> parse(input: String, visitor: DigitsParserBaseVisitor<ParseResult<T>>, d
     val syntaxErrors = mutableListOf<ErrorMessage>()
     parser.addErrorListener(object : BaseErrorListener() {
         override fun syntaxError(recognizer: Recognizer<*, *>, offendingSymbol: Any?, line: Int, charPositionInLine: Int, msg: String, e: RecognitionException?) {
-            syntaxErrors += ErrorMessage(msg, intervalOf(offendingSymbol as Token) )
+            syntaxErrors += ErrorMessage(msg, intervalOf(offendingSymbol as Token))
         }
     })
 

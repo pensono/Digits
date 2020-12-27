@@ -94,14 +94,14 @@ object UnitSystem { // Preferred Units?
             AtomicHumanUnit("Da", "Dalton", null, mass, (SciNumber.Real("1.66053906660") * SciNumber.Real(10).pow(SciNumber.Real(-27))) as SciNumber.Real),
             AtomicHumanUnit("lb", "Pound", null, mass, SciNumber.Real("453.5924")),
 
-            AtomicHumanUnit("c", "US Customary Cup", "¹⁄₂pt", volume,    SciNumber.Real("0.0002365882365")),
-            AtomicHumanUnit("cup", "US Customary Cup", "¹⁄₂pt", volume,  SciNumber.Real("0.0002365882365")),
-            AtomicHumanUnit("tsp", "US Teaspoon", "¹⁄₂floz", volume,     SciNumber.Real("0.00001478676478125")),
-            AtomicHumanUnit("tbsp", "US Tablespoon", "3tsp", volume,    SciNumber.Real("0.00004436029434375")),
+            AtomicHumanUnit("c", "US Customary Cup", "¹⁄₂pt", volume, SciNumber.Real("0.0002365882365")),
+            AtomicHumanUnit("cup", "US Customary Cup", "¹⁄₂pt", volume, SciNumber.Real("0.0002365882365")),
+            AtomicHumanUnit("tsp", "US Teaspoon", "¹⁄₂floz", volume, SciNumber.Real("0.00001478676478125")),
+            AtomicHumanUnit("tbsp", "US Tablespoon", "3tsp", volume, SciNumber.Real("0.00004436029434375")),
             AtomicHumanUnit("floz", "US Fluid Ounce", "¹⁄₁₂₈gal", volume, SciNumber.Real("0.0000295735295625")),
-            AtomicHumanUnit("pt", "US Pint", "16floz", volume,          SciNumber.Real("0.000473176473")),
-            AtomicHumanUnit("qt", "US Quart", "2pt³", volume,           SciNumber.Real("0.000946352946")),
-            AtomicHumanUnit("gal", "US Gallon", "231in³", volume,       SciNumber.Real("0.003785411784"))
+            AtomicHumanUnit("pt", "US Pint", "16floz", volume, SciNumber.Real("0.000473176473")),
+            AtomicHumanUnit("qt", "US Quart", "2pt³", volume, SciNumber.Real("0.000946352946")),
+            AtomicHumanUnit("gal", "US Gallon", "231in³", volume, SciNumber.Real("0.003785411784"))
     )
 
     val prefixMagStart = -24

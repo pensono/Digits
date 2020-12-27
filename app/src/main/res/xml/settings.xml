@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-        <SwitchPreference
-            android:key="space_grouping"
-            android:title="Group digits in result with a space"
-            android:defaultValue="true"/>
+    <SwitchPreference
+        android:key="space_grouping"
+        android:title="Group digits in result with a space"
+        android:defaultValue="true" />
 
-        <SwitchPreference
-            android:key="sigfig_highlight"
-            android:title="Highlight significant figures in result"
-            android:defaultValue="true"/>
+    <SwitchPreference
+        android:key="sigfig_highlight"
+        android:title="Highlight significant figures in result"
+        android:defaultValue="true" />
 
-        <SwitchPreference
-            android:key="round_results"
-            android:title="Round results by significant figures"
-            android:defaultValue="false"/>
+    <SwitchPreference
+        android:key="round_results"
+        android:title="Round results by significant figures"
+        android:defaultValue="false" />
 </PreferenceScreen>

@@ -8,7 +8,7 @@ import com.monotonic.digits.units.NaturalUnit
 /**
  * @author Ethan
  */
-fun evaluateHumanized(input: String, preferredUnits: Map<DimensionBag, HumanUnit>) : ParseResult<HumanQuantity> {
+fun evaluateHumanized(input: String, preferredUnits: Map<DimensionBag, HumanUnit>): ParseResult<HumanQuantity> {
     val parseResult = evaluateExpression(input)
     val usedUnits = largestUsedUnits(input) // Somewhat inefficient to do this if the preferred unit will be used anyways
 

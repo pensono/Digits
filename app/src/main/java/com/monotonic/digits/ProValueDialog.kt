@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 
-fun createProValueDialog(context: Context, action: () -> Unit) : Dialog {
+fun createProValueDialog(context: Context, action: () -> Unit): Dialog {
     val builder = AlertDialog.Builder(context)
     builder.setPositiveButton("Buy") { _, _ -> action() }
     builder.setNegativeButton("Cancel") { d, _ -> d.cancel() }

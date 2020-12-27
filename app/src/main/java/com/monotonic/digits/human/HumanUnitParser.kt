@@ -7,7 +7,7 @@ import com.monotonic.digits.units.PrefixUnit
 import com.monotonic.digits.units.UnitSystem
 import org.antlr.v4.runtime.misc.Interval
 
-fun parseHumanUnit(input: String) : HumanUnit? {
+fun parseHumanUnit(input: String): HumanUnit? {
     val tokens = TokenIterator(input, Interval(0, input.length))
     var unit = HumanUnit(mapOf())
 
@@ -27,7 +27,7 @@ fun parseHumanUnit(input: String) : HumanUnit? {
             val exponentStr = tokens.nextWhile(::isNumber)
             val exponent = if (exponentStr == "") 1 else parseNumber(exponentStr)
             unit = HumanUnit(mapOf(UnitSystem.unitAbbreviations[first.abbreviation]!! to exponent))
-        } else if (first is PrefixUnit){
+        } else if (first is PrefixUnit) {
             unit = HumanUnit(mapOf(), first)
 
             if (!tokens.hasNext()) {

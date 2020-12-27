@@ -14,7 +14,7 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     /**
      * @requires this.unit.dimensionallyEqual(other.unit)
      */
-    operator fun plus(other: Quantity) : Quantity {
+    operator fun plus(other: Quantity): Quantity {
         if (!unit.dimensionallyEqual(other.unit)) throw RuntimeException("Bad units")
         return doSum(this, other, SciNumber::plus)
     }
@@ -22,22 +22,22 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     /**
      * @requires this.unit.dimensionallyEqual(other.unit)
      */
-    operator fun minus(other: Quantity) : Quantity {
+    operator fun minus(other: Quantity): Quantity {
         if (!unit.dimensionallyEqual(other.unit)) throw RuntimeException("Bad units")
         return doSum(this, other, SciNumber::minus)
     }
 
-    operator fun unaryMinus() : Quantity = Quantity(-value, unit)
+    operator fun unaryMinus(): Quantity = Quantity(-value, unit)
 
-    operator fun times(other: Quantity) : Quantity {
+    operator fun times(other: Quantity): Quantity {
         return Quantity(value.times(other.value), unit + other.unit)
     }
 
-    operator fun div(other: Quantity) : Quantity {
+    operator fun div(other: Quantity): Quantity {
         return Quantity(value / other.value, unit - other.unit)
     }
 
-    fun pow(other: Quantity) : Quantity {
+    fun pow(other: Quantity): Quantity {
         if (!other.unit.dimensionallyEqual(UnitSystem.void)) throw RuntimeException("Exponentiation is only allowed if the power is dimensionless")
 
         return if (unit.dimensionallyEqual(UnitSystem.void)) {
@@ -75,9 +75,9 @@ class Quantity(val value: SciNumber, val unit: NaturalUnit = UnitSystem.void) {
     fun normalized() = Quantity(value * unit.factor, NaturalUnit(unit.dimensions, SciNumber.One))
 
     override fun equals(other: Any?): Boolean =
-        other is Quantity
-                && unit.dimensionallyEqual(other.unit)
-                && normalizedValue == other.normalizedValue
+            other is Quantity
+                    && unit.dimensionallyEqual(other.unit)
+                    && normalizedValue == other.normalizedValue
 
     override fun hashCode(): Int = value.hashCode() xor unit.hashCode()
 

@@ -1,6 +1,7 @@
 package com.monotonic.digits
 
-import com.monotonic.digits.human.*
+import com.monotonic.digits.human.HumanUnit
+import com.monotonic.digits.human.parseHumanUnit
 import com.monotonic.digits.units.PrefixUnit
 import junit.framework.Assert.assertEquals
 import org.junit.Test

@@ -2,7 +2,6 @@ package com.monotonic.digits.units
 
 import com.monotonic.digits.evaluator.Precision
 import com.monotonic.digits.evaluator.SciNumber
-import kotlin.math.absoluteValue
 
 
 /**
@@ -19,7 +18,7 @@ open class NaturalUnit constructor(open val dimensions: DimensionBag, open val f
     operator fun minus(other: NaturalUnit) =
             NaturalUnit(dimensions.combine(other.dimensions, Int::minus), (factor / other.factor) as SciNumber.Real)
 
-    open operator fun times(n: Int) : NaturalUnit =
+    open operator fun times(n: Int): NaturalUnit =
             NaturalUnit(dimensions.map { it * n }, factor.powReal(SciNumber.Real(n)))
 
     operator fun unaryMinus() =
@@ -32,7 +31,7 @@ open class NaturalUnit constructor(open val dimensions: DimensionBag, open val f
      * Result only makes sense iff isMultiple(other)
      * TODO Should also examine the factors
      */
-    operator fun div(other: NaturalUnit) : Int =
+    operator fun div(other: NaturalUnit): Int =
             dimensions.values.map { d -> d.value / other.dimensions.values.getOrDefault(d.key, 0) }.first()
 
     override fun equals(other: Any?) =

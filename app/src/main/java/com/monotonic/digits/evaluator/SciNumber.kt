@@ -9,8 +9,8 @@ import kotlin.math.abs
 import kotlin.math.pow
 
 sealed class Precision : Comparable<Precision> {
-    abstract operator fun plus(value: Int) : Precision
-    abstract operator fun minus(value: Int) : Precision
+    abstract operator fun plus(value: Int): Precision
+    abstract operator fun minus(value: Int): Precision
 
     object Infinite : Precision() {
         override fun compareTo(other: Precision): Int =
@@ -50,35 +50,35 @@ sealed class SciNumber {
      * The number of digits in the number if greater than one, or the negative number of zeroes
      * until the decimal if less than 1
      */
-    abstract val magnitude : Int
+    abstract val magnitude: Int
 
-    abstract operator fun plus(other: SciNumber) : SciNumber
-    abstract operator fun minus(other: SciNumber) : SciNumber
-    abstract operator fun times(other: SciNumber) : SciNumber
-    abstract operator fun div(other: SciNumber) : SciNumber
-    abstract operator fun unaryMinus() : SciNumber
+    abstract operator fun plus(other: SciNumber): SciNumber
+    abstract operator fun minus(other: SciNumber): SciNumber
+    abstract operator fun times(other: SciNumber): SciNumber
+    abstract operator fun div(other: SciNumber): SciNumber
+    abstract operator fun unaryMinus(): SciNumber
 
     abstract fun pow(other: SciNumber): SciNumber
-    abstract fun sqrt() : SciNumber
+    abstract fun sqrt(): SciNumber
     abstract fun log(base: BigDecimal): SciNumber
     abstract fun exp(): SciNumber // Base e
 
-    abstract fun sin() : SciNumber
-    abstract fun cos() : SciNumber
-    abstract fun tan() : SciNumber
-    abstract fun sinh() : SciNumber
-    abstract fun cosh() : SciNumber
-    abstract fun tanh() : SciNumber
-    abstract fun asin() : SciNumber
-    abstract fun acos() : SciNumber
-    abstract fun atan() : SciNumber
-    abstract fun csc() : SciNumber
-    abstract fun sec() : SciNumber
-    abstract fun cot() : SciNumber
+    abstract fun sin(): SciNumber
+    abstract fun cos(): SciNumber
+    abstract fun tan(): SciNumber
+    abstract fun sinh(): SciNumber
+    abstract fun cosh(): SciNumber
+    abstract fun tanh(): SciNumber
+    abstract fun asin(): SciNumber
+    abstract fun acos(): SciNumber
+    abstract fun atan(): SciNumber
+    abstract fun csc(): SciNumber
+    abstract fun sec(): SciNumber
+    abstract fun cot(): SciNumber
 
-    abstract fun valueString(separatorType: SeparatorType) : SigfigString
-    abstract fun valueEqual(other: SciNumber) : Boolean
-    abstract fun toDouble() : Double
+    abstract fun valueString(separatorType: SeparatorType): SigfigString
+    abstract fun valueEqual(other: SciNumber): Boolean
+    abstract fun toDouble(): Double
     abstract fun isIntegral(): Boolean
 
     companion object {
@@ -102,7 +102,7 @@ sealed class SciNumber {
                 Math.floor(Math.log10(abs(number))).toInt() + 1
         }
 
-        val lsd  : Int?
+        val lsd: Int?
             get() =
                 when (precision) {
                     is Precision.Infinite -> null
@@ -183,7 +183,7 @@ sealed class SciNumber {
                     is Real -> realOperation(this, other)
                 }
 
-        private fun additiveOperation(other: Real, op: (BigDecimal, BigDecimal) -> BigDecimal) : Real {
+        private fun additiveOperation(other: Real, op: (BigDecimal, BigDecimal) -> BigDecimal): Real {
             val result = op(backing, other.backing)
 
             val newLsd = minLsd(lsd, other.lsd)
@@ -197,15 +197,15 @@ sealed class SciNumber {
         }
 
         private fun minLsd(lsdA: Int?, lsdB: Int?): Int? =
-            if (lsdA == null) {
-                lsdB
-            } else {
-                if (lsdB == null) {
-                    lsdA
+                if (lsdA == null) {
+                    lsdB
                 } else {
-                    min(lsdA, lsdB)
+                    if (lsdB == null) {
+                        lsdA
+                    } else {
+                        min(lsdA, lsdB)
+                    }
                 }
-            }
 
         private fun minPrecision(other: Real) = minOf(precision, other.precision)
 
@@ -216,6 +216,7 @@ sealed class SciNumber {
                     Real(BigDecimal.valueOf(Math.sqrt(backing.toDouble())), precision)
                 else
                     Nan // Until imaginary numbers are implemented
+
         fun abs() = Real(backing.abs(), precision)
 
         // Kinda a shitty calculation
@@ -242,7 +243,7 @@ sealed class SciNumber {
         override fun sec() = doubleFunction(Math::acos)
         override fun cot() = doubleFunction(Math::atan)
 
-        private fun doubleFunction(op : (Double) -> Double) : SciNumber {
+        private fun doubleFunction(op: (Double) -> Double): SciNumber {
             val value = op(backing.toDouble())
             return if (value.isNaN()) {
                 Nan
@@ -253,8 +254,9 @@ sealed class SciNumber {
 
         override fun equals(other: Any?): Boolean =
                 other is Real &&
-                    ((other.precision == Precision.Infinite && this.backing.toDouble() == other.backing.toDouble())
-                    || (this.backing == other.backing && this.precision == other.precision))
+                        ((other.precision == Precision.Infinite && this.backing.toDouble() == other.backing.toDouble())
+                                || (this.backing == other.backing && this.precision == other.precision))
+
         override fun hashCode(): Int = backing.hashCode()
         override fun toString(): String = backing.toPlainString() + " precision: $precision"
 
@@ -336,11 +338,11 @@ sealed class SciNumber {
          * Inserts grouping separator from index 0:
          * 000,000,00
          */
-        private fun insertGroupingSeparator(input: String, separatorType: SeparatorType) : String =
+        private fun insertGroupingSeparator(input: String, separatorType: SeparatorType): String =
                 // Chop into bits and join together
-            (0 .. input.length / 3).map { input.substring(it * 3, min(it * 3 + 3, input.length)) }
-                    .filter { it.isNotEmpty() } // Removes last one if it's empty
-                    .joinToString(separatorType.separator)
+                (0..input.length / 3).map { input.substring(it * 3, min(it * 3 + 3, input.length)) }
+                        .filter { it.isNotEmpty() } // Removes last one if it's empty
+                        .joinToString(separatorType.separator)
     }
 
     object Nan : SciNumber() {
@@ -371,7 +373,7 @@ sealed class SciNumber {
         override fun sec() = this
         override fun cot() = this
 
-        override fun valueString(separatorType: SeparatorType) = SigfigString("NaN",3)
+        override fun valueString(separatorType: SeparatorType) = SigfigString("NaN", 3)
         override fun valueEqual(other: SciNumber): Boolean = other === Nan
         override fun toDouble(): Double = Double.NaN
         override fun isIntegral(): Boolean = false
