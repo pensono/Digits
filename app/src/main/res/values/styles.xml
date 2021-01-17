@@ -39,7 +39,6 @@
         <item name="android:onClick">calculatorButtonClick</item>
         <item name="android:longClickable">true</item>
         <item name="onLongClick">calculatorButtonLongClick</item>
-        <item name="android:hapticFeedbackEnabled">true</item>
     </style>
 
     <style name="AppTheme.BaseCalculatorButton.DigitTheme">

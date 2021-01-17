@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.Button
+import androidx.preference.PreferenceManager
 import java.lang.reflect.Method
 
 /**
@@ -61,8 +63,6 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
                         var handler: Method? = null
 
                         override fun onLongClick(view: View?): Boolean {
-                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-
                             // https://stackoverflow.com/a/42210910/2496050
                             var listenerContext = getContext()
                             if (listenerContext is ContextWrapper && listenerContext !is Activity) { // Not sure what I'm doing here with the context
@@ -85,6 +85,18 @@ class CalculatorButton(context: Context, attrs: AttributeSet) : Button(context, 
         }
 
         attributes.recycle()
+    }
+
+    override fun performClick(): Boolean {
+        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+
+        return super.performClick()
+    }
+
+    override fun performLongClick(): Boolean {
+        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+
+        return super.performLongClick()
     }
 
     override fun getHitRect(outRect: Rect) {
