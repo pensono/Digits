@@ -86,6 +86,11 @@
         <item name="android:textSize">20dp</item>
     </style>
 
+    <style name="AppTheme.CalculatorButton.FloatingInfo" parent="AppTheme.CalculatorButton.Floating">
+        <item name="android:clickable">false</item>
+        <item name="android:longClickable">false</item>
+        <item name="android:onClick">@null</item> <!-- It's just info, remove the ability to click on it -->
+    </style>
 
     <style name="AppTheme.CalculatorButton.Secondary" parent="AppTheme.CalculatorButton">
         <item name="android:minHeight">40dp</item>
