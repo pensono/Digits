@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.button_area.*
 
 class MainActivity : Activity() {
     companion object {
-        val TAG = "Digits_MainActivity"
+        const val TAG = "Digits_MainActivity"
     }
 
     private val history = mutableListOf<HistoryItem>()
@@ -54,24 +54,24 @@ class MainActivity : Activity() {
 
     private val resultSeparator: SeparatorType
         get() {
-            val spaceSeparate = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("space_grouping", true)
+            val spaceSeparate = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Preferences.spaceGrouping, true)
             return if (spaceSeparate) SeparatorType.SPACE else SeparatorType.NONE
         }
 
     private val numberFormat: NumberFormat
         get() {
-            val useEngineering = getPreferences(Context.MODE_PRIVATE).getBoolean("use_engineering_format", true)
+            val useEngineering = getPreferences(Context.MODE_PRIVATE).getBoolean(Preferences.numberFormat, true)
             return if (useEngineering) NumberFormat.ENGINEERING else NumberFormat.SCIENTIFIC
         }
 
     private val roundingMode: RoundingMode
         get() {
-            val roundResults = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("round_results", false)
+            val roundResults = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Preferences.roundResult, false)
             return if (roundResults) RoundingMode.SIGFIG else RoundingMode.REMOVE_TRAILING
         }
 
     private val sigfigHighlight: Boolean
-        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sigfig_highlight", false)
+        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Preferences.sigfigHighlight, false)
 
     private lateinit var skin: Skin
 
@@ -101,13 +101,13 @@ class MainActivity : Activity() {
         unit_input.onFocusChangeListener = View.OnFocusChangeListener { _, _ -> tryUnitConversion() }
 
         discipline_dropdown.adapter = GenericSpinnerAdapter(this, R.layout.spinner_item, disciplines) { getString(it.nameResource) }
-        discipline_dropdown.setSelection(getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.pref_discipline), 0))
+        discipline_dropdown.setSelection(getPreferences(Context.MODE_PRIVATE).getInt(Preferences.discipline, 0))
         discipline_dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 populateUnitSelector(disciplines[pos].units, unit_selector)
                 with(getPreferences(Context.MODE_PRIVATE).edit()) {
-                    putInt(getString(R.string.pref_discipline), pos)
+                    putInt(Preferences.discipline, pos)
                     apply()
                 }
             }
@@ -119,7 +119,7 @@ class MainActivity : Activity() {
         result_preview.post { updatePreview() }
 
         val skinName = getPreferences(Context.MODE_PRIVATE)
-                .getString(getString(R.string.pref_skin), resources.getResourceName(R.array.skin_default_light))
+                .getString(Preferences.skin, resources.getResourceName(R.array.skin_default_light))
         val skinId = resources.getIdentifier(skinName, "id", packageName)
         val validatedSkinId = if (skinId == 0) R.array.skin_default_light else skinId // Might happen if a skin is no longer available
         applySkin(skinFromResource(this, validatedSkinId))
@@ -136,21 +136,21 @@ class MainActivity : Activity() {
     override fun onPause() {
         super.onPause()
         with(getPreferences(Context.MODE_PRIVATE).edit()) {
-            putString("input_value", input.text.toString())
+            putString(Preferences.inputValue, input.text.toString())
             apply()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        input.text.replace(0, input.text.length, getPreferences(Context.MODE_PRIVATE).getString("input_value", ""))
+        input.text.replace(0, input.text.length, getPreferences(Context.MODE_PRIVATE).getString(Preferences.inputValue, ""))
 
         billingManager.refreshPurchases()
     }
 
     fun numberFormatToggled(@Suppress("UNUSED_PARAMETER") view: View) {
         with(getPreferences(Context.MODE_PRIVATE).edit()) {
-            putBoolean("use_engineering_format", number_format_switcher.isChecked)
+            putBoolean(Preferences.numberFormat, number_format_switcher.isChecked)
             commit()
         }
         updatePreview()
@@ -180,7 +180,7 @@ class MainActivity : Activity() {
                 Log.d(TAG, "Enabled: $validUnit")
             }
         } catch (e: Exception) {
-            result_preview.text = "Error"
+            result_preview.text = getString(R.string.result_error)
             submit_conversion.isEnabled = false
             Log.e(TAG, "Unit parsing error", e)
         }
@@ -205,7 +205,7 @@ class MainActivity : Activity() {
                 R.id.menu_customize -> {
                     val dialog = createSkinPickerDialog(this, billingManager) {
                         with(getPreferences(Context.MODE_PRIVATE).edit()) {
-                            putString(getString(R.string.pref_skin), resources.getResourceName(it.id))
+                            putString(Preferences.skin, resources.getResourceName(it.id))
                             apply()
                         }
                         applySkin(it)
@@ -384,7 +384,7 @@ class MainActivity : Activity() {
                 result_preview.setText(coloredText, TextView.BufferType.SPANNABLE)
                 input.errors = parseResult.errors
             } catch (e: Exception) {
-                result_preview.text = "Error"
+                result_preview.text = getString(R.string.result_error)
                 Log.e(TAG, "Calculation error", e)
             }
         }
