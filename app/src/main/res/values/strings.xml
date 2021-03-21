@@ -1,4 +1,8 @@
 <resources>
+    <string name="unit_derivation_prefix">%1$s (%2$s, 1ᴇ%3$d)</string>
+    <string name="unit_derivation_derived">%1$s (%2$s)</string>
+    <string name="unit_derivation_base">%1$s</string>
+
     <string name="app_name">Digits</string>
     <string name="discipline_basic">Basic</string>
     <string name="discipline_electrical">Electrical</string>
@@ -39,4 +43,99 @@
         - Custom unit groupings/disciplines\n
         - Custom skins\n
     </string>
+
+    <string name="unit_name_meters">Meters</string>
+    <string name="unit_name_inches">Inches</string>
+    <string name="unit_name_feet">Feet</string>
+    <string name="unit_name_miles">Miles</string>
+    <string name="unit_name_astronomical_Units">Astronomical Units</string>
+    <string name="unit_name_parsecs">Parsecs</string>
+    <string name="unit_name_light_years">Light Years</string>
+    <string name="unit_name_liters">Liters</string>
+    <string name="unit_name_radians">Radians</string>
+    <string name="unit_name_degrees">Degrees</string>
+    <string name="unit_name_steradian">Steradian</string>
+    <string name="unit_name_acre">Acre</string>
+    <string name="unit_name_are">Are</string>
+    <string name="unit_name_hectare">Hectare</string>
+    <string name="unit_name_seconds">Seconds</string>
+    <string name="unit_name_minutes">Minutes</string>
+    <string name="unit_name_hours">Hours</string>
+    <string name="unit_name_days">Days</string>
+    <string name="unit_name_julian_years">Julian Years</string>
+    <string name="unit_name_hertz">Hertz</string>
+    <string name="unit_name_grams">Grams</string>
+    <string name="unit_name_newtons">Newtons</string>
+    <string name="unit_name_pascals">Pascals</string>
+    <string name="unit_name_moles">Moles</string>
+    <string name="unit_name_bits">Bits</string>
+    <string name="unit_name_volts">Volts</string>
+    <string name="unit_name_amps">Amps</string>
+    <string name="unit_name_ohms">Ohms</string>
+    <string name="unit_name_siemens">Siemens</string>
+    <string name="unit_name_farads">Farads</string>
+    <string name="unit_name_watts">Watts</string>
+    <string name="unit_name_teslas">Teslas</string>
+    <string name="unit_name_webers">Webers</string>
+    <string name="unit_name_henries">Henries</string>
+    <string name="unit_name_coulombs">Coulombs</string>
+    <string name="unit_name_horsepower">Horsepower</string>
+    <string name="unit_name_atmospheres">Atmospheres</string>
+    <string name="unit_name_technical_atmospheres">Technical Atmospheres</string>
+    <string name="unit_name_torres">Torres (mmHg)</string>
+    <string name="unit_name_bar">Bar</string>
+    <string name="unit_name_joule">Joule</string>
+    <string name="unit_name_electron_volt">Electron Volt</string>
+    <string name="unit_name_calorie">Calorie</string>
+    <string name="unit_name_iso_british_thermal_units">ISO British Thermal Units</string>
+    <string name="unit_name_electronvolts">Electronvolts</string>
+    <string name="unit_name_unified_atomic_mass_units">Unified Atomic Mass Units</string>
+    <string name="unit_name_dalton">Dalton</string>
+    <string name="unit_name_pound">Pound</string>
+    <string name="unit_name_us_customary_cup">US Customary Cup</string>
+    <string name="unit_name_us_teaspoon">US Teaspoon</string>
+    <string name="unit_name_us_tablespoon">US Tablespoon</string>
+    <string name="unit_name_us_fluid_ounce">US Fluid Ounce</string>
+    <string name="unit_name_us_pint">US Pint</string>
+    <string name="unit_name_us_quart">US Quart</string>
+    <string name="unit_name_us_gallon">US Gallon</string>
+
+    <string name="prefix_name_yotta">Yotta</string>
+    <string name="prefix_name_zetta">Zetta</string>
+    <string name="prefix_name_exa">Exa</string>
+    <string name="prefix_name_peta">Peta</string>
+    <string name="prefix_name_tera">Tera</string>
+    <string name="prefix_name_giga">Giga</string>
+    <string name="prefix_name_mega">Mega</string>
+    <string name="prefix_name_kilo">Kilo</string>
+    <string name="prefix_name_one">One</string>
+    <string name="prefix_name_centi">Centi</string>
+    <string name="prefix_name_milli">Milli</string>
+    <string name="prefix_name_micro">Micro</string>
+    <string name="prefix_name_nano">Nano</string>
+    <string name="prefix_name_pico">Pico</string>
+    <string name="prefix_name_femto">Femto</string>
+    <string name="prefix_name_atto">Atto</string>
+    <string name="prefix_name_zepto">Zepto</string>
+    <string name="prefix_name_yocto">Yocto</string>
+    <string name="prefix_name_unknown">Unknown</string>
+
+    <string name="prefix_description_yotta">Septillion</string>
+    <string name="prefix_description_zetta">Sextillion</string>
+    <string name="prefix_description_exa">Quintillion</string>
+    <string name="prefix_description_peta">Quadrillion</string>
+    <string name="prefix_description_tera">Trillion</string>
+    <string name="prefix_description_giga">Billion</string>
+    <string name="prefix_description_mega">Million</string>
+    <string name="prefix_description_kilo">Thousand</string>
+    <string name="prefix_description_one">One</string>
+    <string name="prefix_description_centi">Hundredth</string>
+    <string name="prefix_description_milli">Thousandth</string>
+    <string name="prefix_description_micro">Millionth</string>
+    <string name="prefix_description_nano">Trillionth</string>
+    <string name="prefix_description_pico">Billionth</string>
+    <string name="prefix_description_femto">Quadrillionth</string>
+    <string name="prefix_description_atto">Quintillionth</string>
+    <string name="prefix_description_zepto">Sextillionth</string>
+    <string name="prefix_description_yocto">Septillionth</string>
 </resources>

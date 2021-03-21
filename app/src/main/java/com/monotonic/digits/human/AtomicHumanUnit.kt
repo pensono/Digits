@@ -10,9 +10,9 @@ import com.monotonic.digits.units.NaturalUnit
  */
 
 
-open class AtomicHumanUnit(val abbreviation: String, val name: String, val unitDerivation: String?, dimensions: DimensionBag, factor: SciNumber.Real) : NaturalUnit(dimensions, factor) {
-    constructor(abbreviation: String, name: String, unitDerivation: String?, dimensions: DimensionBag, factor: String = "1")
-            : this(abbreviation, name, unitDerivation, dimensions, SciNumber.Real(factor, Precision.Infinite))
+open class AtomicHumanUnit(val abbreviation: String, val nameResourceId: Int, val unitDerivation: String?, dimensions: DimensionBag, factor: SciNumber.Real) : NaturalUnit(dimensions, factor) {
+    constructor(abbreviation: String, nameResourceId: Int, unitDerivation: String?, dimensions: DimensionBag, factor: String = "1")
+            : this(abbreviation, nameResourceId, unitDerivation, dimensions, SciNumber.Real(factor, Precision.Infinite))
 
     override fun toString() = abbreviation + "-" + super.toString()
 }

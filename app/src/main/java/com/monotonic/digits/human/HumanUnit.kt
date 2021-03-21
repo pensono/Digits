@@ -1,5 +1,6 @@
 package com.monotonic.digits.human
 
+import com.monotonic.digits.R
 import com.monotonic.digits.evaluator.Quantity
 import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.prettyExponent
@@ -110,7 +111,7 @@ fun humanize(quantity: Quantity): HumanQuantity {
     }
 
     // This code should never execute because there should be a base unit for each dimension (like meters or seconds). We'll do something sensible anyways
-    val extraUnit = AtomicHumanUnit("Unk", "Unknown", null, quantity.unit.dimensions, quantity.unit.factor)
+    val extraUnit = AtomicHumanUnit("Unk", R.string.prefix_name_unknown, null, quantity.unit.dimensions, quantity.unit.factor)
     return applyPrefix(quantity, HumanUnit(mapOf(extraUnit to 1)), prefixMagnitude)
 }
 
@@ -124,7 +125,7 @@ private fun applyPrefix(quantity: Quantity, unit: HumanUnit, prefixMagnitude: In
             if (unit.components.size == 1) {
                 val nameScale = unit.components.values.first() // So that we can fake (km)2 rather than k(m^2)
                 val scaledUnit = UnitSystem.prefixes.first { p -> p.exponent <= ((prefixMagnitude - 1) / nameScale) && p.exponent % 3 == 0 }
-                PrefixUnit(scaledUnit.abbreviation, scaledUnit.name, unscaledPrefix.exponent, "")
+                PrefixUnit(scaledUnit.abbreviation, scaledUnit.nameResourceId, unscaledPrefix.exponent, R.string.prefix_name_unknown)
             } else {
                 unscaledPrefix
             }

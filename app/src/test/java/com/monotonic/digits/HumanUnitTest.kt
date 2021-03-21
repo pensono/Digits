@@ -82,8 +82,8 @@ class HumanUnitTest {
         // assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("m") to 3))), humanize(Quantity(SciNumber.One, u("m") * 3)))
 
         // Kinda fudging it with changing the meaning of the prefix "k" to get things to work in this special case
-        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("s") to 2), PrefixUnit("k", "Kilo", 6, ""))), humanize(Quantity(Mega, u("s") * 2)))
-        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("s") to 2), PrefixUnit("m", "Milli", -6, ""))), humanize(Quantity(Micro, u("s") * 2)))
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("s") to 2), PrefixUnit("k", R.string.prefix_name_kilo, 6, R.string.prefix_description_kilo))), humanize(Quantity(Mega, u("s") * 2)))
+        assertEquals(HumanQuantity(SciNumber.One, HumanUnit(mapOf(u("s") to 2), PrefixUnit("m", R.string.prefix_name_milli, -6, R.string.prefix_description_milli))), humanize(Quantity(Micro, u("s") * 2)))
     }
 
     @Test

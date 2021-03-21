@@ -25,6 +25,7 @@ import com.monotonic.digits.evaluator.SciNumber
 import com.monotonic.digits.human.*
 import com.monotonic.digits.skin.*
 import com.monotonic.digits.units.DimensionBag
+import com.monotonic.digits.units.PrefixUnit
 import com.monotonic.digits.units.UnitSystem
 import com.monotonic.digits.units.disciplines
 import kotlinx.android.synthetic.main.activity_main.*
@@ -409,13 +410,14 @@ class MainActivity : Activity() {
             newButton.setOnLongClickListener {
                 val floating = createFloatingSecondaryFor(newButton)
                 val info = layoutInflater.inflate(R.layout.floating_info, floating, false) as TextView
-                val derivationString =
-                        if (unit.unitDerivation == null)
-                            ""
-                        else
-                            " (${unit.unitDerivation})"
 
-                info.text = unit.name + derivationString
+                val tooltipText = when {
+                    unit is PrefixUnit -> getString(R.string.unit_derivation_prefix, getString(unit.nameResourceId), getString(unit.descriptionResourceId), unit.exponent)
+                    unit.unitDerivation != null -> getString(R.string.unit_derivation_derived, getString(unit.nameResourceId), unit.unitDerivation)
+                    else -> getString(R.string.unit_derivation_base, getString(unit.nameResourceId))
+                }
+
+                info.text = tooltipText
                 floating.addView(info)
                 mainRootLayout.addView(floating)
                 true
