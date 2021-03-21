@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/prefix_selector"></LinearLayout>
+            android:id="@+id/prefix_selector" />
     </ScrollView>
 
     <ScrollView
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/unit_selector"></LinearLayout>
+            android:id="@+id/unit_selector" />
     </ScrollView>
 
     <GridLayout

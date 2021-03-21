@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/prefix_selector"></LinearLayout>
+            android:id="@+id/prefix_selector" />
     </HorizontalScrollView>
 
     <HorizontalScrollView
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/unit_selector"></LinearLayout>
+            android:id="@+id/unit_selector" />
     </HorizontalScrollView>
 
     <GridLayout
